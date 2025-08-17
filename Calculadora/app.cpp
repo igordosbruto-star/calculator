@@ -22,26 +22,10 @@
 // ------------------------------------------------------------
 namespace {
 
-    // Compara por R$/m² e retorna maior/menor
-    Como compararPorM2(const Material& a, const Material& b) {
-        Como r;
-        const double v1 = a.capPorm2();
-        const double v2 = b.capPorm2();
-
-        if (v1 > v2) {
-            r.maior = {a.capNome(), v1};
-            r.menor = {b.capNome(), v2};
-            wr::p("COMPARA", "Maior", "Green");
-        } else if (v1 < v2) {
-            r.maior = {b.capNome(), v2};
-            r.menor = {a.capNome(), v1};
-            wr::p("COMPARA", "Menor", "Green");
-        } else {
-            r.maior = {a.capNome(), v1};
-            r.menor = {b.capNome(), v2};
-            wr::p("COMPARA", "Iguais", "Green");
-        }
-        return r;
+    Como extremosPorM2(const std::vector<Material>& mats) {
+        auto cmp = [](const Material& a, const Material& b){ return a.capPorm2() < b.capPorm2(); };
+        auto [min_it, max_it] = std::minmax_element(mats.begin(), mats.end(), cmp);
+        return {{min_it->capNome(), min_it->capPorm2()}, {max_it->capNome(), max_it->capPorm2()}};
     }
 
     // Lê uma opção do usuário garantindo apenas 1 ou 2
@@ -196,7 +180,8 @@ bool App::carregarJSON() {
     }
 
     wr::p("TESTE", "Inicio do teste...", "Yellow");
-    q = compararPorM2(mats[0], mats[1]);
+    q = extremosPorM2(mats);
+    wr::p("COMPARA", "Extremos calculados", "Green");
     wr::p("TESTE", "Final do teste...", "Yellow");
 
     return true;
@@ -304,6 +289,11 @@ void App::iniciar() {
     importarCSV();
     if (!carregarJSON()) return;
     menuMateriais();
+    if (mats.size() < 2) {
+        wr::p("ERRO", "Precisam existir pelo menos 2 materiais para comparar.", "Red");
+        return;
+    }
+    q = extremosPorM2(mats);
     escolherPreco();
     solicitarCortes();
     exportar();
