@@ -1,11 +1,11 @@
 # CHECKLIST.md — Itens obrigatórios antes de commitar/abrir PR
 
 ## 🔍 Revisão de Código
-- [ ] Revisar todos os arquivos modificados
-- [ ] Confirmar que não há código morto ou duplicado
-- [ ] Garantir que todas as variáveis estão inicializadas
-- [ ] Verificar se modularização foi aplicada (funções curtas, `.cpp` separados)
-- [ ] Confirmar que os logs usam `wr:p` corretamente (Debug/Aviso/Erro)
+- [x] Revisar todos os arquivos modificados
+- [x] Confirmar que não há código morto ou duplicado
+- [x] Garantir que todas as variáveis estão inicializadas
+- [x] Verificar se modularização foi aplicada (funções curtas, `.cpp` separados)
+- [x] Confirmar que os logs usam `wr:p` corretamente (Debug/Aviso/Erro)
 
 ## 🧪 Testes
 - [ ] Adicionar testes em `/tests` para cada nova funcionalidade
@@ -22,18 +22,18 @@
 - [ ] Atualizar `Roadmap.md` com novas implementações
 
 ## 🛠️ Build & Lint
-- [ ] Compilar a aplicação com:
+- [x] Compilar a aplicação com:
   ```sh
   g++ -std=c++17 -Wall src/*.cpp -Iinclude -o app
   ```
-- [ ] Garantir que warnings foram tratados ou justificados
-- [ ] Verificar se a estrutura de pastas continua organizada (`/src`, `/include`, `/tests`)
+- [x] Garantir que warnings foram tratados ou justificados
+- [x] Verificar se a estrutura de pastas continua organizada (`/src`, `/include`, `/tests`)
 
 ## 📦 Git & Commits
-- [ ] Commit segue o padrão Conventional Commits (`feat:`, `fix:`, `chore:`)
-- [ ] Mensagem de commit curta e descritiva
-- [ ] Se for PR: título no padrão `[<módulo>] feat: descrição curta`
-- [ ] PR inclui checklist preenchido abaixo
+- [x] Commit segue o padrão Conventional Commits (`feat:`, `fix:`, `chore:`)
+- [x] Mensagem de commit curta e descritiva
+- [x] Se for PR: título no padrão `[<módulo>] feat: descrição curta`
+- [x] PR inclui checklist preenchido abaixo
 
 ---
 
