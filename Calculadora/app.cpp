@@ -13,7 +13,7 @@
 
 // Bibliotecas Personalizadas
 #include "Debug.h"
-#include "Persist.h"   // JSON + CSV (MaterialDTO, save/load, Settings)
+#include "persist.h"   // JSON + CSV (MaterialDTO, save/load, Settings)
 #include "modulos.h"   // Material, Corte, App, Como
 
 // ------------------------------------------------------------
@@ -78,7 +78,7 @@ void App::iniciar() {
     // ===========================
     // 0) Carregar settings
     // ===========================
-    Persist::Settings settings = Persist::loadOrCreateSettings(); // data/settings.json
+    Settings settings = Persist::loadOrCreateSettings(); // data/settings.json
 
     // Configuração de casas decimais (limitamos 0..6 por segurança)
     dec = std::clamp(settings.decimal_places, 0, 6);
