@@ -67,6 +67,83 @@ namespace {
         return mats;
     }
 
+    // Exibe materiais cadastrados
+    void listarMateriais(const std::vector<MaterialDTO>& base) {
+        std::cout << "\nMateriais cadastrados:\n";
+        if (base.empty()) {
+            std::cout << "(vazio)\n";
+            return;
+        }
+        for (size_t i = 0; i < base.size(); ++i) {
+            const auto& m = base[i];
+            std::cout << i + 1 << ") " << m.nome
+                      << " | " << UN_MONE << m.valor
+                      << " | " << m.largura << " x " << m.comprimento << UN_AREA
+                      << "\n";
+        }
+    }
+
+    // Reconstrói vetor de Materiais e persiste base
+    void salvarReconstruir(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
+        mats = reconstruirMateriais(base);
+        Persist::saveJSON("materiais.json", base, 1);
+    }
+
+    // Adiciona novo material
+    void adicionarMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
+        MaterialDTO m;
+        std::cout << "Nome: ";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::getline(std::cin, m.nome);
+        std::cout << "Valor: ";
+        std::cin >> m.valor;
+        std::cout << "Largura: ";
+        std::cin >> m.largura;
+        std::cout << "Comprimento: ";
+        std::cin >> m.comprimento;
+        base.push_back(m);
+        salvarReconstruir(base, mats);
+    }
+
+    // Edita material existente
+    void editarMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
+        if (base.empty()) return;
+        listarMateriais(base);
+        std::cout << "Indice para editar: ";
+        size_t idx = 0;
+        if (!(std::cin >> idx) || idx < 1 || idx > base.size()) {
+            std::cout << "Indice invalido.\n";
+            return;
+        }
+        MaterialDTO& m = base[idx - 1];
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::string nome;
+        std::cout << "Nome (" << m.nome << "): ";
+        std::getline(std::cin, nome);
+        if (!nome.empty()) m.nome = nome;
+        std::cout << "Valor (" << m.valor << "): ";
+        std::cin >> m.valor;
+        std::cout << "Largura (" << m.largura << "): ";
+        std::cin >> m.largura;
+        std::cout << "Comprimento (" << m.comprimento << "): ";
+        std::cin >> m.comprimento;
+        salvarReconstruir(base, mats);
+    }
+
+    // Remove material por indice
+    void removerMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
+        if (base.empty()) return;
+        listarMateriais(base);
+        std::cout << "Indice para remover: ";
+        size_t idx = 0;
+        if (!(std::cin >> idx) || idx < 1 || idx > base.size()) {
+            std::cout << "Indice invalido.\n";
+            return;
+        }
+        base.erase(base.begin() + static_cast<long>(idx - 1));
+        salvarReconstruir(base, mats);
+    }
+
 } // namespace
 
 // ------------------------------------------------------------
@@ -125,6 +202,34 @@ bool App::carregarJSON() {
     return true;
 }
 
+void App::menuMateriais() {
+    while (true) {
+        std::cout << "\n--- Materiais ---\n"
+                  << "1 - Listar\n"
+                  << "2 - Adicionar\n"
+                  << "3 - Editar\n"
+                  << "4 - Remover\n"
+                  << "0 - Continuar\n"
+                  << "Opcao: ";
+        int op = 0;
+        if (!(std::cin >> op)) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
+        }
+        switch (op) {
+            case 1: listarMateriais(base); break;
+            case 2: adicionarMaterial(base, mats); break;
+            case 3: editarMaterial(base, mats); break;
+            case 4: removerMaterial(base, mats); break;
+            case 0: return;
+            default:
+                std::cout << "Opcao invalida.\n";
+                break;
+        }
+    }
+}
+
 void App::escolherPreco() {
     int opcao = 1;
     if      (settings.prefer == "cheapest") opcao = 1;
@@ -171,6 +276,7 @@ void App::iniciar() {
 
     importarCSV();
     if (!carregarJSON()) return;
+    menuMateriais();
     escolherPreco();
     calcularCorte();
     exportar();
