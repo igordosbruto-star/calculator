@@ -9,6 +9,8 @@
 #include <algorithm> // find_if, std::clamp
 #include <cctype>    // std::isspace
 #include <filesystem>
+#include <exception>
+#include "Debug.h"
 
 namespace fs = std::filesystem;
 
@@ -81,9 +83,15 @@ inline bool atomicWrite(const fs::path& finalPath, const std::string& content) {
         // 1) escreve no .tmp
         {
             std::ofstream f(tmpPath, std::ios::out | std::ios::trunc | std::ios::binary);
-            if (!f) return false;
+            if (!f) {
+                wr::p("PERSIST", tmpPath.string() + " open fail", "Red");
+                return false;
+            }
             f.write(content.data(), static_cast<std::streamsize>(content.size()));
-            if (!f) return false;
+            if (!f) {
+                wr::p("PERSIST", tmpPath.string() + " write fail", "Red");
+                return false;
+            }
         }
 
         // 2) backup do arquivo atual (se existir)
@@ -101,10 +109,17 @@ inline bool atomicWrite(const fs::path& finalPath, const std::string& content) {
             std::error_code ec3;
             fs::remove(finalPath, ec3);
             fs::rename(tmpPath, finalPath, ec2);
-            if (ec2) return false;
+            if (ec2) {
+                wr::p("PERSIST", finalPath.string() + " rename fail: " + ec2.message(), "Red");
+                return false;
+            }
         }
         return true;
+    } catch (const std::exception& e) {
+        wr::p("PERSIST", finalPath.string() + " exception: " + e.what(), "Red");
+        return false;
     } catch (...) {
+        wr::p("PERSIST", finalPath.string() + " unknown exception", "Red");
         return false;
     }
 }
@@ -132,8 +147,12 @@ inline bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v,
 }
 
 inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int* out_version = nullptr) {
-    std::ifstream f(dataPath(path));
-    if (!f) return false;
+    const std::string p = dataPath(path);
+    std::ifstream f(p);
+    if (!f) {
+        wr::p("PERSIST", p + " open fail", "Red");
+        return false;
+    }
     try {
         json j; f >> j;
         if (out_version && j.contains("version")) *out_version = j["version"].get<int>();
@@ -141,8 +160,13 @@ inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int
             out = j["materiais"].get<std::vector<MaterialDTO>>();
             return true;
         }
+        wr::p("PERSIST", p + " missing 'materiais'", "Red");
+        return false;
+    } catch (const std::exception& e) {
+        wr::p("PERSIST", p + " parse error: " + e.what(), "Red");
         return false;
     } catch (...) {
+        wr::p("PERSIST", p + " unknown parse error", "Red");
         return false;
     }
 }
@@ -192,14 +216,21 @@ inline bool saveCSV(const std::string& path, const std::vector<MaterialDTO>& ite
 
 // -------------------- CSV: Leitura --------------------
 inline bool loadCSV(const std::string& path, std::vector<MaterialDTO>& out) {
-    std::ifstream f(dataPath(path));
-    if (!f) return false;
+    const std::string p = dataPath(path);
+    std::ifstream f(p);
+    if (!f) {
+        wr::p("PERSIST", p + " open fail", "Red");
+        return false;
+    }
 
     out.clear();
     std::string line;
 
     // Lê primeira linha (cabeçalho). Esperado: nome;valor;largura;comprimento
-    if (!std::getline(f, line)) return false;
+    if (!std::getline(f, line)) {
+        wr::p("PERSIST", p + " header read fail", "Red");
+        return false;
+    }
 
     while (std::getline(f, line)) {
         if (line.empty()) continue;
@@ -252,10 +283,15 @@ inline Settings loadOrCreateSettings(const std::string& filename = "settings.jso
 }
 
 inline bool saveSettings(const Settings& s, const std::string& filename = "settings.json") {
+    const std::string p = dataPath(filename);
     try {
         json j = s;
-        return atomicWrite(fs::path(dataPath(filename)), j.dump(2));
+        return atomicWrite(fs::path(p), j.dump(2));
+    } catch (const std::exception& e) {
+        wr::p("PERSIST", p + " exception: " + e.what(), "Red");
+        return false;
     } catch (...) {
+        wr::p("PERSIST", p + " unknown exception", "Red");
         return false;
     }
 }
