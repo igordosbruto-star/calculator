@@ -179,11 +179,6 @@ bool App::carregarJSON() {
         return false;
     }
 
-    wr::p("TESTE", "Inicio do teste...", "Yellow");
-    q = extremosPorM2(mats);
-    wr::p("COMPARA", "Extremos calculados", "Green");
-    wr::p("TESTE", "Final do teste...", "Yellow");
-
     return true;
 }
 
