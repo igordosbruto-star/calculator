@@ -26,6 +26,8 @@ public:
     double preco = 0.0; // preço/m² escolhido (menor ou maior)
     Como q;             // resultado da comparação
 
-    void iniciar();     // implementado em App.cpp
+    // Inicia o aplicativo
+    // autoMode=true usa automaticamente o material mais barato
+    void iniciar(bool autoMode = false);     // implementado em App.cpp
 };
 

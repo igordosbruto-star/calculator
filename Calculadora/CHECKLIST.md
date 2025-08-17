@@ -8,8 +8,8 @@
 - [x] Confirmar que os logs usam `wr:p` corretamente (Debug/Aviso/Erro)
 
 ## 🧪 Testes
-- [ ] Adicionar testes em `/tests` para cada nova funcionalidade
-- [ ] Compilar e rodar testes com:
+- [x] Adicionar testes em `/tests` para cada nova funcionalidade
+- [x] Compilar e rodar testes com:
   ```sh
   g++ -std=c++17 -Wall tests/*.cpp src/*.cpp -Iinclude -o tests/run_tests
   ./tests/run_tests
@@ -18,7 +18,7 @@
 
 ## 📑 Documentação
 - [x] Adicionar comentários em português explicando intenções do código
-- [ ] Exemplos mínimos nas funções públicas
+- [x] Exemplos mínimos nas funções públicas
 - [x] Atualizar `Roadmap.md` com novas implementações
 
 ## 🛠️ Build & Lint
