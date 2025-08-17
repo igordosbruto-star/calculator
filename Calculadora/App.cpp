@@ -1,5 +1,5 @@
 // ==========================================
-// Arquivo: app.cpp
+// Arquivo: App.cpp
 // Descrição: Funcionamento do programa (lógica do App)
 // ==========================================
 
@@ -13,9 +13,9 @@
 #include <sstream>
 
 // Bibliotecas Personalizadas
+#include "App.h"
+#include "Corte.h"
 #include "Debug.h"
-#include "persist.h"   // JSON + CSV (MaterialDTO, save/load, Settings)
-#include "modulos.h"   // Material, Corte, App, Como
 
 // ------------------------------------------------------------
 // Helpers apenas visíveis neste arquivo
