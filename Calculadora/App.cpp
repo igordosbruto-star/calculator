@@ -243,7 +243,13 @@ void App::solicitarCortes() {
         double comprimento = 0.0;
 
         std::cout << "\nNome do corte: ";
-        std::cin >> nome;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::getline(std::cin, nome);
+        while (nome.empty()) {
+            std::cout << "Nome invalido. Tente novamente.\n";
+            std::cout << "Nome do corte: ";
+            std::getline(std::cin, nome);
+        }
         std::cout << "Largura (m): ";
         std::cin >> largura;
         std::cout << "Comprimento (m): ";
