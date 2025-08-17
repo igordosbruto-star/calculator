@@ -8,6 +8,7 @@ void test_extremos();
 void test_corte();
 void test_plano_dto();
 void test_persist_helpers();
+void test_plano_persist_io();
 
 // Executa todos os testes
 int main() {
@@ -18,6 +19,7 @@ int main() {
     test_corte();
     test_plano_dto();
     test_persist_helpers();
+    test_plano_persist_io();
     return 0;
 }
 
