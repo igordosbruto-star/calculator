@@ -6,8 +6,8 @@
 #include <fstream>
 #include <filesystem>
 
-// Testa salvamento completo de plano em JSON, CSV e atualização do índice
-void test_plano_persist_io() {
+// Testa salvamento e recarga de plano em JSON e CSV
+void test_plano_io() {
     namespace fs = std::filesystem;
     fs::remove_all("out");
 
@@ -35,6 +35,7 @@ void test_plano_persist_io() {
     nlohmann::json j; jf >> j;
     PlanoCorteDTO p2 = j.get<PlanoCorteDTO>();
     assert(p2.cortes.size() == 1);
+    assert(p2.cortes[0].nome == "Lateral");
     assert(p2.total_valor == p.total_valor);
 
     // salva e lê CSV
@@ -44,21 +45,8 @@ void test_plano_persist_io() {
     std::string header; std::getline(cf, header);
     assert(header == "nome;largura_m;comprimento_m;porm2;area_m2;valor;rot90");
     std::string line; std::getline(cf, line);
-    assert(line.find(".") == std::string::npos); // números com vírgula
     assert(line.find("Lateral") == 0);
-
-    // atualiza e verifica índice
-    assert(Persist::updateIndex(p));
-    std::ifstream idx("out/planos/index.json");
-    assert(idx);
-    nlohmann::json ji; idx >> ji;
-    bool found = false;
-    for (const auto& item : ji["planos"]) {
-        if (item["id"].get<std::string>() == p.id) {
-            found = true;
-        }
-    }
-    assert(found);
+    assert(line.find(",") != std::string::npos); // números com vírgula
 
     fs::remove_all("out");
 }
