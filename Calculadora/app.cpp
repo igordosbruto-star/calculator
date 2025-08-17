@@ -142,9 +142,36 @@ void App::escolherPreco() {
     }
 }
 
-void App::calcularCorte() {
-    Corte corte("Tabua de 56,5cm", 0.20, 0.565, preco);
-    corte.imprimir();
+void App::solicitarCortes() {
+    std::vector<Corte> cortes;
+    double total = 0.0;
+    char cont = 's';
+
+    while (cont == 's' || cont == 'S') {
+        std::string nome;
+        double largura = 0.0;
+        double comprimento = 0.0;
+
+        std::cout << "\nNome do corte: ";
+        std::cin >> nome;
+        std::cout << "Largura (m): ";
+        std::cin >> largura;
+        std::cout << "Comprimento (m): ";
+        std::cin >> comprimento;
+
+        Corte c(nome, largura, comprimento, preco);
+        total += c.capValor();
+        cortes.push_back(c);
+
+        std::cout << "Adicionar outro corte? (s/n) | ";
+        std::cin >> cont;
+    }
+
+    std::cout << "\nResumo final:";
+    for (const auto& c : cortes) {
+        c.imprimir();
+    }
+    std::cout << "\nTotal geral: " << UN_MONE << total << "\n";
 }
 
 void App::exportar() {
@@ -172,7 +199,7 @@ void App::iniciar() {
     importarCSV();
     if (!carregarJSON()) return;
     escolherPreco();
-    calcularCorte();
+    solicitarCortes();
     exportar();
 
     std::cout << "\n";
