@@ -9,7 +9,11 @@
 
 ## 🧪 Testes
 - [ ] Adicionar testes em `/tests` para cada nova funcionalidade
-- [ ] Rodar `ctest` e confirmar que todos os testes passaram
+- [ ] Compilar e rodar testes com:
+  ```sh
+  g++ -std=c++17 -Wall tests/*.cpp src/*.cpp -Iinclude -o tests/run_tests
+  ./tests/run_tests
+  ```
 - [ ] Garantir que casos de erro também possuem testes cobrindo o log em vermelho
 
 ## 📑 Documentação
@@ -18,7 +22,10 @@
 - [ ] Atualizar `Roadmap.md` com novas implementações
 
 ## 🛠️ Build & Lint
-- [ ] Rodar `cmake --build .` sem erros
+- [ ] Compilar a aplicação com:
+  ```sh
+  g++ -std=c++17 -Wall src/*.cpp -Iinclude -o app
+  ```
 - [ ] Garantir que warnings foram tratados ou justificados
 - [ ] Verificar se a estrutura de pastas continua organizada (`/src`, `/include`, `/tests`)
 
