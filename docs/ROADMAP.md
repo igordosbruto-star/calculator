@@ -22,6 +22,14 @@ Esta calculadora evoluirá em etapas para oferecer mais flexibilidade e confiabi
   - Criar casos de teste unitários para validar comparações e rotinas de persistência.
   - Integrar com execução contínua (CI) para evitar regressões.
 
+## Novas capacidades de persistência
+
+Com a evolução recente, a camada de persistência agora:
+
+- Serializa planos de corte em JSON e CSV.
+- Atualiza o índice global de forma atômica por meio de `updateIndex`.
+- Salva automaticamente os planos gerados utilizando `makeId`, `outPlanosDirFor`, `savePlanoJSON/CSV` e `updateIndex`.
+
 ## Melhorias propostas
 
 - Documentação expandida em `docs/` para cobrir uso e desenvolvimento.
