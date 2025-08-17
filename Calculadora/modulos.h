@@ -88,6 +88,13 @@ public:
         valor = area * porm2;
     }
 
+    // Getters
+    const std::string& capNome() const noexcept { return nome; }
+    double capLarg() const noexcept { return largura; }
+    double capComp() const noexcept { return comprimento; }
+    double capArea() const noexcept { return area; }
+    double capValor() const noexcept { return valor; }
+
     void imprimir() const {
         std::cout << "\nCorte: " << nome << "\n"
                   << "Valor por m2 : " << UN_MONE << porm2 << "\n"
@@ -113,11 +120,12 @@ private:
     Settings settings;
     std::vector<MaterialDTO> base;
     std::vector<Material> mats;
+    std::vector<Corte> cortes;
 
     void importarCSV();
     bool carregarJSON();
     void escolherPreco();
-    void calcularCorte();
+    void solicitarCortes();
     void exportar();
 
 public:

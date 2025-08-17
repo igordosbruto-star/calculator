@@ -11,6 +11,9 @@
 #include <vector>
 #include <algorithm> // std::clamp
 #include <sstream>
+#include <chrono>
+#include <ctime>
+#include <chrono>
 
 // Bibliotecas Personalizadas
 #include "Debug.h"
@@ -142,9 +145,33 @@ void App::escolherPreco() {
     }
 }
 
-void App::calcularCorte() {
-    Corte corte("Tabua de 56,5cm", 0.20, 0.565, preco);
-    corte.imprimir();
+void App::solicitarCortes() {
+    cortes.clear();
+
+    char resp = 's';
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    while (resp == 's' || resp == 'S') {
+        std::string nome;
+        double largura = 0.0, comprimento = 0.0;
+
+        std::cout << "\nNome do corte | ";
+        std::getline(std::cin, nome);
+
+        std::cout << "Largura (m) | ";
+        if (!(std::cin >> largura)) largura = 0.0;
+
+        std::cout << "Comprimento (m) | ";
+        if (!(std::cin >> comprimento)) comprimento = 0.0;
+
+        cortes.emplace_back(nome, largura, comprimento, preco);
+        cortes.back().imprimir();
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Adicionar outro corte? (s/n) | ";
+        if (!(std::cin >> resp)) resp = 'n';
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
 }
 
 void App::exportar() {
@@ -172,7 +199,24 @@ void App::iniciar() {
     importarCSV();
     if (!carregarJSON()) return;
     escolherPreco();
-    calcularCorte();
+    solicitarCortes();
+
+    std::cout << "\nExportar cortes para CSV? (s/n) | ";
+    char resp = 'n';
+    if (!(std::cin >> resp)) resp = 'n';
+    if (resp == 's' || resp == 'S') {
+        auto now = std::chrono::system_clock::now();
+        std::time_t t = std::chrono::system_clock::to_time_t(now);
+        std::tm tm = *std::localtime(&t);
+        std::ostringstream fname;
+        fname << "cortes_" << std::put_time(&tm, "%Y-%m-%d") << ".csv";
+        if (Persist::saveCutsCSV(fname.str(), cortes)) {
+            wr::p("CSV", fname.str() + " exportado com sucesso.", "Green");
+        } else {
+            wr::p("CSV", "Falha ao exportar " + fname.str(), "Red");
+        }
+    }
+
     exportar();
 
     std::cout << "\n";

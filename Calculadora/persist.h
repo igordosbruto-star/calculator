@@ -12,6 +12,9 @@
 #include <exception>
 #include "Debug.h"
 
+// Forward declaration de Corte (definido em modulos.h)
+class Corte;
+
 namespace fs = std::filesystem;
 
 // ---- DTO de Material (somente dados base) ----
@@ -213,6 +216,9 @@ inline bool saveCSV(const std::string& path, const std::vector<MaterialDTO>& ite
     }
     return atomicWrite(fs::path(dataPath(path)), oss.str());
 }
+
+// -------------------- CSV de Cortes --------------------
+bool saveCutsCSV(const std::string& path, const std::vector<Corte>& cortes);
 
 // -------------------- CSV: Leitura --------------------
 inline bool loadCSV(const std::string& path, std::vector<MaterialDTO>& out) {
