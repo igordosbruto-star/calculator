@@ -1,0 +1,17 @@
+{
+  "materiais": [
+    {
+      "comprimento": 3.0,
+      "largura": 0.2,
+      "nome": "Pinus 20cm",
+      "valor": 17.0
+    },
+    {
+      "comprimento": 2.75,
+      "largura": 1.85,
+      "nome": "MDF 15mm",
+      "valor": 180.0
+    }
+  ],
+  "version": 1
+}
