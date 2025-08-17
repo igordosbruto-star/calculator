@@ -9,7 +9,7 @@ Esta calculadora evoluirá em etapas para oferecer mais flexibilidade e confiabi
   - Preparar o arquivo para futura divisão em múltiplos módulos.
 - **Persistência de dados** (`Calculadora/persist.h`)
   - Centralizar leitura/escrita em formatos adicionais (ex.: XML).
-  - Integrar validação de dados antes de salvar.
+  - Integrar validação de dados antes de salvar. ✅
 - **Interface de linha de comando** (`Calculadora/main.cpp`)
   - Adicionar opções de ajuda e parâmetros para cálculos automatizados. ✅
   - Melhorar mensagens de erro para entradas inválidas.

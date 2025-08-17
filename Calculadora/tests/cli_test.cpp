@@ -2,7 +2,7 @@
 #include <cassert>
 
 // Testa o parsing de argumentos basicos
-int main() {
+void test_cli() {
     // testa --help
     const char* a1[] = {"app", "--help"};
     CliOptions o1 = parseArgs(2, const_cast<char**>(a1));
@@ -14,6 +14,4 @@ int main() {
     CliOptions o2 = parseArgs(2, const_cast<char**>(a2));
     assert(o2.autoMode);
     assert(!o2.showHelp);
-
-    return 0;
 }

@@ -14,7 +14,7 @@
   g++ -std=c++17 -Wall tests/*.cpp src/*.cpp -Iinclude -o tests/run_tests
   ./tests/run_tests
   ```
-- [ ] Garantir que casos de erro também possuem testes cobrindo o log em vermelho
+- [x] Garantir que casos de erro também possuem testes cobrindo o log em vermelho
 
 ## 📑 Documentação
 - [x] Adicionar comentários em português explicando intenções do código
