@@ -17,6 +17,18 @@
       "largura": 0.3,
       "nome": "Pinus 30cm",
       "valor": 33.75
+    },
+    {
+      "comprimento": 2.75,
+      "largura": 1.85,
+      "nome": "MDF 3mm",
+      "valor": 60.0
+    },
+    {
+      "comprimento": 2.75,
+      "largura": 1.85,
+      "nome": "MDF 9mm",
+      "valor": 140.0
     }
   ],
   "version": 1
