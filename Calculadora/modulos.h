@@ -116,6 +116,7 @@ private:
 
     void importarCSV();
     bool carregarJSON();
+    void menuMateriais();
     void escolherPreco();
     void calcularCorte();
     void exportar();
