@@ -1,9 +1,13 @@
 #include "Corte.h"
 #include "Material.h"
+#include <algorithm>
 #include <iostream>
 
 Corte::Corte(const std::string& n, double l, double c, double precoPorM2)
-    : nome(n), largura(l), comprimento(c), porm2(precoPorM2) {
+    : nome(n),
+      largura(std::max(0.0, l)),
+      comprimento(std::max(0.0, c)),
+      porm2(precoPorM2) {
     area  = largura * comprimento;
     valor = area * porm2;
 }

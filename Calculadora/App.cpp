@@ -250,10 +250,25 @@ void App::solicitarCortes() {
             std::cout << "Nome do corte: ";
             std::getline(std::cin, nome);
         }
-        std::cout << "Largura (m): ";
-        std::cin >> largura;
-        std::cout << "Comprimento (m): ";
-        std::cin >> comprimento;
+        do {
+            std::cout << "Largura (m): ";
+            std::cin >> largura;
+            if (!(std::cin) || largura <= 0) {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Valor invalido. A largura deve ser maior que zero.\n";
+            }
+        } while (largura <= 0);
+
+        do {
+            std::cout << "Comprimento (m): ";
+            std::cin >> comprimento;
+            if (!(std::cin) || comprimento <= 0) {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Valor invalido. O comprimento deve ser maior que zero.\n";
+            }
+        } while (comprimento <= 0);
 
         Corte c(nome, largura, comprimento, preco);
         total += c.capValor();
