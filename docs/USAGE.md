@@ -12,6 +12,11 @@ Exibe instruções de uso e encerra.
 ```
 Inicia em modo automático, escolhendo o material mais barato.
 
+```bash
+./app --projeto caminho/do/projeto.json
+```
+Carrega o projeto informado para uso na sessão (em desenvolvimento).
+
 As opções podem ser combinadas conforme necessário.
 
 ## Configuração do VS Code
