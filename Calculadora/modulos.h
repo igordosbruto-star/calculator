@@ -8,9 +8,11 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <vector>
 
 // Bibliotecas Personalizadas
 #include "Debug.h"   // logs coloridos
+#include "persist.h" // MaterialDTO, Settings
 
 // Constantes globais de unidade
 inline constexpr const char* UN_MONE = "R$ ";
@@ -108,6 +110,15 @@ struct Como { Base menor, maior; };
 class App {
 private:
     int dec = 2; // casas decimais para exibição
+    Settings settings;
+    std::vector<MaterialDTO> base;
+    std::vector<Material> mats;
+
+    void importarCSV();
+    bool carregarJSON();
+    void escolherPreco();
+    void calcularCorte();
+    void exportar();
 
 public:
     double preco = 0.0; // preço/m² escolhido (menor ou maior)
