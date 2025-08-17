@@ -61,6 +61,20 @@ inline void from_json(const json& j, Settings& s) {
 
 namespace Persist {
 
+// ------------------------------------------------
+// Valida MaterialDTO: nome nao vazio e valores >=0
+// Exemplo:
+//   MaterialDTO m{"Madeira", 10, 2, 3};
+//   bool ok = Persist::validar(m); // true
+// ------------------------------------------------
+inline bool validar(const MaterialDTO& m) {
+    if (m.nome.empty()) return false;
+    if (m.valor < 0) return false;
+    if (m.largura < 0) return false;
+    if (m.comprimento < 0) return false;
+    return true;
+}
+
 // ----------------------------------------------
 // Garante a pasta data/ e devolve "data/<arquivo>"
 // ----------------------------------------------
@@ -140,6 +154,12 @@ inline std::string to_str_br(double x, int precision = 6) {
 
 // ----------------- JSON: salvar/carregar -----------------
 inline bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v, int version = 1) {
+    for (const auto& m : v) {
+        if (!validar(m)) {
+            wr::p("PERSIST", "Material invalido: " + m.nome, "Red");
+            return false;
+        }
+    }
     json j;
     j["version"]   = version;
     j["materiais"] = v; // usa to_json automaticamente
@@ -195,6 +215,13 @@ namespace detail {
 
 // ------------ CSV (formato BR: ; + vírgula decimal) ------------
 inline bool saveCSV(const std::string& path, const std::vector<MaterialDTO>& items) {
+    for (const auto& m : items) {
+        if (!validar(m)) {
+            wr::p("PERSIST", "Material invalido: " + m.nome, "Red");
+            return false;
+        }
+    }
+
     std::ostringstream oss;
 
     // Cabeçalho
