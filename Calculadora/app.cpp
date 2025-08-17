@@ -10,6 +10,7 @@
 #include <limits>
 #include <vector>
 #include <algorithm> // std::clamp
+#include <sstream>
 
 // Bibliotecas Personalizadas
 #include "Debug.h"
@@ -123,7 +124,9 @@ void App::iniciar() {
             wr::p("DATA", "Falha ao criar materiais.json", "Red");
         }
     } else {
-        wr::p("DATA", "materiais.json carregado (versao " + std::to_string(version) + ")", "Green");
+        std::ostringstream oss;
+        oss << "materiais.json carregado (versao " << version << ")";
+        wr::p("DATA", oss.str(), "Green");
     }
 
     // ===========================

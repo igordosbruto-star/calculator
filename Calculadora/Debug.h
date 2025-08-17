@@ -12,6 +12,7 @@
 #include <iostream>     // Entrada e saída (ex: cout)
 #include <string>       // Manipulação de texto
 #include <map>          // Mapa ordenado chave-valor
+#include <sstream>      // Conversão genérica para string
 
 namespace wr {
 
@@ -28,10 +29,7 @@ namespace wr {
     };
 
     inline void p(const std::string& mensagem) {
-
-        // Caso a mensagem for um numero
-        
-        // printa no terminal a mensagem
+        // Imprime mensagem simples
         std::cout << "[DEBUG] " << mensagem << colorMap.at("Reset") << "\n";
     }
 
@@ -44,6 +42,27 @@ namespace wr {
         std::string corANSI = (it != colorMap.end()) ? it->second : colorMap.at("White");
 
         std::cout << corANSI << "[" << modulo << "]" << colorMap.at("Reset") << " " << mensagem << "\n";
+    }
+
+    template <typename T>
+    inline void p(const T& valor) {
+        std::ostringstream oss;
+        oss << valor;
+        p(oss.str());
+    }
+
+    template <typename T>
+    inline void p(const std::string& modulo, const T& valor) {
+        std::ostringstream oss;
+        oss << valor;
+        p(modulo, oss.str());
+    }
+
+    template <typename T>
+    inline void p(const std::string& modulo, const T& valor, const std::string& cor) {
+        std::ostringstream oss;
+        oss << valor;
+        p(modulo, oss.str(), cor);
     }
 
 }
