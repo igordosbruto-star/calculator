@@ -12,6 +12,7 @@ Esta calculadora evoluirá em etapas para oferecer mais flexibilidade e confiabi
   - Integrar validação de dados antes de salvar. ✅
   - Suporte a serialização de planos de corte (CorteDTO e PlanoCorteDTO). ✅
   - Funções para salvar PlanoCorteDTO em JSON e CSV. ✅
+  - Índice global de planos com atualização atômica (`updateIndex`). ✅
 - **Interface de linha de comando** (`Calculadora/main.cpp`)
   - Adicionar opções de ajuda e parâmetros para cálculos automatizados. ✅
   - Melhorar mensagens de erro para entradas inválidas.
