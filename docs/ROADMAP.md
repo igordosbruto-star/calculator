@@ -1,0 +1,24 @@
+# Roadmap
+
+Esta calculadora evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
+
+## Módulos planejados
+
+- **Núcleo do aplicativo** (`Calculadora/app.cpp`)
+  - Extrair a lógica de comparação e seleção de materiais em funções reutilizáveis.
+  - Preparar o arquivo para futura divisão em múltiplos módulos.
+- **Persistência de dados** (`Calculadora/persist.h`)
+  - Centralizar leitura/escrita em formatos adicionais (ex.: XML).
+  - Integrar validação de dados antes de salvar.
+- **Interface de linha de comando** (`Calculadora/main.cpp`)
+  - Adicionar opções de ajuda e parâmetros para cálculos automatizados.
+  - Melhorar mensagens de erro para entradas inválidas.
+- **Testes automatizados** (novo diretório `tests/`)
+  - Criar casos de teste unitários para validar comparações e rotinas de persistência.
+  - Integrar com execução contínua (CI) para evitar regressões.
+
+## Melhorias propostas
+
+- Documentação expandida em `docs/` para cobrir uso e desenvolvimento.
+- Guia de contribuições explicando estilo e práticas de codificação.
+
