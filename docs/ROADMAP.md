@@ -21,4 +21,5 @@ Esta calculadora evoluirá em etapas para oferecer mais flexibilidade e confiabi
 
 - Documentação expandida em `docs/` para cobrir uso e desenvolvimento.
 - Guia de contribuições explicando estilo e práticas de codificação.
+- Centralizar constantes de formatação em `format.h` para reutilização.
 

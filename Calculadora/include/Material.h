@@ -2,9 +2,6 @@
 
 #include <string>
 
-inline constexpr const char* UN_MONE = "R$ ";
-inline constexpr const char* UN_AREA = " m²";
-
 class Material {
 private:
     std::string nome;
