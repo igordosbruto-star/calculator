@@ -88,6 +88,9 @@ public:
         valor = area * porm2;
     }
 
+    double capArea() const noexcept { return area; }
+    double capValor() const noexcept { return valor; }
+
     void imprimir() const {
         std::cout << "\nCorte: " << nome << "\n"
                   << "Valor por m2 : " << UN_MONE << porm2 << "\n"
@@ -118,7 +121,7 @@ private:
     bool carregarJSON();
     void menuMateriais();
     void escolherPreco();
-    void calcularCorte();
+    void solicitarCortes();
     void exportar();
 
 public:
