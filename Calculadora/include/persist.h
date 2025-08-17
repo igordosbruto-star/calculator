@@ -10,16 +10,18 @@
 #include <cctype>    // std::isspace
 #include <filesystem>
 #include <exception>
+#include <system_error>
 #include "Debug.h"
 
 namespace fs = std::filesystem;
 
+// Nota: todas as medidas de largura e comprimento permanecem em metros.
 // ---- DTO de Material (somente dados base) ----
 struct MaterialDTO {
     std::string nome;
-    double valor = 0.0;
-    double largura = 0.0;
-    double comprimento = 0.0;
+    double valor = 0.0;      // valor total da peça
+    double largura = 0.0;    // largura em metros
+    double comprimento = 0.0; // comprimento em metros
 };
 
 // ------------ JSON ------------
@@ -77,20 +79,39 @@ inline bool validar(const MaterialDTO& m) {
 
 // ----------------------------------------------
 // Garante a pasta data/ e devolve "data/<arquivo>"
+// Exemplo:
+//   std::string p = Persist::dataPath("materiais.json"); // "data/materiais.json"
 // ----------------------------------------------
 inline std::string dataPath(const std::string& filename) {
-    try { fs::create_directory("data"); } catch (...) {}
+    std::error_code ec;
+    bool created = fs::create_directory("data", ec);
+    if (ec) {
+        wr::p("PERSIST", std::string("data create fail: ") + ec.message(), "Red");
+    } else if (created) {
+        wr::p("PERSIST", "Diretorio data criado.", "Green");
+    }
     return "data/" + filename;
 }
 
 // ----------------------------------------------
 // Escrita atômica com .tmp e backup .bak
+// Exemplo:
+//   Persist::atomicWrite("data/arquivo.txt", "conteudo");
 // ----------------------------------------------
 inline bool atomicWrite(const fs::path& finalPath, const std::string& content) {
     try {
-        if (!finalPath.parent_path().empty())
-            fs::create_directories(finalPath.parent_path());
+        if (!finalPath.parent_path().empty()) {
+            std::error_code ecDir;
+            bool dirCreated = fs::create_directories(finalPath.parent_path(), ecDir);
+            if (ecDir) {
+                wr::p("PERSIST", finalPath.parent_path().string() + " create fail: " + ecDir.message(), "Red");
+                return false;
+            } else if (dirCreated) {
+                wr::p("PERSIST", finalPath.parent_path().string() + " criado.", "Green");
+            }
+        }
 
+        bool existed = fs::exists(finalPath);
         const fs::path tmpPath = finalPath.string() + ".tmp";
         const fs::path bakPath = finalPath.string() + ".bak";
 
@@ -109,10 +130,12 @@ inline bool atomicWrite(const fs::path& finalPath, const std::string& content) {
         }
 
         // 2) backup do arquivo atual (se existir)
-        if (fs::exists(finalPath)) {
+        if (existed) {
             std::error_code ec;
             fs::copy_file(finalPath, bakPath, fs::copy_options::overwrite_existing, ec);
-            // falha no backup não é fatal
+            if (ec) {
+                wr::p("PERSIST", finalPath.string() + " backup copy fail: " + ec.message(), "Yellow");
+            }
         }
 
         // 3) move .tmp -> final
@@ -128,6 +151,8 @@ inline bool atomicWrite(const fs::path& finalPath, const std::string& content) {
                 return false;
             }
         }
+
+        wr::p("PERSIST", finalPath.string() + (existed ? " atualizado." : " criado."), "Green");
         return true;
     } catch (const std::exception& e) {
         wr::p("PERSIST", finalPath.string() + " exception: " + e.what(), "Red");

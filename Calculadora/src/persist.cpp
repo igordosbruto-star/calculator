@@ -9,6 +9,7 @@
 #include <filesystem>
 #include <algorithm>
 #include <fstream>
+#include <system_error>
 
 namespace fs = std::filesystem;
 
@@ -50,10 +51,12 @@ std::string makeId(const std::string& projeto) {
 std::string outPlanosDirFor(const std::string& projeto, const std::string& id) {
     (void)projeto; // id já contém o nome do projeto
     const fs::path dir = fs::path("out") / "planos" / id;
-    try {
-        fs::create_directories(dir);
-    } catch (...) {
-        // falha silenciosa: retorno mesmo assim
+    std::error_code ec;
+    bool created = fs::create_directories(dir, ec);
+    if (ec) {
+        wr::p("PERSIST", dir.string() + " create fail: " + ec.message(), "Red");
+    } else if (created) {
+        wr::p("PERSIST", dir.string() + " criado.", "Green");
     }
     return dir.string();
 }
@@ -101,8 +104,15 @@ bool savePlanoCSV(const std::string& dir, const PlanoCorteDTO& plano) {
 bool updateIndex(const PlanoCorteDTO& plano) {
     const fs::path indexPath = fs::path("out") / "planos" / "index.json";
     try {
-        if (!indexPath.parent_path().empty())
-            fs::create_directories(indexPath.parent_path());
+        if (!indexPath.parent_path().empty()) {
+            std::error_code ec;
+            bool created = fs::create_directories(indexPath.parent_path(), ec);
+            if (ec) {
+                wr::p("PERSIST", indexPath.parent_path().string() + " create fail: " + ec.message(), "Red");
+            } else if (created) {
+                wr::p("PERSIST", indexPath.parent_path().string() + " criado.", "Green");
+            }
+        }
 
         json j;
         if (fs::exists(indexPath)) {
