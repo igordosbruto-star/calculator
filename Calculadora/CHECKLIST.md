@@ -17,9 +17,9 @@
 - [ ] Garantir que casos de erro também possuem testes cobrindo o log em vermelho
 
 ## 📑 Documentação
-- [ ] Adicionar comentários em português explicando intenções do código
+- [x] Adicionar comentários em português explicando intenções do código
 - [ ] Exemplos mínimos nas funções públicas
-- [ ] Atualizar `Roadmap.md` com novas implementações
+- [x] Atualizar `Roadmap.md` com novas implementações
 
 ## 🛠️ Build & Lint
 - [x] Compilar a aplicação com:

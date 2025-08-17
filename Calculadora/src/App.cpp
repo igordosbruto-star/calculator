@@ -14,6 +14,7 @@
 
 // Bibliotecas Personalizadas
 #include "App.h"
+#include "format.h"
 #include "Corte.h"
 #include "Debug.h"
 
