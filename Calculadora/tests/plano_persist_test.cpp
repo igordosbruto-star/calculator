@@ -1,25 +1,30 @@
 #include "persist.hpp"
 #include "plano_corte.h"
+#include "Corte.h"
 #include <nlohmann/json.hpp>
 #include <cassert>
 #include <fstream>
 #include <filesystem>
 
-// Testa salvamento e leitura imediata de plano em JSON e CSV
+// Testa salvamento completo de plano em JSON, CSV e atualização do índice
 void test_plano_persist_io() {
-    // monta um corte simples
-    CorteDTO c{"Lateral", 2.0, 0.15, 180.0, 0.3, 54.0, false};
+    namespace fs = std::filesystem;
+    fs::remove_all("out");
+
+    // monta um corte e seu DTO correspondente
+    Corte c("Lateral", 2.0, 0.15, 180.0);
+    CorteDTO dto{"Lateral", 2.0, 0.15, 180.0, c.capArea(), c.capValor(), false};
 
     // monta plano com o corte
     PlanoCorteDTO p;
-    p.id = "plano_teste";
     p.projeto = "ProjetoX";
-    p.gerado_em = "2025-08-17T18:30:12";
     p.algoritmo = "simples";
     p.porm2_usado = 180.0;
-    p.cortes.push_back(c);
-    p.total_area_m2 = 0.3;
-    p.total_valor = 54.0;
+    p.cortes.push_back(dto);
+    p.total_area_m2 = c.capArea();
+    p.total_valor = c.capValor();
+    p.gerado_em = Persist::nowIso8601();
+    p.id = Persist::makeId(p.projeto);
 
     const std::string dir = Persist::outPlanosDirFor(p.projeto, p.id);
 
@@ -30,7 +35,7 @@ void test_plano_persist_io() {
     nlohmann::json j; jf >> j;
     PlanoCorteDTO p2 = j.get<PlanoCorteDTO>();
     assert(p2.cortes.size() == 1);
-    assert(p2.cortes[0].nome == "Lateral");
+    assert(p2.total_valor == p.total_valor);
 
     // salva e lê CSV
     assert(Persist::savePlanoCSV(dir, p));
@@ -42,5 +47,18 @@ void test_plano_persist_io() {
     assert(line.find(".") == std::string::npos); // números com vírgula
     assert(line.find("Lateral") == 0);
 
-    std::filesystem::remove_all(dir);
+    // atualiza e verifica índice
+    assert(Persist::updateIndex(p));
+    std::ifstream idx("out/planos/index.json");
+    assert(idx);
+    nlohmann::json ji; idx >> ji;
+    bool found = false;
+    for (const auto& item : ji["planos"]) {
+        if (item["id"].get<std::string>() == p.id) {
+            found = true;
+        }
+    }
+    assert(found);
+
+    fs::remove_all("out");
 }

@@ -17,6 +17,8 @@
 #include "format.h"
 #include "Corte.h"
 #include "Debug.h"
+#include "plano_corte.h"
+#include "persist.hpp"
 
 // ------------------------------------------------------------
 // Helpers apenas visíveis neste arquivo
@@ -229,9 +231,17 @@ void App::escolherPreco() {
 }
 
 void App::solicitarCortes() {
-    std::vector<Corte> cortes;
-    double total = 0.0;
+    std::vector<Corte> cortes;           // mantém objetos de domínio
+    std::vector<CorteDTO> cortesDTO;     // paralelamente, DTOs para persistência
+    double totalArea = 0.0;              // soma das áreas
+    double totalValor = 0.0;             // soma dos valores
     char cont = 's';
+
+    // Nome opcional do projeto para compor o identificador
+    std::string projeto;
+    std::cout << "\nNome do projeto: ";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(std::cin, projeto);
 
     while (cont == 's' || cont == 'S') {
         std::string nome;
@@ -239,7 +249,6 @@ void App::solicitarCortes() {
         double comprimento = 0.0;
 
         std::cout << "\nNome do corte: ";
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::getline(std::cin, nome);
         while (nome.empty()) {
             std::cout << "Nome invalido. Tente novamente.\n";
@@ -267,18 +276,44 @@ void App::solicitarCortes() {
         } while (comprimento <= 0);
 
         Corte c(nome, largura, comprimento, preco);
-        total += c.capValor();
         cortes.push_back(c);
+        totalArea += c.capArea();
+        totalValor += c.capValor();
+
+        // Constrói o DTO correspondente
+        CorteDTO dto{nome, largura, comprimento, preco, c.capArea(), c.capValor(), false};
+        cortesDTO.push_back(dto);
 
         std::cout << "Adicionar outro corte? (s/n) | ";
         std::cin >> cont;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
     std::cout << "\nResumo final:";
     for (const auto& c : cortes) {
         c.imprimir();
     }
-    std::cout << "\nTotal geral: " << UN_MONE << total << "\n";
+    std::cout << "\nTotal geral: " << UN_MONE << totalValor << "\n";
+
+    // Monta DTO do plano com totais e preço usado
+    PlanoCorteDTO plano;
+    plano.projeto = projeto;
+    plano.porm2_usado = preco;
+    plano.cortes = cortesDTO;
+    plano.total_area_m2 = totalArea;
+    plano.total_valor = totalValor;
+    plano.algoritmo = "manual";
+    plano.gerado_em = Persist::nowIso8601();
+    plano.id = Persist::makeId(projeto);
+
+    // Persiste o plano em disco
+    const std::string dir = Persist::outPlanosDirFor(projeto, plano.id);
+    Persist::savePlanoJSON(dir, plano);
+    Persist::savePlanoCSV(dir, plano);
+    Persist::updateIndex(plano);
+
+    // Exibe ao usuário onde foi salvo
+    wr::p("PERSIST", "Plano salvo em: " + dir, "Green");
 }
 
 void App::exportar() {
