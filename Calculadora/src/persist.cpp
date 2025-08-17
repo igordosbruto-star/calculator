@@ -8,6 +8,7 @@
 #include <cctype>
 #include <filesystem>
 #include <algorithm>
+#include <fstream>
 
 namespace fs = std::filesystem;
 
@@ -93,6 +94,55 @@ bool savePlanoCSV(const std::string& dir, const PlanoCorteDTO& plano) {
         return false;
     } catch (...) {
         wr::p("PERSIST", p.string() + " unknown exception", "Red");
+        return false;
+    }
+}
+
+bool updateIndex(const PlanoCorteDTO& plano) {
+    const fs::path indexPath = fs::path("out") / "planos" / "index.json";
+    try {
+        if (!indexPath.parent_path().empty())
+            fs::create_directories(indexPath.parent_path());
+
+        json j;
+        if (fs::exists(indexPath)) {
+            std::ifstream f(indexPath);
+            if (f) {
+                try {
+                    f >> j;
+                } catch (...) {
+                    j = json{};
+                }
+            }
+        }
+        if (!j.is_object()) j = json::object();
+        if (!j.contains("planos") || !j["planos"].is_array())
+            j["planos"] = json::array();
+
+        json entry = {
+            {"id", plano.id},
+            {"total_valor", plano.total_valor},
+            {"total_area_m2", plano.total_area_m2},
+            {"porm2", plano.porm2_usado}
+        };
+
+        bool replaced = false;
+        for (auto& item : j["planos"]) {
+            if (item.is_object() && item.value("id", std::string{}) == plano.id) {
+                item = entry;
+                replaced = true;
+                break;
+            }
+        }
+        if (!replaced)
+            j["planos"].push_back(entry);
+
+        return atomicWrite(indexPath, j.dump(2));
+    } catch (const std::exception& e) {
+        wr::p("PERSIST", indexPath.string() + " exception: " + e.what(), "Red");
+        return false;
+    } catch (...) {
+        wr::p("PERSIST", indexPath.string() + " unknown exception", "Red");
         return false;
     }
 }

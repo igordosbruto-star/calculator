@@ -14,4 +14,22 @@ void test_cli() {
     CliOptions o2 = parseArgs(2, const_cast<char**>(a2));
     assert(o2.autoMode);
     assert(!o2.showHelp);
+
+    // testa --projeto com caminho
+    const char* a3[] = {"app", "--projeto", "proj.json"};
+    CliOptions o3 = parseArgs(3, const_cast<char**>(a3));
+    assert(o3.projeto == "proj.json");
+
+    // testa comandos
+    const char* a4[] = {"app", "abrir"};
+    CliOptions o4 = parseArgs(2, const_cast<char**>(a4));
+    assert(o4.comando == Comando::Abrir);
+
+    const char* a5[] = {"app", "listar"};
+    CliOptions o5 = parseArgs(2, const_cast<char**>(a5));
+    assert(o5.comando == Comando::Listar);
+
+    const char* a6[] = {"app", "comparar"};
+    CliOptions o6 = parseArgs(2, const_cast<char**>(a6));
+    assert(o6.comando == Comando::Comparar);
 }
