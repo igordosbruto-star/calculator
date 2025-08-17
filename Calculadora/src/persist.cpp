@@ -1,4 +1,5 @@
 #include "persist.hpp"
+#include "persist.h" // para atomicWrite e utilidades
 
 #include <chrono>
 #include <ctime>
@@ -54,6 +55,46 @@ std::string outPlanosDirFor(const std::string& projeto, const std::string& id) {
         // falha silenciosa: retorno mesmo assim
     }
     return dir.string();
+}
+
+bool savePlanoJSON(const std::string& dir, const PlanoCorteDTO& plano) {
+    const fs::path p = fs::path(dir) / "plano.json";
+    try {
+        json j = plano;
+        return atomicWrite(p, j.dump(2));
+    } catch (const std::exception& e) {
+        wr::p("PERSIST", p.string() + " exception: " + e.what(), "Red");
+        return false;
+    } catch (...) {
+        wr::p("PERSIST", p.string() + " unknown exception", "Red");
+        return false;
+    }
+}
+
+bool savePlanoCSV(const std::string& dir, const PlanoCorteDTO& plano) {
+    const fs::path p = fs::path(dir) / "plano.csv";
+    try {
+        std::ostringstream oss;
+        oss << "nome;largura_m;comprimento_m;porm2;area_m2;valor;rot90\n";
+        for (const auto& c : plano.cortes) {
+            std::string safe = c.nome;
+            for (auto& ch : safe) if (ch == ';') ch = ',';
+            oss << safe << ';'
+                << to_str_br(c.largura_m) << ';'
+                << to_str_br(c.comprimento_m) << ';'
+                << to_str_br(c.porm2) << ';'
+                << to_str_br(c.area_m2) << ';'
+                << to_str_br(c.valor) << ';'
+                << (c.rot90 ? "1" : "0") << '\n';
+        }
+        return atomicWrite(p, oss.str());
+    } catch (const std::exception& e) {
+        wr::p("PERSIST", p.string() + " exception: " + e.what(), "Red");
+        return false;
+    } catch (...) {
+        wr::p("PERSIST", p.string() + " unknown exception", "Red");
+        return false;
+    }
 }
 
 } // namespace Persist
