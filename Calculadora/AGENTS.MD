@@ -27,7 +27,7 @@
 - Adicionar implementações feitas em `Roadmap.md`
 - Sempre que possível modularizar: preferir vários `.cpp` pequenos em vez de funções longas
 - Verificar `CHECKLIST.md` e marcar entradas
-- Compilar com:  ```sh  g++ -std=c++17 -Wall src/*.cpp -Iinclude -o app
+- Compilar com:  ```sh  g++ -std=c++17 -Wall src/*.cpp -Iinclude -Ithird_party -o app
 - Executar testes com: ./tests/run_tests
 - Commits no padrão Conventional Commits (`feat:`, `fix:`, `chore:`)
 
