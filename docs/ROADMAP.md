@@ -11,7 +11,7 @@ Esta calculadora evoluirá em etapas para oferecer mais flexibilidade e confiabi
   - Centralizar leitura/escrita em formatos adicionais (ex.: XML).
   - Integrar validação de dados antes de salvar.
 - **Interface de linha de comando** (`Calculadora/main.cpp`)
-  - Adicionar opções de ajuda e parâmetros para cálculos automatizados.
+  - Adicionar opções de ajuda e parâmetros para cálculos automatizados. ✅
   - Melhorar mensagens de erro para entradas inválidas.
 - **Testes automatizados** (novo diretório `tests/`)
   - Criar casos de teste unitários para validar comparações e rotinas de persistência.

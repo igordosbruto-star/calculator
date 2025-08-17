@@ -294,11 +294,15 @@ void App::exportar() {
     }
 }
 
-void App::iniciar() {
+void App::iniciar(bool autoMode) {
     wr::p("APP", "Iniciando..", "Green");
     std::cout << "\n";
 
     settings = Persist::loadOrCreateSettings();
+    if (autoMode) {
+        settings.prefer = "cheapest";
+        wr::p("APP", "Modo automatico ativado.", "Blue");
+    }
 
     dec = std::clamp(settings.decimal_places, 0, 6);
     std::cout << std::fixed << std::setprecision(dec);
