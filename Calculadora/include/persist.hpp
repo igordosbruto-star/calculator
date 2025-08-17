@@ -45,5 +45,14 @@ bool savePlanoJSON(const std::string& dir, const PlanoCorteDTO& plano);
 // ----------------------------------------------------------------------
 bool savePlanoCSV(const std::string& dir, const PlanoCorteDTO& plano);
 
+// ----------------------------------------------------------------------
+// Atualiza o arquivo de índice global "out/planos/index.json".
+// Se já existir entrada com mesmo `id`, ela é substituída.
+// Cria o arquivo caso não exista, usando escrita atômica.
+// Exemplo:
+//   Persist::updateIndex(plano);
+// ----------------------------------------------------------------------
+bool updateIndex(const PlanoCorteDTO& plano);
+
 } // namespace Persist
 
