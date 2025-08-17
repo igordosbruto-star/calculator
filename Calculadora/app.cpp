@@ -71,45 +71,27 @@ namespace {
 // ------------------------------------------------------------
 // Implementação do App
 // ------------------------------------------------------------
-void App::iniciar() {
-    wr::p("APP", "Iniciando..", "Green");
-    std::cout << "\n";
 
-    // ===========================
-    // 0) Carregar settings
-    // ===========================
-    Settings settings = Persist::loadOrCreateSettings(); // data/settings.json
+void App::importarCSV() {
+    std::cout << "Importar materiais do CSV para JSON? (s/n) | ";
+    char imp = 'n';
+    if (!(std::cin >> imp)) imp = 'n';
 
-    // Configuração de casas decimais (limitamos 0..6 por segurança)
-    dec = std::clamp(settings.decimal_places, 0, 6);
-    std::cout << std::fixed << std::setprecision(dec);
-
-    // ===========================
-    // 1) Opcional: importar CSV -> JSON
-    // ===========================
-    {
-        std::cout << "Importar materiais do CSV para JSON? (s/n) | ";
-        char imp = 'n';
-        if (!(std::cin >> imp)) imp = 'n';
-
-        if (imp == 's' || imp == 'S') {
-            std::vector<MaterialDTO> tmp;
-            if (Persist::loadCSV("materiais.csv", tmp) && !tmp.empty()) {
-                if (Persist::saveJSON("materiais.json", tmp, 1)) {
-                    wr::p("DATA", "Importacao CSV -> JSON concluida (materiais.json atualizado).", "Green");
-                } else {
-                    wr::p("DATA", "Falha ao salvar JSON apos importar CSV.", "Red");
-                }
+    if (imp == 's' || imp == 'S') {
+        std::vector<MaterialDTO> tmp;
+        if (Persist::loadCSV("materiais.csv", tmp) && !tmp.empty()) {
+            if (Persist::saveJSON("materiais.json", tmp, 1)) {
+                wr::p("DATA", "Importacao CSV -> JSON concluida (materiais.json atualizado).", "Green");
             } else {
-                wr::p("DATA", "Falha ao ler materiais.csv ou arquivo vazio.", "Red");
+                wr::p("DATA", "Falha ao salvar JSON apos importar CSV.", "Red");
             }
+        } else {
+            wr::p("DATA", "Falha ao ler materiais.csv ou arquivo vazio.", "Red");
         }
     }
+}
 
-    // ===========================
-    // 2) Carregar JSON (fonte de verdade) ou criar defaults
-    // ===========================
-    std::vector<MaterialDTO> base;
+bool App::carregarJSON() {
     int version = 0;
     if (!Persist::loadJSON("materiais.json", base, &version) || base.empty()) {
         wr::p("DATA", "Base nao encontrada. Criando materiais padrao...", "Yellow");
@@ -126,31 +108,25 @@ void App::iniciar() {
         wr::p("DATA", "materiais.json carregado (versao " + std::to_string(version) + ")", "Green");
     }
 
-    // ===========================
-    // 3) Reconstruir objetos Material
-    // ===========================
-    auto mats = reconstruirMateriais(base);
+    mats = reconstruirMateriais(base);
 
     if (mats.size() < 2) {
         wr::p("ERRO", "Precisam existir pelo menos 2 materiais para comparar.", "Red");
-        return;
+        return false;
     }
 
-    // ===========================
-    // 4) Comparar por R$/m² (exemplo entre os dois primeiros)
-    // ===========================
     wr::p("TESTE", "Inicio do teste...", "Yellow");
     q = compararPorM2(mats[0], mats[1]);
     wr::p("TESTE", "Final do teste...", "Yellow");
 
-    // ===========================
-    // 5) Escolha do mais barato/caro — respeitando settings.prefer
-    // ===========================
+    return true;
+}
+
+void App::escolherPreco() {
     int opcao = 1;
     if      (settings.prefer == "cheapest") opcao = 1;
     else if (settings.prefer == "priciest") opcao = 2;
     else {
-        // "ask": pergunta ao usuário como antes
         opcao = lerOpcao12(1);
     }
 
@@ -161,16 +137,14 @@ void App::iniciar() {
         std::cout << "Vamos calcular com o mais caro! (" << q.maior.nome << ")\n";
         preco = q.maior.valor;
     }
+}
 
-    // ===========================
-    // 6) Calculo do corte (exemplo)
-    // ===========================
+void App::calcularCorte() {
     Corte corte("Tabua de 56,5cm", 0.20, 0.565, preco);
     corte.imprimir();
+}
 
-    // ===========================
-    // 7) Exportar CSV (opcional)
-    // ===========================
+void App::exportar() {
     std::cout << "\nExportar base para CSV? (s/n) | ";
     char resp = 'n';
     if (!(std::cin >> resp)) resp = 'n';
@@ -181,6 +155,22 @@ void App::iniciar() {
             wr::p("CSV", "Falha ao exportar materiais.csv", "Red");
         }
     }
+}
+
+void App::iniciar() {
+    wr::p("APP", "Iniciando..", "Green");
+    std::cout << "\n";
+
+    settings = Persist::loadOrCreateSettings();
+
+    dec = std::clamp(settings.decimal_places, 0, 6);
+    std::cout << std::fixed << std::setprecision(dec);
+
+    importarCSV();
+    if (!carregarJSON()) return;
+    escolherPreco();
+    calcularCorte();
+    exportar();
 
     std::cout << "\n";
     wr::p("APP", "Finalizando..", "Green");
