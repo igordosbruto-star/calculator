@@ -30,15 +30,15 @@ namespace {
         if (v1 > v2) {
             r.maior = {a.capNome(), v1};
             r.menor = {b.capNome(), v2};
-            std::cout << "Maior\n";
+            wr::p("COMPARA", "Maior", "Green");
         } else if (v1 < v2) {
             r.maior = {b.capNome(), v2};
             r.menor = {a.capNome(), v1};
-            std::cout << "Menor\n";
+            wr::p("COMPARA", "Menor", "Green");
         } else {
             r.maior = {a.capNome(), v1};
             r.menor = {b.capNome(), v2};
-            std::cout << "Iguais\n";
+            wr::p("COMPARA", "Iguais", "Green");
         }
         return r;
     }
@@ -51,7 +51,7 @@ namespace {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             opcao = padrao;
-            std::cout << "Entrada invalida. Usando opcao " << padrao << ".\n";
+            wr::p("APP", "Entrada invalida. Usando opcao " + std::to_string(padrao) + ".", "Yellow");
         }
         return opcao;
     }
@@ -155,10 +155,10 @@ void App::iniciar() {
     }
 
     if (opcao == 1) {
-        std::cout << "Vamos calcular com o mais barato! (" << q.menor.nome << ")\n";
+        wr::p("APP", "Vamos calcular com o mais barato! (" + q.menor.nome + ")", "Green");
         preco = q.menor.valor;
     } else {
-        std::cout << "Vamos calcular com o mais caro! (" << q.maior.nome << ")\n";
+        wr::p("APP", "Vamos calcular com o mais caro! (" + q.maior.nome + ")", "Green");
         preco = q.maior.valor;
     }
 
