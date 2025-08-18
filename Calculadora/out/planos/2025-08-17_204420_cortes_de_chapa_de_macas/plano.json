@@ -1,0 +1,20 @@
+{
+  "algoritmo": "manual",
+  "cortes": [
+    {
+      "area_m2": 1.11,
+      "comprimento_m": 1.85,
+      "largura_m": 0.6,
+      "nome": "Tampo",
+      "porm2": 11.793611793611793,
+      "rot90": false,
+      "valor": 13.090909090909092
+    }
+  ],
+  "gerado_em": "2025-08-17T20:44:20",
+  "id": "2025-08-17_204420_cortes_de_chapa_de_macas",
+  "porm2_usado": 11.793611793611793,
+  "projeto": "Cortes de Chapa de Macas",
+  "total_area_m2": 1.11,
+  "total_valor": 13.090909090909092
+}
