@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Wall -DUNIT_TEST
 
 CORE_DIR = ../core
-CALC_DIR = ../Calculadora
+CALC_DIR = ../DUKE
 
 LIB_CORE = $(CORE_DIR)/libcore.a
 LIB_CALC = $(CALC_DIR)/libcalculadora.a
@@ -16,7 +16,7 @@ all: calculadora core
 
 calculadora: $(LIB_CALC) $(LIB_CORE)
 ifeq ($(strip $(CALC_SRCS)),)
-	@echo "No calculadora tests"
+        @echo "No DUKE tests"
 else
 	$(CXX) $(CXXFLAGS) -include calculadora/namespace.h \
 		$(CALC_SRCS) -I$(CALC_DIR)/include -I$(CALC_DIR)/third_party -I$(CORE_DIR)/include \

@@ -1,6 +1,6 @@
 # Uso via CLI
 
-A calculadora pode ser executada com as seguintes opções:
+O DUKE pode ser executado com as seguintes opções:
 
 ```bash
 ./app --help

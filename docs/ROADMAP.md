@@ -1,13 +1,13 @@
 # Roadmap
 
-Esta calculadora evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
+O DUKE evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
 
 ## Módulos planejados
 
-- **Núcleo do aplicativo** (`Calculadora/app.cpp`)
+- **Núcleo do aplicativo** (`DUKE/app.cpp`)
   - Extrair a lógica de comparação e seleção de materiais em funções reutilizáveis.
   - Preparar o arquivo para futura divisão em múltiplos módulos.
-- **Persistência de dados** (`Calculadora/persist.h`)
+- **Persistência de dados** (`DUKE/persist.h`)
   - Centralizar leitura/escrita em formatos adicionais (ex.: XML).
   - Integrar validação de dados antes de salvar. ✅
   - Suporte a serialização de planos de corte (CorteDTO e PlanoCorteDTO). ✅
@@ -15,7 +15,7 @@ Esta calculadora evoluirá em etapas para oferecer mais flexibilidade e confiabi
   - Função para carregar PlanoCorteDTO em JSON (`loadPlanoJSON`). ✅
   - Índice global de planos com atualização atômica (`updateIndex`). ✅
   - Persistência automática de planos gerados com `makeId`, `outPlanosDirFor`, `savePlanoJSON/CSV` e `updateIndex`. ✅
-- **Interface de linha de comando** (`Calculadora/main.cpp`)
+- **Interface de linha de comando** (`DUKE/main.cpp`)
   - Adicionar opções de ajuda e parâmetros para cálculos automatizados. ✅
   - Melhorar mensagens de erro para entradas inválidas.
   - Suporte inicial a `--projeto` e registro dos comandos `abrir`, `listar` e `comparar`. ✅
