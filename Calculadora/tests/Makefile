@@ -3,7 +3,8 @@ CXXFLAGS = -std=c++17 -Wall -DUNIT_TEST
 INCLUDES = -I../include -I../third_party
 
 TEST_SRCS = $(wildcard *.cpp)
-SRC_FILES = ../src/Material.cpp ../src/Corte.cpp ../src/cli.cpp \
+SRC_FILES = ../src/Material.cpp ../src/Corte.cpp ../src/cli/args.cpp \
+            ../src/cli/app.cpp ../src/core.cpp \
             ../src/plano_corte.cpp ../src/persist.cpp \
             ../src/persist_projeto.cpp \
             ../src/persist_tempo.cpp \

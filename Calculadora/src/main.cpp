@@ -4,8 +4,8 @@
 // ==========================================
 
 #include "Debug.h"
-#include "App.h"
-#include "cli.h"
+#include "cli/App.h"
+#include "cli/args.h"
 #include <string>
 
 // ----------------------------------------------------------
