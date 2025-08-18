@@ -13,7 +13,8 @@ SRC_FILES = ../src/Material.cpp ../src/Corte.cpp ../src/cli.cpp \
             ../src/domain/MaterialFactory.cpp \
             ../src/domain/Projeto.cpp \
             ../src/domain/Tempo.cpp \
-            ../src/custo/EstimadorCusto.cpp
+            ../src/custo/EstimadorCusto.cpp \
+            ../src/ui/Menu.cpp
 
 run_tests: $(TEST_SRCS) $(SRC_FILES)
 	$(CXX) $(CXXFLAGS) $(TEST_SRCS) $(SRC_FILES) $(INCLUDES) -o run_tests

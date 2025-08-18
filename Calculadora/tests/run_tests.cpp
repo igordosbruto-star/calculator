@@ -18,6 +18,7 @@ void test_estimador_custo();
 void test_projeto();
 void test_projeto_custo();
 void test_tempo();
+void test_menu();
 
 // Executa todos os testes
 int main() {
@@ -38,5 +39,6 @@ int main() {
     test_projeto();
     test_projeto_custo();
     test_tempo();
+    test_menu();
     return 0;
 }

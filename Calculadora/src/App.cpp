@@ -19,6 +19,8 @@
 #include "Debug.h"
 #include "plano_corte.h"
 #include "persist.hpp"
+#include "ui/Menu.h"
+#include "ui/Screens.h"
 
 // ------------------------------------------------------------
 // Helpers apenas visíveis neste arquivo
@@ -354,15 +356,54 @@ void App::iniciar(bool autoMode) {
 
     importarCSV();
     if (!carregarJSON()) return;
-    menuMateriais();
-    if (mats.size() < 2) {
-        wr::p("ERRO", "Precisam existir pelo menos 2 materiais para comparar.", "Red");
-        return;
-    }
     q = extremosPorM2(mats);
-    escolherPreco();
-    solicitarCortes();
-    exportar();
+
+    ui::MenuState state = ui::MenuState::Principal;
+    while (state != ui::MenuState::Sair) {
+        switch (state) {
+            case ui::MenuState::Principal: {
+                ui::clearScreen();
+                ui::renderBreadcrumb({ui::toString(ui::MenuState::Principal)});
+                int opt = ui::promptMenu({"Criar", "Listar", "Comparar", "Config", "Sair"});
+                switch (opt) {
+                    case 1: state = ui::MenuState::Criar; break;
+                    case 2: state = ui::MenuState::Listar; break;
+                    case 3: state = ui::MenuState::Comparar; break;
+                    case 4: state = ui::MenuState::Config; break;
+                    default: state = ui::MenuState::Sair; break;
+                }
+                break;
+            }
+            case ui::MenuState::Criar:
+                escolherPreco();
+                solicitarCortes();
+                exportar();
+                ui::readString("Pressione ENTER para continuar...", std::cin, std::cout);
+                state = ui::MenuState::Principal;
+                break;
+            case ui::MenuState::Listar:
+                listarMateriais(base);
+                ui::readString("Pressione ENTER para voltar...", std::cin, std::cout);
+                state = ui::MenuState::Principal;
+                break;
+            case ui::MenuState::Comparar:
+                escolherPreco();
+                ui::readString("Pressione ENTER para voltar...", std::cin, std::cout);
+                state = ui::MenuState::Principal;
+                break;
+            case ui::MenuState::Config:
+                menuMateriais();
+                if (mats.size() < 2) {
+                    wr::p("ERRO", "Precisam existir pelo menos 2 materiais para comparar.", "Red");
+                } else {
+                    q = extremosPorM2(mats);
+                }
+                state = ui::MenuState::Principal;
+                break;
+            case ui::MenuState::Sair:
+                break;
+        }
+    }
 
     std::cout << "\n";
     wr::p("APP", "Finalizando..", "Green");
