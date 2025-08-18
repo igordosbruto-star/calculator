@@ -1,6 +1,7 @@
 #include "ui/Menu.h"
 #include <limits>
 #include <cctype>
+namespace calculadora {
 
 namespace ui {
 
@@ -103,3 +104,4 @@ std::string readString(const std::string& prompt,
 
 } // namespace ui
 
+} // namespace calculadora

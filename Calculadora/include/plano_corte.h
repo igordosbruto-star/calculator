@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <nlohmann/json.hpp>
+namespace calculadora {
 
 using nlohmann::json;
 
@@ -36,3 +37,4 @@ void from_json(const json& j, CorteDTO& c);
 void to_json(json& j, const PlanoCorteDTO& p);
 void from_json(const json& j, PlanoCorteDTO& p);
 
+} // namespace calculadora

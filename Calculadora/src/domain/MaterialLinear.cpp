@@ -1,4 +1,5 @@
 #include "domain/MaterialLinear.h"
+namespace calculadora {
 
 // Construtor com preco por metro e percentual de perda
 // Exemplo: MaterialLinear ml(10.0, 0.1);
@@ -15,3 +16,4 @@ double MaterialLinear::custo(double qtd, const Medidas& m) const {
     double metros = m.comprimento;
     return precoM * metros * qtd * (1.0 + perda);
 }
+} // namespace calculadora

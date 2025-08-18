@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+namespace calculadora {
 
 class Material {
 private:
@@ -32,3 +33,4 @@ public:
     void mostrar() const;
 };
 
+} // namespace calculadora

@@ -5,6 +5,7 @@
 #include "domain/MaterialBase.h"
 #include "custo/CustoParams.h"
 #include "domain/Tempo.h"
+namespace calculadora {
 
 // Item de material dentro de um projeto
 struct ProjetoItemMaterial {
@@ -72,3 +73,4 @@ public:
     bool adicionarOperacao(const Operacao& op);
 };
 
+} // namespace calculadora

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "plano_corte.h"
+namespace calculadora {
 
 namespace Persist {
 
@@ -80,3 +81,4 @@ bool loadIndex(std::vector<PlanoIndexEntry>& out);
 
 } // namespace Persist
 
+} // namespace calculadora

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+namespace calculadora {
 
 class Corte {
 private:
@@ -20,3 +21,4 @@ public:
     void imprimir() const;
 };
 
+} // namespace calculadora

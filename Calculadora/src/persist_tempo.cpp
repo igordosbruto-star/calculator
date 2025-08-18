@@ -3,6 +3,7 @@
 
 #include <filesystem>
 #include <fstream>
+namespace calculadora {
 
 using nlohmann::json;
 namespace fs = std::filesystem;
@@ -22,6 +23,8 @@ static bool upgradeIfNeeded(json& j) {
 }
 
 namespace Persist {
+using ::Persist::dataPath;
+using ::Persist::atomicWrite;
 
 bool loadTempoTemplate(const std::string& nome, std::vector<Operacao>& out) {
     try {
@@ -47,3 +50,4 @@ bool loadTempoTemplate(const std::string& nome, std::vector<Operacao>& out) {
 
 } // namespace Persist
 
+} // namespace calculadora

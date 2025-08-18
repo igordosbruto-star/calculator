@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "domain/Projeto.h"
+namespace calculadora {
 
 namespace Persist {
 
@@ -20,3 +21,4 @@ bool deleteProjeto(const std::string& id);
 
 } // namespace Persist
 
+} // namespace calculadora

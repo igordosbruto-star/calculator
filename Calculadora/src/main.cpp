@@ -8,6 +8,8 @@
 #include "cli/args.h"
 #include <string>
 
+using namespace calculadora;
+
 // ----------------------------------------------------------
 // Entrada principal da aplicação
 // Processa argumentos e executa o App
