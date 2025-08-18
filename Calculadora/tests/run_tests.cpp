@@ -17,6 +17,7 @@ void test_material_factory();
 void test_estimador_custo();
 void test_projeto();
 void test_projeto_custo();
+void test_tempo();
 
 // Executa todos os testes
 int main() {
@@ -36,5 +37,6 @@ int main() {
     test_estimador_custo();
     test_projeto();
     test_projeto_custo();
+    test_tempo();
     return 0;
 }

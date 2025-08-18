@@ -6,11 +6,13 @@ TEST_SRCS = $(wildcard *.cpp)
 SRC_FILES = ../src/Material.cpp ../src/Corte.cpp ../src/cli.cpp \
             ../src/plano_corte.cpp ../src/persist.cpp \
             ../src/persist_projeto.cpp \
+            ../src/persist_tempo.cpp \
             ../src/domain/MaterialUnitario.cpp \
             ../src/domain/MaterialLinear.cpp \
             ../src/domain/MaterialCubico.cpp \
             ../src/domain/MaterialFactory.cpp \
             ../src/domain/Projeto.cpp \
+            ../src/domain/Tempo.cpp \
             ../src/custo/EstimadorCusto.cpp
 
 run_tests: $(TEST_SRCS) $(SRC_FILES)

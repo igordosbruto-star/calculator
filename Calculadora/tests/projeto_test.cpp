@@ -33,6 +33,10 @@ void test_projeto() {
     ct.custoUnitario = 1.0;
     assert(prj.adicionarCorte(ct));
 
+    // Operação válida
+    Operacao op{Fase::Producao, 1.0, 1};
+    assert(prj.adicionarOperacao(op));
+
     // Corte inválido (medida <=0)
     ProjetoItemCorte ctInv;
     ctInv.idMaterial = "mat1";
@@ -52,12 +56,15 @@ void test_projeto() {
     // Testes de persistência
     prj.adicionarMaterial(mat);
     prj.adicionarCorte(ct);
+    prj.operacoes.clear();
+    prj.adicionarOperacao(op);
     assert(Persist::saveProjetoJSON(prj));
 
     Projeto lido;
     assert(Persist::loadProjetoJSON(prj.id, lido));
     assert(lido.materiais.size() == 1);
     assert(lido.cortes.size() == 1);
+    assert(lido.operacoes.size() == 1);
 
     auto ids = Persist::listarProjetos();
     bool encontrado = false;

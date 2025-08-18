@@ -36,6 +36,10 @@ static json projetoToJson(const Projeto& p) {
             {"custo_unitario", c.custoUnitario}
         });
     }
+    j["operacoes"] = json::array();
+    for (const auto& op : p.operacoes) {
+        j["operacoes"].push_back(op);
+    }
     return j;
 }
 
@@ -64,6 +68,10 @@ static void jsonToProjeto(const json& j, Projeto& p) {
         jc.at("quantidade").get_to(c.quantidade);
         jc.at("custo_unitario").get_to(c.custoUnitario);
         p.cortes.push_back(c);
+    }
+    p.operacoes.clear();
+    for (const auto& jo : j.value("operacoes", json::array())) {
+        p.operacoes.push_back(jo.get<Operacao>());
     }
 }
 

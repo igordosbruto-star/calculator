@@ -23,9 +23,13 @@ void test_projeto_custo() {
     ct.custoUnitario = 2.0;
     assert(prj.adicionarCorte(ct));
 
+    // Operação de 1h
+    Operacao op{Fase::Producao, 1.0, 1};
+    assert(prj.adicionarOperacao(op));
+
     CustoParams cfg;
     cfg.perdaPadrao = 0.0;
-    cfg.fatorMaoObra = 0.1;
+    cfg.fatorMaoObra = 10.0; // custo por hora
     cfg.overhead = 0.05;
     cfg.markup = 0.2;
     cfg.casasDecimais = 2;
@@ -34,5 +38,5 @@ void test_projeto_custo() {
     assert(resumo.itens.size() == 2);
     assert(resumo.itens[0].subtotal == 20.0);
     assert(resumo.itens[1].subtotal == 2.0);
-    assert(resumo.total == 30.49);
+    assert(resumo.total == 40.32);
 }
