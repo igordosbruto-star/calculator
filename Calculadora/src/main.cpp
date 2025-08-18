@@ -23,9 +23,12 @@ int main(int argc, char* argv[]) {
     // Se for solicitado help, exibe instruções e sai
     if (opt.showHelp) {
         std::cout << "Uso: ./app [comando] [opcoes]\n";
-        std::cout << "  comandos: abrir, listar, comparar (em construcao)\n";
+        std::cout << "  comandos: criar, listar, comparar (em construcao)\n";
         std::cout << "  --auto : calcula usando o material mais barato.\n";
         std::cout << "  --projeto <arq> : abre projeto informado.\n";
+        std::cout << "  --tipo <t> : filtra por tipo de material.\n";
+        std::cout << "  --ordem <c:d> : ordena listagem.\n";
+        std::cout << "  --ids <1,2,3> : ids para comparacao.\n";
         std::cout << "  --help : mostra esta ajuda e finaliza.\n";
         return 0;
     }
@@ -34,7 +37,7 @@ int main(int argc, char* argv[]) {
     if (opt.comando != Comando::Nenhum) {
         std::string nome;
         switch (opt.comando) {
-            case Comando::Abrir: nome = "abrir"; break;
+            case Comando::Criar: nome = "criar"; break;
             case Comando::Listar: nome = "listar"; break;
             case Comando::Comparar: nome = "comparar"; break;
             default: nome = ""; break;

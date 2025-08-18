@@ -5,6 +5,7 @@
 
 #include "cli.h"
 #include <string>
+#include <sstream>
 
 CliOptions parseArgs(int argc, char* argv[]) {
     CliOptions opt; // guarda opções reconhecidas
@@ -17,10 +18,45 @@ CliOptions parseArgs(int argc, char* argv[]) {
         } else if (a == "--projeto" && i + 1 < argc) {
             // consome próximo argumento como caminho do projeto
             opt.projeto = argv[++i];
+        } else if (a.rfind("--tipo", 0) == 0) {
+            // aceita --tipo=valor ou --tipo valor
+            std::string valor;
+            if (a == "--tipo" && i + 1 < argc) {
+                valor = argv[++i];
+            } else if (a.find('=') != std::string::npos) {
+                valor = a.substr(a.find('=') + 1);
+            }
+            if (!valor.empty()) opt.tipo = valor;
+        } else if (a.rfind("--ordem", 0) == 0) {
+            // aceita --ordem=campo:direcao ou --ordem valor
+            std::string valor;
+            if (a == "--ordem" && i + 1 < argc) {
+                valor = argv[++i];
+            } else if (a.find('=') != std::string::npos) {
+                valor = a.substr(a.find('=') + 1);
+            }
+            if (!valor.empty()) opt.ordem = valor;
+        } else if (a.rfind("--ids", 0) == 0) {
+            // aceita lista separada por vírgula
+            std::string valor;
+            if (a == "--ids" && i + 1 < argc) {
+                valor = argv[++i];
+            } else if (a.find('=') != std::string::npos) {
+                valor = a.substr(a.find('=') + 1);
+            }
+            if (!valor.empty()) {
+                std::stringstream ss(valor);
+                std::string item;
+                while (std::getline(ss, item, ',')) {
+                    if (!item.empty()) {
+                        opt.ids.push_back(std::stoi(item));
+                    }
+                }
+            }
         } else if (opt.comando == Comando::Nenhum) {
             // registra comando principal
-            if (a == "abrir") {
-                opt.comando = Comando::Abrir;
+            if (a == "criar") {
+                opt.comando = Comando::Criar;
             } else if (a == "listar") {
                 opt.comando = Comando::Listar;
             } else if (a == "comparar") {
