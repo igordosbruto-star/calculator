@@ -27,6 +27,12 @@ void test_estimador_custo() {
     double custoC = est.custoMaterial(reqC, mc);
     assert(custoC == 300.0);
 
+    // Material cúbico com volume zero
+    Medidas mz{};
+    ItemReq reqZ{"MAT-Z", "cubico", 2.0, mz};
+    double custoZ = est.custoMaterial(reqZ, mc);
+    assert(custoZ == 0.0);
+
     // Projeto agregando os três itens
     ProjetoCusto prj;
     prj.materiais.push_back({reqU, &mu});
