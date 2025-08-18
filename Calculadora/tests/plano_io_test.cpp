@@ -1,7 +1,6 @@
 #include "persist.hpp"
 #include "plano_corte.h"
 #include "Corte.h"
-#include <nlohmann/json.hpp>
 #include <cassert>
 #include <fstream>
 #include <filesystem>
@@ -30,10 +29,8 @@ void test_plano_io() {
 
     // salva e lê JSON
     assert(Persist::savePlanoJSON(dir, p));
-    std::ifstream jf(dir + "/plano.json");
-    assert(jf);
-    nlohmann::json j; jf >> j;
-    PlanoCorteDTO p2 = j.get<PlanoCorteDTO>();
+    PlanoCorteDTO p2;
+    assert(Persist::loadPlanoJSON(dir + "/plano.json", p2));
     assert(p2.cortes.size() == 1);
     assert(p2.cortes[0].nome == "Lateral");
     assert(p2.total_valor == p.total_valor);
