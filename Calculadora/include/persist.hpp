@@ -46,6 +46,14 @@ bool savePlanoJSON(const std::string& dir, const PlanoCorteDTO& plano);
 bool savePlanoCSV(const std::string& dir, const PlanoCorteDTO& plano);
 
 // ----------------------------------------------------------------------
+// Reabre um PlanoCorteDTO a partir de um arquivo JSON previamente salvo.
+// Retorna verdadeiro em caso de sucesso.
+// Exemplo:
+//   PlanoCorteDTO p; Persist::loadPlanoJSON("out/planos/xyz/plano.json", p);
+// ----------------------------------------------------------------------
+bool loadPlanoJSON(const std::string& file, PlanoCorteDTO& out);
+
+// ----------------------------------------------------------------------
 // Atualiza o arquivo de índice global "out/planos/index.json".
 // Se já existir entrada com mesmo `id`, ela é substituída.
 // Cria o arquivo caso não exista, usando escrita atômica.
