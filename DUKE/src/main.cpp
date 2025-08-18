@@ -8,7 +8,7 @@
 #include "cli/args.h"
 #include <string>
 
-using namespace calculadora;
+using namespace duke;
 
 // ----------------------------------------------------------
 // Entrada principal da aplicação

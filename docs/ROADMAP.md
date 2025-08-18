@@ -43,5 +43,5 @@ Com a evolução recente, a camada de persistência agora:
 - Documentação expandida em `docs/` para cobrir uso e desenvolvimento.
 - Guia de contribuições explicando estilo e práticas de codificação.
 - Centralizar constantes de formatação em `format.h` para reutilização.
-- API pública simplificada via `calculadora.hpp`. ✅
+- API pública simplificada via `duke.hpp`. ✅
 

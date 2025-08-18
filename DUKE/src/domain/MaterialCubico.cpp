@@ -1,5 +1,5 @@
 #include "domain/MaterialCubico.h"
-namespace calculadora {
+namespace duke {
 
 // Construtor com preco por metro cubico
 // Exemplo: MaterialCubico mc(100.0);
@@ -16,4 +16,4 @@ double MaterialCubico::custo(double qtd, const Medidas& m) const {
     double volume = m.largura * m.altura * m.profundidade;
     return precoM3 * volume * qtd;
 }
-} // namespace calculadora
+} // namespace duke

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-namespace calculadora {
+namespace duke {
 
 namespace ui {
 
@@ -27,4 +27,4 @@ inline std::string toString(MenuState s) {
 
 } // namespace ui
 
-} // namespace calculadora
+} // namespace duke

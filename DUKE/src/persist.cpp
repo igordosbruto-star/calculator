@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <fstream>
 #include <system_error>
-namespace calculadora {
+namespace duke {
 
 namespace fs = std::filesystem;
 
@@ -210,4 +210,4 @@ bool loadIndex(std::vector<PlanoIndexEntry>& out) {
 
 } // namespace Persist
 
-} // namespace calculadora
+} // namespace duke

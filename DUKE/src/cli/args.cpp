@@ -6,7 +6,7 @@
 #include "cli/args.h"
 #include <string>
 #include <sstream>
-namespace calculadora {
+namespace duke {
 
 CliOptions parseArgs(int argc, char* argv[]) {
     CliOptions opt; // guarda opções reconhecidas
@@ -68,4 +68,4 @@ CliOptions parseArgs(int argc, char* argv[]) {
     return opt;
 }
 
-} // namespace calculadora
+} // namespace duke

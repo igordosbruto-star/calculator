@@ -1,4 +1,4 @@
-namespace calculadora {
+namespace duke {
 #pragma once
 
 // Parâmetros globais para cálculo de custo
@@ -12,4 +12,4 @@ struct CustoParams {
 
 // Exemplo de uso:
 // CustoParams cfg{0.05, 0.1, 0.05, 0.2, 2};
-} // namespace calculadora
+} // namespace duke

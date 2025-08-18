@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include <nlohmann/json.hpp>
-namespace calculadora {
+namespace duke {
 
 // Fases básicas de uma operação
 enum class Fase {
@@ -39,4 +39,4 @@ Fase faseFromString(const std::string& s);
 void to_json(nlohmann::json& j, const Operacao& o);
 void from_json(const nlohmann::json& j, Operacao& o);
 
-} // namespace calculadora
+} // namespace duke

@@ -3,7 +3,7 @@
 #include "domain/MaterialLinear.h"
 #include "domain/MaterialCubico.h"
 #include <stdexcept>
-namespace calculadora {
+namespace duke {
 
 // Cria instância concreta conforme o tipo informado
 // Exemplo: fromDTO({"Item",10,0,0,"unitario"}) -> MaterialUnitario
@@ -19,4 +19,4 @@ std::unique_ptr<MaterialBase> MaterialFactory::fromDTO(const MaterialDTO& dto) {
     }
     throw std::invalid_argument("tipo desconhecido: " + dto.tipo);
 }
-} // namespace calculadora
+} // namespace duke

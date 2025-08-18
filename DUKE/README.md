@@ -4,12 +4,12 @@ API pública simplificada para cálculos de cortes.
 
 ## Uso
 
-Inclua `include/calculadora.hpp` e utilize as funções disponibilizadas.
+Inclua `include/duke.hpp` e utilize as funções disponibilizadas.
 
 ```cpp
-#include "calculadora.hpp"
+#include "duke.hpp"
 
-using namespace calculadora;
+using namespace duke;
 
 int main() {
     Material m{"Madeira", 100.0, 2.0, 2.0};

@@ -5,7 +5,7 @@
 
 #include "custo/CustoParams.h"
 #include "domain/MaterialBase.h"
-namespace calculadora {
+namespace duke {
 
 // Item requisitado com identificação e medidas
 struct ItemReq {
@@ -48,4 +48,4 @@ public:
     double custoProjeto(const ProjetoCusto& prj, const CustoParams& cfg) const;
 };
 
-} // namespace calculadora
+} // namespace duke

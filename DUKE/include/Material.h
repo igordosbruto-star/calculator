@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-namespace calculadora {
+namespace duke {
 
 class Material {
 private:
@@ -33,4 +33,4 @@ public:
     void mostrar() const;
 };
 
-} // namespace calculadora
+} // namespace duke
