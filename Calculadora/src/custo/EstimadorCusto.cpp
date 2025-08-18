@@ -26,6 +26,7 @@ double EstimadorCusto::custoProjeto(const ProjetoCusto& prj, const CustoParams& 
     }
     subtotal *= (1.0 + cfg.perdaPadrao);
     subtotal *= (1.0 + cfg.fatorMaoObra);
+    subtotal *= (1.0 + cfg.overhead);
     subtotal *= (1.0 + cfg.markup);
     return arredondar(subtotal, cfg.casasDecimais);
 }
