@@ -4,6 +4,7 @@
 void test_cli();
 void test_persist();
 void test_persist_io();
+void testPersistGolden();
 void test_persist_migration();
 void test_settings_migration();
 void test_extremos();
@@ -15,6 +16,7 @@ void test_plano_index();
 void test_data_path();
 void test_domain_material();
 void test_material_factory();
+void testValidarMaterialPorTipo();
 void test_estimador_custo();
 void test_projeto();
 void test_projeto_custo();
@@ -26,6 +28,7 @@ int main() {
     test_cli();
     test_persist();
     test_persist_io();
+    testPersistGolden();
     test_persist_migration();
     test_settings_migration();
     test_extremos();
@@ -37,6 +40,7 @@ int main() {
     test_data_path();
     test_domain_material();
     test_material_factory();
+    testValidarMaterialPorTipo();
     test_estimador_custo();
     test_projeto();
     test_projeto_custo();

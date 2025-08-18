@@ -1,2 +1,2 @@
-nome;valor;largura;comprimento
-Madeira;10,000000;2,000000;3,000000
+nome;tipo;valor;largura;comprimento
+Madeira;linear;10,000000;2,000000;3,000000
