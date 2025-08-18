@@ -5,7 +5,8 @@ INCLUDES = -Iinclude -Ithird_party -I$(CORE_DIR)/include
 
 CORE_LIB = $(CORE_DIR)/libcore.a
 
-SRC := $(wildcard src/*.cpp) $(wildcard src/cli/*.cpp) \
+CLI_SRC := src/cli/app.cpp src/cli/args.cpp src/cli/parser.cpp src/cli/utils.cpp src/cli/commands.cpp
+SRC := $(wildcard src/*.cpp) $(CLI_SRC) \
        $(wildcard src/domain/*.cpp) $(wildcard src/custo/*.cpp) \
        $(wildcard src/ui/*.cpp)
 LIB_SRC := $(filter-out src/main.cpp,$(SRC))
