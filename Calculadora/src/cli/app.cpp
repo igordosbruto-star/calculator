@@ -13,7 +13,7 @@
 #include <sstream>
 
 // Bibliotecas Personalizadas
-#include "App.h"
+#include "cli/App.h"
 #include "format.h"
 #include "Corte.h"
 #include "Debug.h"
@@ -21,17 +21,12 @@
 #include "persist.hpp"
 #include "ui/Menu.h"
 #include "ui/Screens.h"
+#include "core.h"
 
 // ------------------------------------------------------------
 // Helpers apenas visíveis neste arquivo
 // ------------------------------------------------------------
 namespace {
-
-    Como extremosPorM2(const std::vector<Material>& mats) {
-        auto cmp = [](const Material& a, const Material& b){ return a.capPorm2() < b.capPorm2(); };
-        auto [min_it, max_it] = std::minmax_element(mats.begin(), mats.end(), cmp);
-        return {{min_it->capNome(), min_it->capPorm2()}, {max_it->capNome(), max_it->capPorm2()}};
-    }
 
     // Lê uma opção do usuário garantindo apenas 1 ou 2
     int lerOpcao12(int padrao = 1) {
@@ -44,16 +39,6 @@ namespace {
             wr::p("APP", "Entrada invalida. Usando opcao " + std::to_string(padrao) + ".", "Yellow");
         }
         return opcao;
-    }
-
-    // Reconstrói objetos Material a partir dos DTOs carregados do JSON.
-    std::vector<Material> reconstruirMateriais(const std::vector<MaterialDTO>& v) {
-        std::vector<Material> mats;
-        mats.reserve(v.size());
-        for (const auto& d : v) {
-            mats.emplace_back(d.nome, d.valor, d.largura, d.comprimento);
-        }
-        return mats;
     }
 
     // Exibe materiais cadastrados
@@ -74,7 +59,7 @@ namespace {
 
     // Reconstrói vetor de Materiais e persiste base
     void salvarReconstruir(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
-        mats = reconstruirMateriais(base);
+        mats = core::reconstruirMateriais(base);
         Persist::saveJSON("materiais.json", base, 1);
     }
 
@@ -189,7 +174,7 @@ bool App::carregarJSON() {
         wr::p("DATA", oss.str(), "Green");
     }
 
-    mats = reconstruirMateriais(base);
+    mats = core::reconstruirMateriais(base);
 
     if (mats.size() < 2) {
         wr::p("ERRO", "Precisam existir pelo menos 2 materiais para comparar.", "Red");
@@ -298,7 +283,7 @@ void App::compararMateriais() {
     }
     std::vector<Material> sel;
     for (int i : ids) sel.push_back(mats[static_cast<size_t>(i)]);
-    auto [menor, maior] = extremosPorM2(sel);
+    auto [menor, maior] = core::extremosPorM2(sel);
     std::cout << "ID | Nome | porm2\n";
     for (int i : ids) {
         const auto& m = mats[static_cast<size_t>(i)];
@@ -441,7 +426,7 @@ void App::iniciar(bool autoMode) {
 
     importarCSV();
     if (!carregarJSON()) return;
-    q = extremosPorM2(mats);
+    q = core::extremosPorM2(mats);
 
     ui::MenuState state = ui::MenuState::Principal;
     while (state != ui::MenuState::Sair) {
@@ -504,7 +489,7 @@ void App::iniciar(bool autoMode) {
                 if (mats.size() < 2) {
                     wr::p("ERRO", "Precisam existir pelo menos 2 materiais para comparar.", "Red");
                 } else {
-                    q = extremosPorM2(mats);
+                    q = core::extremosPorM2(mats);
                 }
                 state = ui::MenuState::Principal;
                 break;

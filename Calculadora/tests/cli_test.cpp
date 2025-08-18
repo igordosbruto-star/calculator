@@ -1,4 +1,4 @@
-#include "cli.h"
+#include "cli/args.h"
 #include <cassert>
 
 // Testa o parsing de argumentos basicos

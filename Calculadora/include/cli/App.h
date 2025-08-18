@@ -4,9 +4,7 @@
 #include <string>
 #include "persist.h"
 #include "Material.h"
-
-struct Base { std::string nome; double valor = 0.0; };
-struct Como { Base menor, maior; };
+#include "core.h"
 
 class App {
 private:
@@ -26,8 +24,8 @@ private:
     void compararMateriais();
 
 public:
-    double preco = 0.0; // preço/m² escolhido (menor ou maior)
-    Como q;             // resultado da comparação
+    double preco = 0.0;      // preço/m² escolhido (menor ou maior)
+    core::Como q;            // resultado da comparação
 
     // Inicia o aplicativo
     // autoMode=true usa automaticamente o material mais barato
