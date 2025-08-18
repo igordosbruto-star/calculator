@@ -5,7 +5,7 @@ CORE_DIR = ../core
 CALC_DIR = ../DUKE
 
 LIB_CORE = $(CORE_DIR)/libcore.a
-LIB_CALC = $(CALC_DIR)/libcalculadora.a
+LIB_CALC = $(CALC_DIR)/libduke.a
 
 CALC_SRCS := $(wildcard calculadora/*.cpp)
 CORE_SRCS := $(wildcard core/*.cpp)
@@ -34,7 +34,7 @@ else
 endif
 
 $(LIB_CALC):
-	$(MAKE) -C $(CALC_DIR) libcalculadora.a
+	$(MAKE) -C $(CALC_DIR) libduke.a
 
 $(LIB_CORE):
 	$(MAKE) -C $(CORE_DIR) libcore.a
