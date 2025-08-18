@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "plano_corte.h"
 
 namespace Persist {
@@ -61,6 +62,21 @@ bool loadPlanoJSON(const std::string& file, PlanoCorteDTO& out);
 //   Persist::updateIndex(plano);
 // ----------------------------------------------------------------------
 bool updateIndex(const PlanoCorteDTO& plano);
+
+// ------------------------------------------------------------
+// Lê o arquivo "out/planos/index.json" e devolve vetor de entradas.
+// Retorna falso se não for possível ler.
+// Exemplo:
+// std::vector<PlanoIndexEntry> v; Persist::loadIndex(v);
+// ------------------------------------------------------------
+struct PlanoIndexEntry {
+    std::string id;         // identificador do plano
+    double total_valor = 0; // valor total em moedas
+    double total_area_m2 = 0; // área total em m²
+    double porm2 = 0;       // preço por m² utilizado
+};
+
+bool loadIndex(std::vector<PlanoIndexEntry>& out);
 
 } // namespace Persist
 

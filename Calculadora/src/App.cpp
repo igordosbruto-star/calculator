@@ -78,6 +78,7 @@ namespace {
         Persist::saveJSON("materiais.json", base, 1);
     }
 
+
     // Adiciona novo material
     void adicionarMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
         MaterialDTO m;
@@ -142,6 +143,7 @@ namespace {
         base.erase(base.begin() + static_cast<long>(idx - 1));
         salvarReconstruir(base, mats);
     }
+
 
 } // namespace
 
@@ -222,6 +224,89 @@ void App::menuMateriais() {
                 std::cout << "Opcao invalida.\n";
                 break;
         }
+    }
+}
+
+// Cria material a partir de entradas específicas por tipo
+void App::criarMaterial() {
+    ui::renderBreadcrumb({ui::toString(ui::MenuState::Principal),
+                           ui::toString(ui::MenuState::Criar),
+                           "Material"});
+    MaterialDTO m;
+    m.nome = ui::readString("Nome: ");
+    int tipo = ui::readInt("Tipo (1-Unitario 2-Linear 3-Cubico): ");
+    switch (tipo) {
+        case 1:
+            m.tipo = "unitario";
+            m.valor = ui::readDouble("Preco por unidade: ");
+            break;
+        case 3:
+            m.tipo = "cubico";
+            m.valor = ui::readDouble("Preco por m3: ");
+            break;
+        default:
+            m.tipo = "linear";
+            m.valor = ui::readDouble("Preco por metro: ");
+            m.comprimento = ui::readDouble("Comprimento padrao (m): ");
+            break;
+    }
+    if (!Persist::validar(m)) {
+        wr::p("APP", "Material invalido, nada salvo.", "Red");
+        return;
+    }
+    base.push_back(m);
+    salvarReconstruir(base, mats);
+    wr::p("APP", "Material criado.", "Green");
+}
+
+// Lista cortes cadastrados lendo o índice global
+void App::listarCortes() {
+    ui::renderBreadcrumb({ui::toString(ui::MenuState::Principal),
+                           ui::toString(ui::MenuState::Listar),
+                           "Cortes"});
+    std::vector<Persist::PlanoIndexEntry> itens;
+    if (!Persist::loadIndex(itens) || itens.empty()) {
+        std::cout << "(vazio)\n";
+        return;
+    }
+    for (size_t i = 0; i < itens.size(); ++i) {
+        const auto& e = itens[i];
+        std::cout << i + 1 << ") " << e.id
+                  << " | area:" << e.total_area_m2
+                  << "m2 | total:" << UN_MONE << e.total_valor
+                  << " | porm2:" << UN_MONE << e.porm2
+                  << "\n";
+    }
+}
+
+// Compara materiais selecionados pelo usuário
+void App::compararMateriais() {
+    ui::renderBreadcrumb({ui::toString(ui::MenuState::Principal),
+                           ui::toString(ui::MenuState::Comparar),
+                           "Materiais"});
+    listarMateriais(base);
+    std::string linha = ui::readString("IDs separados por espaco: ");
+    std::istringstream iss(linha);
+    std::vector<int> ids; int id;
+    while (iss >> id) {
+        if (id >= 1 && id <= static_cast<int>(mats.size()))
+            ids.push_back(id - 1);
+    }
+    if (ids.size() < 2) {
+        std::cout << "Selecione ao menos dois materiais.\n";
+        return;
+    }
+    std::vector<Material> sel;
+    for (int i : ids) sel.push_back(mats[static_cast<size_t>(i)]);
+    auto [menor, maior] = extremosPorM2(sel);
+    std::cout << "ID | Nome | porm2\n";
+    for (int i : ids) {
+        const auto& m = mats[static_cast<size_t>(i)];
+        std::string extra;
+        if (m.capNome() == menor.nome) extra = " <menor>";
+        if (m.capNome() == maior.nome) extra = " <maior>";
+        std::cout << i + 1 << " | " << m.capNome() << " | "
+                  << UN_MONE << m.capPorm2() << extra << "\n";
     }
 }
 
@@ -364,33 +449,56 @@ void App::iniciar(bool autoMode) {
             case ui::MenuState::Principal: {
                 ui::clearScreen();
                 ui::renderBreadcrumb({ui::toString(ui::MenuState::Principal)});
-                int opt = ui::promptMenu({"Criar", "Listar", "Comparar", "Config", "Sair"});
+                int opt = ui::promptMenuKey({"Criar", "Listar", "Comparar", "Config", "Sair"},
+                                            {'C','L','M','O','S'});
                 switch (opt) {
-                    case 1: state = ui::MenuState::Criar; break;
-                    case 2: state = ui::MenuState::Listar; break;
-                    case 3: state = ui::MenuState::Comparar; break;
-                    case 4: state = ui::MenuState::Config; break;
+                    case 0: state = ui::MenuState::Criar; break;
+                    case 1: state = ui::MenuState::Listar; break;
+                    case 2: state = ui::MenuState::Comparar; break;
+                    case 3: state = ui::MenuState::Config; break;
                     default: state = ui::MenuState::Sair; break;
                 }
                 break;
             }
-            case ui::MenuState::Criar:
-                escolherPreco();
-                solicitarCortes();
-                exportar();
-                ui::readString("Pressione ENTER para continuar...", std::cin, std::cout);
+            case ui::MenuState::Criar: {
+                ui::renderBreadcrumb({ui::toString(ui::MenuState::Principal),
+                                      ui::toString(ui::MenuState::Criar)});
+                int opt = ui::promptMenuKey({"Material", "Corte", "Voltar"}, {'M','C','V'});
+                if (opt == 0) {
+                    criarMaterial();
+                    ui::readString("Pressione ENTER para voltar...", std::cin, std::cout);
+                } else if (opt == 1) {
+                    escolherPreco();
+                    solicitarCortes();
+                    exportar();
+                    ui::readString("Pressione ENTER para voltar...", std::cin, std::cout);
+                }
                 state = ui::MenuState::Principal;
                 break;
-            case ui::MenuState::Listar:
-                listarMateriais(base);
-                ui::readString("Pressione ENTER para voltar...", std::cin, std::cout);
+            }
+            case ui::MenuState::Listar: {
+                ui::renderBreadcrumb({ui::toString(ui::MenuState::Principal),
+                                      ui::toString(ui::MenuState::Listar)});
+                int opt = ui::promptMenuKey({"Materiais", "Cortes", "Voltar"}, {'M','C','V'});
+                if (opt == 0) {
+                    listarMateriais(base);
+                    ui::readString("Pressione ENTER para voltar...", std::cin, std::cout);
+                } else if (opt == 1) {
+                    listarCortes();
+                    ui::readString("Pressione ENTER para voltar...", std::cin, std::cout);
+                }
                 state = ui::MenuState::Principal;
                 break;
-            case ui::MenuState::Comparar:
-                escolherPreco();
-                ui::readString("Pressione ENTER para voltar...", std::cin, std::cout);
+            }
+            case ui::MenuState::Comparar: {
+                int opt = ui::promptMenuKey({"Materiais", "Voltar"}, {'M','V'});
+                if (opt == 0) {
+                    compararMateriais();
+                    ui::readString("Pressione ENTER para voltar...", std::cin, std::cout);
+                }
                 state = ui::MenuState::Principal;
                 break;
+            }
             case ui::MenuState::Config:
                 menuMateriais();
                 if (mats.size() < 2) {

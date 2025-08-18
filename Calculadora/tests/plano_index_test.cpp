@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <fstream>
 #include <cassert>
+#include <vector>
 
 // Testa inserção e atualização do índice global de planos
 void test_plano_index() {
@@ -63,6 +64,15 @@ void test_plano_index() {
     }
     assert(count == 1);
 
+    fs::remove_all("out");
+
+    // Testa leitura via API
+    assert(Persist::updateIndex(p1));
+    assert(Persist::updateIndex(p2));
+    std::vector<Persist::PlanoIndexEntry> entradas;
+    assert(Persist::loadIndex(entradas));
+    assert(entradas.size() == 2);
+    assert(entradas[0].id == "id1" || entradas[1].id == "id1");
     fs::remove_all("out");
 }
 

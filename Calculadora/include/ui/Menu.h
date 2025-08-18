@@ -24,6 +24,15 @@ int promptMenu(const std::vector<std::string>& options,
                std::istream& in = std::cin,
                std::ostream& out = std::cout);
 
+// Exibe menu com atalhos de teclado. `keys` deve ter mesmo tamanho de `options`.
+// Retorna o índice escolhido (0..n-1).
+// Exemplo:
+// int idx = promptMenuKey({"Criar","Listar"}, {'C','L'});
+int promptMenuKey(const std::vector<std::string>& options,
+                  const std::vector<char>& keys,
+                  std::istream& in = std::cin,
+                  std::ostream& out = std::cout);
+
 // Lê um inteiro do usuário
 // Exemplo:
 // int v = readInt("Quantos? ");
