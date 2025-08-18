@@ -167,8 +167,8 @@ void App::importarCSV() {
 }
 
 bool App::carregarJSON() {
-    int version = 0;
-    if (!Persist::loadJSON("materiais.json", base, &version) || base.empty()) {
+    int schemaVersion = 0;
+    if (!Persist::loadJSON("materiais.json", base, &schemaVersion) || base.empty()) {
         wr::p("DATA", "Base nao encontrada. Criando materiais padrao...", "Yellow");
         base = {
             {"Pinus 20cm", 17.00, 0.20, 3.00},
@@ -181,7 +181,7 @@ bool App::carregarJSON() {
         }
     } else {
         std::ostringstream oss;
-        oss << "materiais.json carregado (versao " << version << ")";
+        oss << "materiais.json carregado (versao " << schemaVersion << ")";
         wr::p("DATA", oss.str(), "Green");
     }
 

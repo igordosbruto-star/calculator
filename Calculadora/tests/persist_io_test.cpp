@@ -10,7 +10,9 @@ void test_persist_io() {
     // Salva e carrega JSON
     assert(Persist::saveJSON("teste_io.json", itens));
     std::vector<MaterialDTO> carregado;
-    assert(Persist::loadJSON("teste_io.json", carregado));
+    int schemaVersion = 0;
+    assert(Persist::loadJSON("teste_io.json", carregado, &schemaVersion));
+    assert(schemaVersion == 1);
     assert(carregado.size() == 1);
     assert(carregado[0].nome == "Madeira");
     assert(carregado[0].tipo == "linear");

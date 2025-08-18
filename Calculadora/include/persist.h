@@ -185,7 +185,8 @@ inline std::string to_str_br(double x, int precision = 6) {
 }
 
 // ----------------- JSON: salvar/carregar -----------------
-inline bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v, int version = 1) {
+// Salva materiais em JSON com versão de schema
+inline bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v, int schemaVersion = 1) {
     for (const auto& m : v) {
         if (!validar(m)) {
             wr::p("PERSIST", "Material invalido: " + m.nome, "Red");
@@ -193,12 +194,13 @@ inline bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v,
         }
     }
     json j;
-    j["version"]   = version;
-    j["materiais"] = v; // usa to_json automaticamente
+    j["schema_version"] = schemaVersion;
+    j["materiais"]      = v; // usa to_json automaticamente
     return atomicWrite(fs::path(dataPath(path)), j.dump(2));
 }
 
-inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int* out_version = nullptr) {
+// Carrega materiais de JSON, migrando campos antigos se necessário
+inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int* out_schema_version = nullptr) {
     const std::string p = dataPath(path);
     std::ifstream f(p);
     if (!f) {
@@ -207,9 +209,10 @@ inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int
     }
     try {
         json j; f >> j;
-        int version = 1;
-        if (j.contains("version")) version = j["version"].get<int>();
-        if (out_version) *out_version = version;
+        int schemaVersion = 1;
+        if (j.contains("schema_version"))      schemaVersion = j["schema_version"].get<int>();
+        else if (j.contains("version")) schemaVersion = j["version"].get<int>();
+        if (out_schema_version) *out_schema_version = schemaVersion;
         if (j.contains("materiais")) {
             bool migrated = false;
             out.clear();
@@ -221,7 +224,7 @@ inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int
                 }
                 out.push_back(std::move(m));
             }
-            if (migrated) saveJSON(path, out, version);
+            if (migrated) saveJSON(path, out, schemaVersion);
             return true;
         }
         wr::p("PERSIST", p + " missing 'materiais'", "Red");
