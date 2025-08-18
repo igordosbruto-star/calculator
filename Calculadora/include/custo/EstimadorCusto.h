@@ -31,7 +31,7 @@ struct ProjetoItem {
 };
 
 // Projeto composto por itens de materiais
-struct Projeto {
+struct ProjetoCusto {
     std::vector<ProjetoItem> materiais;  // itens de material do projeto
 };
 
@@ -44,6 +44,6 @@ public:
 
     // Calcula o custo total de um projeto aplicando parâmetros globais
     // Exemplo: custoProjeto(prj, cfg)
-    double custoProjeto(const Projeto& prj, const CustoParams& cfg) const;
+    double custoProjeto(const ProjetoCusto& prj, const CustoParams& cfg) const;
 };
 

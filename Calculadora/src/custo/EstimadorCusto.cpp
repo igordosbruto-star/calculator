@@ -17,7 +17,7 @@ static double arredondar(double valor, int casas) {
 
 // Calcula o custo total do projeto
 // Exemplo: EstimadorCusto est; est.custoProjeto(prj, cfg);
-double EstimadorCusto::custoProjeto(const Projeto& prj, const CustoParams& cfg) const {
+double EstimadorCusto::custoProjeto(const ProjetoCusto& prj, const CustoParams& cfg) const {
     double subtotal = 0.0;
     for (const auto& item : prj.materiais) {
         if (item.material != nullptr) {
