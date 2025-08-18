@@ -13,6 +13,7 @@ void test_persist_io() {
     assert(Persist::loadJSON("teste_io.json", carregado));
     assert(carregado.size() == 1);
     assert(carregado[0].nome == "Madeira");
+    assert(carregado[0].tipo == "linear");
 
     // Salva e carrega CSV
     assert(Persist::saveCSV("teste_io.csv", itens));
@@ -20,6 +21,7 @@ void test_persist_io() {
     assert(Persist::loadCSV("teste_io.csv", carregado));
     assert(carregado.size() == 1);
     assert(carregado[0].valor == 10.0);
+    assert(carregado[0].tipo == "linear");
 
     // Limpa arquivos de teste
     std::filesystem::remove("data/teste_io.json");
