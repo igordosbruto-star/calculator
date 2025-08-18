@@ -2,7 +2,7 @@
 
 #include <memory>
 #include "domain/MaterialBase.h"
-#include "persist.h"
+#include "core/persist.h"
 
 // Factory para criar materiais a partir de um MaterialDTO
 class MaterialFactory {

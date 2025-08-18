@@ -1,6 +1,6 @@
 #include <cassert>
 #include <filesystem>
-#include "persist.h"
+#include "core/persist.h"
 
 // Testa que dataPath cria o diretório `data` e retorna o caminho correto
 void test_data_path() {

@@ -1,4 +1,4 @@
-#include "persist.h"
+#include "core/persist.h"
 #include <cassert>
 
 // Testa Persist::validar para tipos de material

@@ -3,7 +3,7 @@
 // Descrição: Ponto de entrada minimalista
 // ==========================================
 
-#include "Debug.h"
+#include "core/Debug.h"
 #include "cli/App.h"
 #include "cli/args.h"
 #include <string>
