@@ -6,7 +6,7 @@ Visão geral dos principais componentes da calculadora.
 Responsável pela lógica de comparação e pelos cálculos de cortes e materiais.
 Principais arquivos:
 - `Calculadora/app.cpp`
-- `Calculadora/modulos.h`
+- `Calculadora/include/calculadora.hpp`
 
 ## Persistência de dados
 Centraliza leitura e escrita de informações em JSON ou CSV, além das

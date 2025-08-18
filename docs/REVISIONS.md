@@ -2,7 +2,7 @@
 
 1. Separar a lógica do app em módulos
    - Motivação: Facilitar manutenção, testes e reutilização.
-   - Arquivos impactados: `Calculadora/app.cpp`, `Calculadora/modulos.h`, `Calculadora/main.cpp`.
+   - Arquivos impactados: `Calculadora/app.cpp`, `Calculadora/include/calculadora.hpp`, `Calculadora/main.cpp`.
 
 2. Validar dados antes de salvar
    - Motivação: Garantir integridade das informações e evitar erros ao persistir dados.

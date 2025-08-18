@@ -9,6 +9,7 @@ void test_persist_migration();
 void test_settings_migration();
 void test_extremos();
 void test_corte();
+void test_calculadora_api();
 void test_plano_dto();
 void test_persist_helpers();
 void test_plano_io();
@@ -33,6 +34,7 @@ int main() {
     test_settings_migration();
     test_extremos();
     test_corte();
+    test_calculadora_api();
     test_plano_dto();
     test_persist_helpers();
     test_plano_io();
