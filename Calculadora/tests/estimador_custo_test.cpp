@@ -28,7 +28,7 @@ void test_estimador_custo() {
     assert(custoC == 300.0);
 
     // Projeto agregando os três itens
-    Projeto prj;
+    ProjetoCusto prj;
     prj.materiais.push_back({reqU, &mu});
     prj.materiais.push_back({reqL, &ml});
     prj.materiais.push_back({reqC, &mc});
