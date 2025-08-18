@@ -3,7 +3,7 @@
 
 #include <filesystem>
 #include <fstream>
-namespace calculadora {
+namespace duke {
 
 using nlohmann::json;
 namespace fs = std::filesystem;
@@ -50,4 +50,4 @@ bool loadTempoTemplate(const std::string& nome, std::vector<Operacao>& out) {
 
 } // namespace Persist
 
-} // namespace calculadora
+} // namespace duke

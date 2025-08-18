@@ -1,7 +1,7 @@
 #pragma once
 
 #include "domain/MaterialBase.h"
-namespace calculadora {
+namespace duke {
 
 // Material vendido por metro linear
 class MaterialLinear : public MaterialBase {
@@ -14,4 +14,4 @@ public:
     std::string tipo() const override;
     double custo(double qtd, const Medidas& m) const override;
 };
-} // namespace calculadora
+} // namespace duke

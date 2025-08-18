@@ -1,3 +1,3 @@
 #pragma once
-namespace calculadora {}
-using namespace calculadora;
+namespace duke {}
+using namespace duke;

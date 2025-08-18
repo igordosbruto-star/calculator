@@ -1,5 +1,5 @@
 #include "domain/MaterialUnitario.h"
-namespace calculadora {
+namespace duke {
 
 // Construtor com preco por unidade
 // Exemplo: MaterialUnitario mu(5.0);
@@ -15,4 +15,4 @@ std::string MaterialUnitario::tipo() const { return "unitario"; }
 double MaterialUnitario::custo(double qtd, const Medidas&) const {
     return precoUnitario * qtd;
 }
-} // namespace calculadora
+} // namespace duke

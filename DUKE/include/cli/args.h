@@ -5,7 +5,7 @@
 // ----------------------------------------------------------
 #include <string>
 #include <vector>
-namespace calculadora {
+namespace duke {
 
 // Comandos reconhecidos pela aplicação (ainda não implementados)
 enum class Comando {
@@ -30,4 +30,4 @@ struct CliOptions {
 //   CliOptions opt = parseArgs(argc, argv);
 CliOptions parseArgs(int argc, char* argv[]);
 
-} // namespace calculadora
+} // namespace duke

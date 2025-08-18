@@ -1,6 +1,6 @@
 #include "core.h"
 #include <algorithm>
-namespace calculadora {
+namespace duke {
 
 namespace core {
     std::vector<Material> reconstruirMateriais(const std::vector<MaterialDTO>& v) {
@@ -19,4 +19,4 @@ namespace core {
     }
 }
 
-} // namespace calculadora
+} // namespace duke

@@ -2,7 +2,7 @@
 
 1. Separar a lógica do app em módulos
    - Motivação: Facilitar manutenção, testes e reutilização.
-   - Arquivos impactados: `DUKE/app.cpp`, `DUKE/include/calculadora.hpp`, `DUKE/main.cpp`.
+   - Arquivos impactados: `DUKE/app.cpp`, `DUKE/include/duke.hpp`, `DUKE/main.cpp`.
 
 2. Validar dados antes de salvar
    - Motivação: Garantir integridade das informações e evitar erros ao persistir dados.

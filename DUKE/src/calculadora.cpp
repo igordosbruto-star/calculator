@@ -1,6 +1,6 @@
-#include "calculadora.hpp"
+#include "duke.hpp"
 
-namespace calculadora {
+namespace duke {
 
 double calcularValorCorte(const Material& material,
                           double largura,
@@ -9,5 +9,5 @@ double calcularValorCorte(const Material& material,
     return area * material.capPorm2();
 }
 
-} // namespace calculadora
+} // namespace duke
 

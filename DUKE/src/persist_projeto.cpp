@@ -3,7 +3,7 @@
 
 #include <filesystem>
 #include <fstream>
-namespace calculadora {
+namespace duke {
 
 using nlohmann::json;
 namespace fs = std::filesystem;
@@ -188,4 +188,4 @@ bool Persist::deleteProjeto(const std::string& id) {
     return ok;
 }
 
-} // namespace calculadora
+} // namespace duke

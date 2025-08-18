@@ -1,4 +1,4 @@
-#include "calculadora.hpp"
+#include "duke.hpp"
 #include <cassert>
 
 // Testa cálculo simplificado do valor de corte

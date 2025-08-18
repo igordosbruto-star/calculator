@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-namespace calculadora {
+namespace duke {
 
 namespace ui {
 
@@ -57,4 +57,4 @@ std::string readString(const std::string& prompt,
 
 } // namespace ui
 
-} // namespace calculadora
+} // namespace duke

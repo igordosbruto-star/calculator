@@ -6,7 +6,7 @@ Visão geral dos principais componentes do DUKE.
 Responsável pela lógica de comparação e pelos cálculos de cortes e materiais.
 Principais arquivos:
 - `DUKE/app.cpp`
-- `DUKE/include/calculadora.hpp`
+- `DUKE/include/duke.hpp`
 
 ## Persistência de dados
 Centraliza leitura e escrita de informações em JSON ou CSV, além das

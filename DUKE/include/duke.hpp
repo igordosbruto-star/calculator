@@ -2,7 +2,7 @@
 
 #include "Material.h"
 
-namespace calculadora {
+namespace duke {
 
 /**
  * @brief Calcula o valor de um corte retangular.
@@ -25,5 +25,5 @@ double calcularValorCorte(const Material& material,
                           double largura,
                           double comprimento);
 
-} // namespace calculadora
+} // namespace duke
 

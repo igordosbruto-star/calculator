@@ -22,7 +22,7 @@
 #include "ui/Menu.h"
 #include "ui/Screens.h"
 #include "core.h"
-namespace calculadora {
+namespace duke {
 
 // ------------------------------------------------------------
 // Helpers apenas visíveis neste arquivo
@@ -502,4 +502,4 @@ void App::iniciar(bool autoMode) {
     std::cout << "\n";
     wr::p("APP", "Finalizando..", "Green");
 }
-} // namespace calculadora
+} // namespace duke

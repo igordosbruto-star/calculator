@@ -5,7 +5,7 @@
 #include "core/persist.h"
 #include "Material.h"
 #include "core.h"
-namespace calculadora {
+namespace duke {
 
 class App {
 private:
@@ -33,4 +33,4 @@ public:
     void iniciar(bool autoMode = false);     // implementado em App.cpp
 };
 
-} // namespace calculadora
+} // namespace duke
