@@ -1,11 +1,12 @@
 {
+  "schema_version": 1,
   "materiais": [
     {
-      "comprimento": 3.0,
-      "largura": 2.0,
       "nome": "Madeira",
-      "valor": 10.0
+      "tipo": "linear",
+      "valor": 10.0,
+      "largura": 2.0,
+      "comprimento": 3.0
     }
-  ],
-  "version": 1
+  ]
 }
