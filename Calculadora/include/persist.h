@@ -185,7 +185,34 @@ inline std::string to_str_br(double x, int precision = 6) {
 }
 
 // ----------------- JSON: salvar/carregar -----------------
+namespace mater {
+// Atualiza JSON de materiais para versão mais recente
+inline bool upgradeIfNeeded(json& j) {
+    bool upgraded = false;
+    if (!j.contains("schema_version")) {
+        int v = 1;
+        if (j.contains("version")) v = j["version"].get<int>();
+        j["schema_version"] = v;
+        j.erase("version");
+        upgraded = true;
+    }
+    if (!j.contains("materiais") || !j["materiais"].is_array()) {
+        j["materiais"] = json::array();
+        upgraded = true;
+    }
+    for (auto& item : j["materiais"]) {
+        if (!item.contains("tipo") || !item["tipo"].is_string() || item["tipo"].get<std::string>().empty()) {
+            item["tipo"] = "linear";
+            upgraded = true;
+        }
+    }
+    return upgraded;
+}
+} // namespace mater
+
 // Salva materiais em JSON com versão de schema
+// Exemplo:
+//   Persist::saveJSON("materiais.json", v);
 inline bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v, int schemaVersion = 1) {
     for (const auto& m : v) {
         if (!validar(m)) {
@@ -200,6 +227,9 @@ inline bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v,
 }
 
 // Carrega materiais de JSON, migrando campos antigos se necessário
+// Exemplo:
+//   std::vector<MaterialDTO> itens;
+//   Persist::loadJSON("materiais.json", itens);
 inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int* out_schema_version = nullptr) {
     const std::string p = dataPath(path);
     std::ifstream f(p);
@@ -209,22 +239,17 @@ inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int
     }
     try {
         json j; f >> j;
-        int schemaVersion = 1;
-        if (j.contains("schema_version"))      schemaVersion = j["schema_version"].get<int>();
-        else if (j.contains("version")) schemaVersion = j["version"].get<int>();
+        bool migrated = mater::upgradeIfNeeded(j);
+        int schemaVersion = j.value("schema_version", 1);
         if (out_schema_version) *out_schema_version = schemaVersion;
-        if (j.contains("materiais")) {
-            bool migrated = false;
+        if (j.contains("materiais") && j["materiais"].is_array()) {
             out.clear();
             for (const auto& item : j["materiais"]) {
-                MaterialDTO m = item.get<MaterialDTO>();
-                if (!item.contains("tipo") || m.tipo.empty()) {
-                    m.tipo = "linear";
-                    migrated = true;
-                }
-                out.push_back(std::move(m));
+                out.push_back(item.get<MaterialDTO>());
             }
-            if (migrated) saveJSON(path, out, schemaVersion);
+            if (migrated) {
+                atomicWrite(fs::path(p), j.dump(2));
+            }
             return true;
         }
         wr::p("PERSIST", p + " missing 'materiais'", "Red");
@@ -333,6 +358,22 @@ inline bool loadCSV(const std::string& path, std::vector<MaterialDTO>& out) {
 }
 
 // -------------------- Settings: carregar/salvar --------------------
+namespace sett {
+// Atualiza JSON de settings para versão mais recente
+inline bool upgradeIfNeeded(json& j) {
+    bool upgraded = false;
+    if (!j.contains("schema_version")) {
+        j["schema_version"] = 1;
+        upgraded = true;
+    }
+    if (!j.contains("decimal_places")) { j["decimal_places"] = 2; upgraded = true; }
+    if (!j.contains("prefer")) { j["prefer"] = "ask"; upgraded = true; }
+    return upgraded;
+}
+} // namespace sett
+
+// Exemplo:
+//   Settings s = Persist::loadOrCreateSettings();
 inline Settings loadOrCreateSettings(const std::string& filename = "settings.json") {
     Settings s;
     const std::string p = dataPath(filename);
@@ -343,7 +384,9 @@ inline Settings loadOrCreateSettings(const std::string& filename = "settings.jso
         if (f) {
             try {
                 json j; f >> j;
+                bool up = sett::upgradeIfNeeded(j);
                 s = j.get<Settings>();
+                if (up) atomicWrite(fs::path(p), j.dump(2));
                 return s;
             } catch (...) {
                 // cai na criação/overwrite de default
@@ -354,15 +397,19 @@ inline Settings loadOrCreateSettings(const std::string& filename = "settings.jso
     // grava default
     try {
         json j = s;
+        j["schema_version"] = 1;
         atomicWrite(fs::path(p), j.dump(2));
     } catch (...) {}
     return s;
 }
 
+// Exemplo:
+//   Persist::saveSettings(s);
 inline bool saveSettings(const Settings& s, const std::string& filename = "settings.json") {
     const std::string p = dataPath(filename);
     try {
         json j = s;
+        j["schema_version"] = 1;
         return atomicWrite(fs::path(p), j.dump(2));
     } catch (const std::exception& e) {
         wr::p("PERSIST", p + " exception: " + e.what(), "Red");
