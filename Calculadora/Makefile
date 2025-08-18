@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Wall
 INCLUDES = -Iinclude -Ithird_party
 
-SRC := $(wildcard src/*.cpp)
+SRC := $(wildcard src/*.cpp) $(wildcard src/domain/*.cpp)
 
 app: $(SRC)
 	$(CXX) $(CXXFLAGS) $(SRC) $(INCLUDES) -o $@

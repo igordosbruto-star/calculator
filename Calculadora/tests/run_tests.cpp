@@ -12,6 +12,7 @@ void test_persist_helpers();
 void test_plano_io();
 void test_plano_index();
 void test_data_path();
+void test_domain_material();
 
 // Executa todos os testes
 int main() {
@@ -26,5 +27,6 @@ int main() {
     test_plano_io();
     test_plano_index();
     test_data_path();
+    test_domain_material();
     return 0;
 }
