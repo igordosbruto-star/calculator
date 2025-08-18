@@ -101,6 +101,27 @@ bool savePlanoCSV(const std::string& dir, const PlanoCorteDTO& plano) {
     }
 }
 
+// Lê o JSON indicado e preenche `out` com os dados do plano
+bool loadPlanoJSON(const std::string& file, PlanoCorteDTO& out) {
+    const fs::path p = file;
+    try {
+        std::ifstream f(p);
+        if (!f) {
+            wr::p("PERSIST", p.string() + " open fail", "Red");
+            return false;
+        }
+        json j; f >> j;
+        out = j.get<PlanoCorteDTO>();
+        return true;
+    } catch (const std::exception& e) {
+        wr::p("PERSIST", p.string() + " exception: " + e.what(), "Red");
+        return false;
+    } catch (...) {
+        wr::p("PERSIST", p.string() + " unknown exception", "Red");
+        return false;
+    }
+}
+
 bool updateIndex(const PlanoCorteDTO& plano) {
     const fs::path indexPath = fs::path("out") / "planos" / "index.json";
     try {

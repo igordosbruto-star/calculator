@@ -12,6 +12,7 @@ Esta calculadora evoluirá em etapas para oferecer mais flexibilidade e confiabi
   - Integrar validação de dados antes de salvar. ✅
   - Suporte a serialização de planos de corte (CorteDTO e PlanoCorteDTO). ✅
   - Funções para salvar PlanoCorteDTO em JSON e CSV. ✅
+  - Função para carregar PlanoCorteDTO em JSON (`loadPlanoJSON`). ✅
   - Índice global de planos com atualização atômica (`updateIndex`). ✅
   - Persistência automática de planos gerados com `makeId`, `outPlanosDirFor`, `savePlanoJSON/CSV` e `updateIndex`. ✅
 - **Interface de linha de comando** (`Calculadora/main.cpp`)
@@ -29,6 +30,7 @@ Com a evolução recente, a camada de persistência agora:
 - Serializa planos de corte em JSON e CSV.
 - Atualiza o índice global de forma atômica por meio de `updateIndex`.
 - Salva automaticamente os planos gerados utilizando `makeId`, `outPlanosDirFor`, `savePlanoJSON/CSV` e `updateIndex`.
+- Permite reabrir planos salvos com `loadPlanoJSON`.
 
 ## Melhorias propostas
 
