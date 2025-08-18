@@ -11,6 +11,7 @@
 #include <filesystem>
 #include <exception>
 #include <system_error>
+#include <cstdlib>
 #include "core/Debug.h"
 
 namespace fs = std::filesystem;
@@ -69,6 +70,24 @@ inline void from_json(const json& j, Settings& s) {
 
 namespace Persist {
 
+struct Config {
+    std::string baseDir = "data";
+    static Config fromEnv() {
+        Config c;
+        if (const char* env = std::getenv("PERSIST_BASE_DIR")) {
+            c.baseDir = env;
+        }
+        return c;
+    }
+};
+
+inline Config& config() {
+    static Config cfg = Config::fromEnv();
+    return cfg;
+}
+
+inline void setConfig(const Config& cfg) { config() = cfg; }
+
 // ------------------------------------------------
 // Valida MaterialDTO: nome nao vazio e valores >=0
 // Exemplo:
@@ -89,15 +108,15 @@ inline bool validar(const MaterialDTO& m) {
 // Exemplo:
 //   std::string p = Persist::dataPath("materiais.json"); // "data/materiais.json"
 // ----------------------------------------------
-inline std::string dataPath(const std::string& filename) {
+inline std::string dataPath(const std::string& filename, const std::string& baseDir = config().baseDir) {
     std::error_code ec;
-    bool created = fs::create_directory("data", ec);
+    bool created = fs::create_directories(baseDir, ec);
     if (ec) {
-        wr::p("PERSIST", std::string("data create fail: ") + ec.message(), "Red");
+        wr::p("PERSIST", baseDir + " create fail: " + ec.message(), "Red");
     } else if (created) {
-        wr::p("PERSIST", "Diretorio data criado.", "Green");
+        wr::p("PERSIST", baseDir + " criado.", "Green");
     }
-    return "data/" + filename;
+    return (fs::path(baseDir) / filename).string();
 }
 
 // ----------------------------------------------
@@ -213,7 +232,7 @@ inline bool upgradeIfNeeded(json& j) {
 // Salva materiais em JSON com versão de schema
 // Exemplo:
 //   Persist::saveJSON("materiais.json", v);
-inline bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v, int schemaVersion = 1) {
+inline bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v, int schemaVersion = 1, const std::string& baseDir = config().baseDir) {
     for (const auto& m : v) {
         if (!validar(m)) {
             wr::p("PERSIST", "Material invalido: " + m.nome, "Red");
@@ -223,15 +242,15 @@ inline bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v,
     json j;
     j["schema_version"] = schemaVersion;
     j["materiais"]      = v; // usa to_json automaticamente
-    return atomicWrite(fs::path(dataPath(path)), j.dump(2));
+    return atomicWrite(fs::path(dataPath(path, baseDir)), j.dump(2));
 }
 
 // Carrega materiais de JSON, migrando campos antigos se necessário
 // Exemplo:
 //   std::vector<MaterialDTO> itens;
 //   Persist::loadJSON("materiais.json", itens);
-inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int* out_schema_version = nullptr) {
-    const std::string p = dataPath(path);
+inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int* out_schema_version = nullptr, const std::string& baseDir = config().baseDir) {
+    const std::string p = dataPath(path, baseDir);
     std::ifstream f(p);
     if (!f) {
         wr::p("PERSIST", p + " open fail", "Red");
@@ -286,7 +305,7 @@ namespace detail {
 } // namespace detail
 
 // ------------ CSV (formato BR: ; + vírgula decimal) ------------
-inline bool saveCSV(const std::string& path, const std::vector<MaterialDTO>& items) {
+inline bool saveCSV(const std::string& path, const std::vector<MaterialDTO>& items, const std::string& baseDir = config().baseDir) {
     for (const auto& m : items) {
         if (!validar(m)) {
             wr::p("PERSIST", "Material invalido: " + m.nome, "Red");
@@ -311,12 +330,12 @@ inline bool saveCSV(const std::string& path, const std::vector<MaterialDTO>& ite
             << to_str_br(m.largura) << ';'
             << to_str_br(m.comprimento) << "\n";
     }
-    return atomicWrite(fs::path(dataPath(path)), oss.str());
+    return atomicWrite(fs::path(dataPath(path, baseDir)), oss.str());
 }
 
 // -------------------- CSV: Leitura --------------------
-inline bool loadCSV(const std::string& path, std::vector<MaterialDTO>& out) {
-    const std::string p = dataPath(path);
+inline bool loadCSV(const std::string& path, std::vector<MaterialDTO>& out, const std::string& baseDir = config().baseDir) {
+    const std::string p = dataPath(path, baseDir);
     std::ifstream f(p);
     if (!f) {
         wr::p("PERSIST", p + " open fail", "Red");
@@ -374,9 +393,9 @@ inline bool upgradeIfNeeded(json& j) {
 
 // Exemplo:
 //   Settings s = Persist::loadOrCreateSettings();
-inline Settings loadOrCreateSettings(const std::string& filename = "settings.json") {
+inline Settings loadOrCreateSettings(const std::string& filename = "settings.json", const std::string& baseDir = config().baseDir) {
     Settings s;
-    const std::string p = dataPath(filename);
+    const std::string p = dataPath(filename, baseDir);
 
     // tenta ler
     {
@@ -405,8 +424,8 @@ inline Settings loadOrCreateSettings(const std::string& filename = "settings.jso
 
 // Exemplo:
 //   Persist::saveSettings(s);
-inline bool saveSettings(const Settings& s, const std::string& filename = "settings.json") {
-    const std::string p = dataPath(filename);
+inline bool saveSettings(const Settings& s, const std::string& filename = "settings.json", const std::string& baseDir = config().baseDir) {
+    const std::string p = dataPath(filename, baseDir);
     try {
         json j = s;
         j["schema_version"] = 1;
