@@ -1,6 +1,9 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -DUNIT_TEST
-INCLUDES = -I../include -I../third_party
+CORE_DIR = ../../core
+INCLUDES = -I../include -I../third_party -I$(CORE_DIR)/include
+
+CORE_LIB = $(CORE_DIR)/libcore.a
 
 TEST_SRCS = $(wildcard *.cpp)
 SRC_FILES = ../src/Material.cpp ../src/Corte.cpp ../src/cli/args.cpp \
@@ -17,8 +20,11 @@ SRC_FILES = ../src/Material.cpp ../src/Corte.cpp ../src/cli/args.cpp \
             ../src/custo/EstimadorCusto.cpp \
             ../src/ui/Menu.cpp
 
-run_tests: $(TEST_SRCS) $(SRC_FILES)
-	$(CXX) $(CXXFLAGS) $(TEST_SRCS) $(SRC_FILES) $(INCLUDES) -o run_tests
+run_tests: $(TEST_SRCS) $(SRC_FILES) $(CORE_LIB)
+	$(CXX) $(CXXFLAGS) $(TEST_SRCS) $(SRC_FILES) $(INCLUDES) -L$(CORE_DIR) -lcore -o run_tests
+
+$(CORE_LIB):
+	$(MAKE) -C $(CORE_DIR)
 
 .PHONY: clean
 clean:

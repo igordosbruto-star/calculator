@@ -14,9 +14,9 @@
 
 // Bibliotecas Personalizadas
 #include "cli/App.h"
-#include "format.h"
+#include "core/format.h"
 #include "Corte.h"
-#include "Debug.h"
+#include "core/Debug.h"
 #include "plano_corte.h"
 #include "persist.hpp"
 #include "ui/Menu.h"

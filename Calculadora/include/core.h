@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include "Material.h"
-#include "persist.h"
+#include "core/persist.h"
 
 namespace core {
     // Base de comparação com nome e valor
