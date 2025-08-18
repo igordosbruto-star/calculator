@@ -13,6 +13,7 @@ void test_plano_io();
 void test_plano_index();
 void test_data_path();
 void test_domain_material();
+void test_material_factory();
 
 // Executa todos os testes
 int main() {
@@ -28,5 +29,6 @@ int main() {
     test_plano_index();
     test_data_path();
     test_domain_material();
+    test_material_factory();
     return 0;
 }
