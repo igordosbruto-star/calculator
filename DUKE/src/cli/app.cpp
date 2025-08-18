@@ -22,117 +22,10 @@
 #include "ui/Menu.h"
 #include "ui/Screens.h"
 #include "core.h"
+#include "cli/parser.h"
+#include "cli/utils.h"
+#include "cli/commands.h"
 namespace duke {
-
-// ------------------------------------------------------------
-// Helpers apenas visíveis neste arquivo
-// ------------------------------------------------------------
-namespace {
-
-    // Lê uma opção do usuário garantindo apenas 1 ou 2
-    int lerOpcao12(int padrao = 1) {
-        int opcao = padrao;
-        std::cout << "Quer o calculo com o mais barato ou com o mais caro? (1/2) | ";
-        if (!(std::cin >> opcao) || (opcao != 1 && opcao != 2)) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            opcao = padrao;
-            wr::p("APP", "Entrada invalida. Usando opcao " + std::to_string(padrao) + ".", "Yellow");
-        }
-        return opcao;
-    }
-
-    // Exibe materiais cadastrados
-    void listarMateriais(const std::vector<MaterialDTO>& base) {
-        std::cout << "\nMateriais cadastrados:\n";
-        if (base.empty()) {
-            std::cout << "(vazio)\n";
-            return;
-        }
-        for (size_t i = 0; i < base.size(); ++i) {
-            const auto& m = base[i];
-            std::cout << i + 1 << ") " << m.nome << " [" << m.tipo << "]"
-                      << " | " << UN_MONE << m.valor
-                      << " | " << m.largura << " x " << m.comprimento << UN_AREA
-                      << "\n";
-        }
-    }
-
-    // Reconstrói vetor de Materiais e persiste base
-    void salvarReconstruir(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
-        mats = core::reconstruirMateriais(base);
-        ::Persist::saveJSON("materiais.json", base, 1);
-    }
-
-
-    // Adiciona novo material
-    void adicionarMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
-        MaterialDTO m;
-        std::cout << "Nome: ";
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::getline(std::cin, m.nome);
-        std::cout << "Tipo (unitario/linear/cubico) [linear]: ";
-        std::string tipo;
-        std::getline(std::cin, tipo);
-        if (!tipo.empty()) {
-            if (tipo == "unitario" || tipo == "linear" || tipo == "cubico") {
-                m.tipo = tipo;
-            } else {
-                wr::p("APP", "Tipo invalido. Usando 'linear'.", "Yellow");
-            }
-        }
-        std::cout << "Valor: ";
-        std::cin >> m.valor;
-        std::cout << "Largura: ";
-        std::cin >> m.largura;
-        std::cout << "Comprimento: ";
-        std::cin >> m.comprimento;
-        base.push_back(m);
-        salvarReconstruir(base, mats);
-    }
-
-    // Edita material existente
-    void editarMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
-        if (base.empty()) return;
-        listarMateriais(base);
-        std::cout << "Indice para editar: ";
-        size_t idx = 0;
-        if (!(std::cin >> idx) || idx < 1 || idx > base.size()) {
-            std::cout << "Indice invalido.\n";
-            return;
-        }
-        MaterialDTO& m = base[idx - 1];
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::string nome;
-        std::cout << "Nome (" << m.nome << "): ";
-        std::getline(std::cin, nome);
-        if (!nome.empty()) m.nome = nome;
-        std::cout << "Valor (" << m.valor << "): ";
-        std::cin >> m.valor;
-        std::cout << "Largura (" << m.largura << "): ";
-        std::cin >> m.largura;
-        std::cout << "Comprimento (" << m.comprimento << "): ";
-        std::cin >> m.comprimento;
-        salvarReconstruir(base, mats);
-    }
-
-    // Remove material por indice
-    void removerMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
-        if (base.empty()) return;
-        listarMateriais(base);
-        std::cout << "Indice para remover: ";
-        size_t idx = 0;
-        if (!(std::cin >> idx) || idx < 1 || idx > base.size()) {
-            std::cout << "Indice invalido.\n";
-            return;
-        }
-        base.erase(base.begin() + static_cast<long>(idx - 1));
-        salvarReconstruir(base, mats);
-    }
-
-
-} // namespace
-
 // ------------------------------------------------------------
 // Implementação do App
 // ------------------------------------------------------------
@@ -201,10 +94,10 @@ void App::menuMateriais() {
             continue;
         }
         switch (op) {
-            case 1: listarMateriais(base); break;
-            case 2: adicionarMaterial(base, mats); break;
-            case 3: editarMaterial(base, mats); break;
-            case 4: removerMaterial(base, mats); break;
+            case 1: cli::listarMateriais(base); break;
+            case 2: cli::adicionarMaterial(base, mats); break;
+            case 3: cli::editarMaterial(base, mats); break;
+            case 4: cli::removerMaterial(base, mats); break;
             case 0: return;
             default:
                 std::cout << "Opcao invalida.\n";
@@ -241,7 +134,7 @@ void App::criarMaterial() {
         return;
     }
     base.push_back(m);
-    salvarReconstruir(base, mats);
+    cli::salvarReconstruir(base, mats);
     wr::p("APP", "Material criado.", "Green");
 }
 
@@ -270,7 +163,7 @@ void App::compararMateriais() {
     ui::renderBreadcrumb({ui::toString(ui::MenuState::Principal),
                            ui::toString(ui::MenuState::Comparar),
                            "Materiais"});
-    listarMateriais(base);
+    cli::listarMateriais(base);
     std::string linha = ui::readString("IDs separados por espaco: ");
     std::istringstream iss(linha);
     std::vector<int> ids; int id;
@@ -301,7 +194,7 @@ void App::escolherPreco() {
     if      (settings.prefer == "cheapest") opcao = 1;
     else if (settings.prefer == "priciest") opcao = 2;
     else {
-        opcao = lerOpcao12(1);
+        opcao = cli::lerOpcao12(1);
     }
 
     if (opcao == 1) {
@@ -467,7 +360,7 @@ void App::iniciar(bool autoMode) {
                                       ui::toString(ui::MenuState::Listar)});
                 int opt = ui::promptMenuKey({"Materiais", "Cortes", "Voltar"}, {'M','C','V'});
                 if (opt == 0) {
-                    listarMateriais(base);
+                    cli::listarMateriais(base);
                     ui::readString("Pressione ENTER para voltar...", std::cin, std::cout);
                 } else if (opt == 1) {
                     listarCortes();

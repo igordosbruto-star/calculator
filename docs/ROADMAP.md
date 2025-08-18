@@ -19,6 +19,7 @@ O DUKE evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
   - Adicionar opções de ajuda e parâmetros para cálculos automatizados. ✅
   - Melhorar mensagens de erro para entradas inválidas.
   - Suporte inicial a `--projeto` e registro dos comandos `abrir`, `listar` e `comparar`. ✅
+  - Modularizar CLI em `parser`, `commands` e utilitários. ✅
 - **Testes automatizados** (novo diretório `tests/`)
   - Criar casos de teste unitários para validar comparações e rotinas de persistência.
   - Integrar com execução contínua (CI) para evitar regressões.
