@@ -4,6 +4,7 @@
 #include <vector>
 #include "domain/MaterialBase.h"
 #include "custo/CustoParams.h"
+#include "domain/Tempo.h"
 
 // Item de material dentro de um projeto
 struct ProjetoItemMaterial {
@@ -41,6 +42,7 @@ public:
     std::string nome;               // nome do projeto
     std::vector<ProjetoItemMaterial> materiais; // itens de material
     std::vector<ProjetoItemCorte> cortes;       // itens de corte
+    std::vector<Operacao> operacoes;             // operações de mão de obra
 
     // Adiciona um material ao projeto. Retorna falso em caso de validação falha.
     // Exemplo:
@@ -62,5 +64,11 @@ public:
     //   CustoParams cfg{0.05, 0.1, 0.05, 0.2, 2};
     //   auto resumo = prj.calcularCustos(cfg);
     ResumoCustoProjeto calcularCustos(const CustoParams& params) const;
+
+    // Tempo total do projeto somando todas as operações
+    double tempoTotal() const;
+
+    // Adiciona uma operação ao projeto
+    bool adicionarOperacao(const Operacao& op);
 };
 

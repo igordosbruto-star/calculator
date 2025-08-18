@@ -4,6 +4,7 @@
 #include <cmath>
 #include "custo/EstimadorCusto.h"
 #include "domain/MaterialUnitario.h"
+#include "domain/Tempo.h"
 
 // Valida se medidas são estritamente positivas
 static bool medidasValidas(const Medidas& m) {
@@ -30,6 +31,13 @@ bool Projeto::adicionarCorte(const ProjetoItemCorte& item) {
     return true;
 }
 
+bool Projeto::adicionarOperacao(const Operacao& op) {
+    if (op.tempoPorUnidade <= 0) return false;
+    if (op.quantidade <= 0) return false;
+    operacoes.push_back(op);
+    return true;
+}
+
 bool Projeto::removerItem(const std::string& idMaterial) {
     auto beforeM = materiais.size();
     materiais.erase(std::remove_if(materiais.begin(), materiais.end(), [&](const auto& m){return m.idMaterial == idMaterial;}), materiais.end());
@@ -49,6 +57,10 @@ double Projeto::resumoCusto() const {
         total += c.quantidade * c.custoUnitario;
     }
     return total;
+}
+
+double Projeto::tempoTotal() const {
+    return Tempo::tempoProjeto(operacoes);
 }
 
 // Função auxiliar para arredondar valores
@@ -84,7 +96,7 @@ ResumoCustoProjeto Projeto::calcularCustos(const CustoParams& params) const {
         subtotal += custo;
     }
 
-    double maoDeObra = subtotal * params.fatorMaoObra;
+    double maoDeObra = tempoTotal() * params.fatorMaoObra;
     double parcial = subtotal + maoDeObra;
     double valorOverhead = parcial * params.overhead;
     parcial += valorOverhead;
