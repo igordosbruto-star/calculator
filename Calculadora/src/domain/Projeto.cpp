@@ -5,6 +5,7 @@
 #include "custo/EstimadorCusto.h"
 #include "domain/MaterialUnitario.h"
 #include "domain/Tempo.h"
+namespace calculadora {
 
 // Valida se medidas são estritamente positivas
 static bool medidasValidas(const Medidas& m) {
@@ -106,3 +107,4 @@ ResumoCustoProjeto Projeto::calcularCustos(const CustoParams& params) const {
     return resumo;
 }
 
+} // namespace calculadora

@@ -14,10 +14,10 @@ void test_tempo() {
     // Teste de template
     nlohmann::json j;
     j["operacoes"] = ops;
-    auto path = Persist::dataPath("templates/tempos/teste.json");
-    Persist::atomicWrite(std::filesystem::path(path), j.dump());
+    auto path = ::Persist::dataPath("templates/tempos/teste.json");
+    ::Persist::atomicWrite(std::filesystem::path(path), j.dump());
     std::vector<Operacao> carregadas;
-    assert(Persist::loadTempoTemplate("teste", carregadas));
+    assert(calculadora::Persist::loadTempoTemplate("teste", carregadas));
     assert(carregadas.size() == 1);
     assert(Tempo::tempoProjeto(carregadas) == 2.0);
 }

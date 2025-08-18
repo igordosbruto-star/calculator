@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+namespace calculadora {
 
 namespace ui {
 
@@ -26,3 +27,4 @@ inline std::string toString(MenuState s) {
 
 } // namespace ui
 
+} // namespace calculadora

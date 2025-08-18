@@ -22,6 +22,7 @@
 #include "ui/Menu.h"
 #include "ui/Screens.h"
 #include "core.h"
+namespace calculadora {
 
 // ------------------------------------------------------------
 // Helpers apenas visíveis neste arquivo
@@ -60,7 +61,7 @@ namespace {
     // Reconstrói vetor de Materiais e persiste base
     void salvarReconstruir(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
         mats = core::reconstruirMateriais(base);
-        Persist::saveJSON("materiais.json", base, 1);
+        ::Persist::saveJSON("materiais.json", base, 1);
     }
 
 
@@ -143,8 +144,8 @@ void App::importarCSV() {
 
     if (imp == 's' || imp == 'S') {
         std::vector<MaterialDTO> tmp;
-        if (Persist::loadCSV("materiais.csv", tmp) && !tmp.empty()) {
-            if (Persist::saveJSON("materiais.json", tmp, 1)) {
+        if (::Persist::loadCSV("materiais.csv", tmp) && !tmp.empty()) {
+            if (::Persist::saveJSON("materiais.json", tmp, 1)) {
                 wr::p("DATA", "Importacao CSV -> JSON concluida (materiais.json atualizado).", "Green");
             } else {
                 wr::p("DATA", "Falha ao salvar JSON apos importar CSV.", "Red");
@@ -157,13 +158,13 @@ void App::importarCSV() {
 
 bool App::carregarJSON() {
     int schemaVersion = 0;
-    if (!Persist::loadJSON("materiais.json", base, &schemaVersion) || base.empty()) {
+    if (!::Persist::loadJSON("materiais.json", base, &schemaVersion) || base.empty()) {
         wr::p("DATA", "Base nao encontrada. Criando materiais padrao...", "Yellow");
         base = {
             {"Pinus 20cm", 17.00, 0.20, 3.00},
             {"MDF 15mm", 180.00, 1.85, 2.75}
         };
-        if (Persist::saveJSON("materiais.json", base, 1)) {
+        if (::Persist::saveJSON("materiais.json", base, 1)) {
             wr::p("DATA", "materiais.json criado.", "Green");
         } else {
             wr::p("DATA", "Falha ao criar materiais.json", "Red");
@@ -235,7 +236,7 @@ void App::criarMaterial() {
             m.comprimento = ui::readDouble("Comprimento padrao (m): ");
             break;
     }
-    if (!Persist::validar(m)) {
+    if (!::Persist::validar(m)) {
         wr::p("APP", "Material invalido, nada salvo.", "Red");
         return;
     }
@@ -403,7 +404,7 @@ void App::exportar() {
     char resp = 'n';
     if (!(std::cin >> resp)) resp = 'n';
     if (resp == 's' || resp == 'S') {
-        if (Persist::saveCSV("materiais.csv", base)) {
+        if (::Persist::saveCSV("materiais.csv", base)) {
             wr::p("CSV", "materiais.csv exportado com sucesso.", "Green");
         } else {
             wr::p("CSV", "Falha ao exportar materiais.csv", "Red");
@@ -415,7 +416,7 @@ void App::iniciar(bool autoMode) {
     wr::p("APP", "Iniciando..", "Green");
     std::cout << "\n";
 
-    settings = Persist::loadOrCreateSettings();
+    settings = ::Persist::loadOrCreateSettings();
     if (autoMode) {
         settings.prefer = "cheapest";
         wr::p("APP", "Modo automatico ativado.", "Blue");
@@ -501,3 +502,4 @@ void App::iniciar(bool autoMode) {
     std::cout << "\n";
     wr::p("APP", "Finalizando..", "Green");
 }
+} // namespace calculadora

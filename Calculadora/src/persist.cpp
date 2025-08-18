@@ -10,10 +10,13 @@
 #include <algorithm>
 #include <fstream>
 #include <system_error>
+namespace calculadora {
 
 namespace fs = std::filesystem;
 
 namespace Persist {
+using ::Persist::atomicWrite;
+using ::Persist::to_str_br;
 
 std::string nowIso8601() {
     const auto now = std::chrono::system_clock::now();
@@ -207,3 +210,4 @@ bool loadIndex(std::vector<PlanoIndexEntry>& out) {
 
 } // namespace Persist
 
+} // namespace calculadora

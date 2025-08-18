@@ -1,6 +1,7 @@
 #include "custo/EstimadorCusto.h"
 
 #include <cmath>
+namespace calculadora {
 
 // Calcula o custo de um material específico
 // Exemplo: ItemReq req{...}; MaterialUnitario m(5.0);
@@ -31,3 +32,4 @@ double EstimadorCusto::custoProjeto(const ProjetoCusto& prj, const CustoParams& 
     return arredondar(subtotal, cfg.casasDecimais);
 }
 
+} // namespace calculadora

@@ -5,6 +5,7 @@
 #include "core/persist.h"
 #include "Material.h"
 #include "core.h"
+namespace calculadora {
 
 class App {
 private:
@@ -32,3 +33,4 @@ public:
     void iniciar(bool autoMode = false);     // implementado em App.cpp
 };
 
+} // namespace calculadora

@@ -2,6 +2,7 @@
 #include "core/format.h"
 #include <algorithm>
 #include <iostream>
+namespace calculadora {
 
 Corte::Corte(const std::string& n, double l, double c, double precoPorM2)
     : nome(n),
@@ -24,3 +25,4 @@ void Corte::imprimir() const {
               << "Valor        : " << UN_MONE << valor << "\n";
 }
 
+} // namespace calculadora

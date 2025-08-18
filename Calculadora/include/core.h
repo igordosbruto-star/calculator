@@ -4,6 +4,7 @@
 #include <string>
 #include "Material.h"
 #include "core/persist.h"
+namespace calculadora {
 
 namespace core {
     // Base de comparação com nome e valor
@@ -33,3 +34,4 @@ namespace core {
     Como extremosPorM2(const std::vector<Material>& mats);
 }
 
+} // namespace calculadora

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+namespace calculadora {
 
 // Estrutura com medidas de um item
 struct Medidas {
@@ -21,3 +22,4 @@ public:
     // Calcula o custo total dado uma quantidade e medidas
     virtual double custo(double qtd, const Medidas& m) const = 0;
 };
+} // namespace calculadora

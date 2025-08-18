@@ -1,4 +1,5 @@
 #include "plano_corte.h"
+namespace calculadora {
 
 // Serializa um CorteDTO para JSON
 void to_json(json& j, const CorteDTO& c) {
@@ -50,3 +51,4 @@ void from_json(const json& j, PlanoCorteDTO& p) {
     if (j.contains("total_valor")) j.at("total_valor").get_to(p.total_valor);
 }
 
+} // namespace calculadora

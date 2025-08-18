@@ -1,4 +1,5 @@
 #include "domain/Tempo.h"
+namespace calculadora {
 
 using nlohmann::json;
 
@@ -47,3 +48,4 @@ void from_json(const json& j, Operacao& o) {
     j.at("quantidade").get_to(o.quantidade);
 }
 
+} // namespace calculadora

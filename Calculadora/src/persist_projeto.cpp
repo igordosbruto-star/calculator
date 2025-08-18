@@ -3,6 +3,7 @@
 
 #include <filesystem>
 #include <fstream>
+namespace calculadora {
 
 using nlohmann::json;
 namespace fs = std::filesystem;
@@ -86,18 +87,18 @@ static void jsonToProjeto(const json& j, Projeto& p) {
 }
 
 static fs::path projetoPath(const std::string& id) {
-    return fs::path(Persist::dataPath("projetos/" + id + "/projeto.json"));
+    return fs::path(::Persist::dataPath("projetos/" + id + "/projeto.json"));
 }
 
 static fs::path indexPath() {
-    return fs::path(Persist::dataPath("projetos/index.json"));
+    return fs::path(::Persist::dataPath("projetos/index.json"));
 }
 
 bool Persist::saveProjetoJSON(const Projeto& projeto) {
     try {
         json j = projetoToJson(projeto);
         upgradeIfNeeded(j);
-        if (!Persist::atomicWrite(projetoPath(projeto.id), j.dump(2))) return false;
+        if (!::Persist::atomicWrite(projetoPath(projeto.id), j.dump(2))) return false;
 
         json idx;
         if (fs::exists(indexPath())) {
@@ -114,7 +115,7 @@ bool Persist::saveProjetoJSON(const Projeto& projeto) {
             }
         }
         if (!found) idx["projetos"].push_back(projeto.id);
-        return Persist::atomicWrite(indexPath(), idx.dump(2));
+        return ::Persist::atomicWrite(indexPath(), idx.dump(2));
     } catch (const std::exception& e) {
         wr::p("PERSIST", std::string("saveProjetoJSON exception: ") + e.what(), "Red");
         return false;
@@ -134,7 +135,7 @@ bool Persist::loadProjetoJSON(const std::string& id, Projeto& out) {
         json j; f >> j;
         bool up = upgradeIfNeeded(j);
         jsonToProjeto(j, out);
-        if (up) Persist::atomicWrite(projetoPath(id), j.dump(2));
+        if (up) ::Persist::atomicWrite(projetoPath(id), j.dump(2));
         return true;
     } catch (const std::exception& e) {
         wr::p("PERSIST", std::string("loadProjetoJSON exception: ") + e.what(), "Red");
@@ -164,7 +165,7 @@ std::vector<std::string> Persist::listarProjetos() {
 bool Persist::deleteProjeto(const std::string& id) {
     bool ok = true;
     try {
-        fs::remove_all(fs::path(Persist::dataPath("projetos/" + id)));
+        fs::remove_all(fs::path(::Persist::dataPath("projetos/" + id)));
         json idx;
         if (fs::exists(indexPath())) {
             std::ifstream f(indexPath());
@@ -174,7 +175,7 @@ bool Persist::deleteProjeto(const std::string& id) {
             auto& arr = idx["projetos"];
             if (arr.is_array()) {
                 arr.erase(std::remove_if(arr.begin(), arr.end(), [&](const json& v){return v.is_string() && v.get<std::string>() == id;}), arr.end());
-                ok = Persist::atomicWrite(indexPath(), idx.dump(2));
+                ok = ::Persist::atomicWrite(indexPath(), idx.dump(2));
             }
         }
     } catch (const std::exception& e) {
@@ -187,3 +188,4 @@ bool Persist::deleteProjeto(const std::string& id) {
     return ok;
 }
 
+} // namespace calculadora

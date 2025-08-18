@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -DUNIT_TEST
+CXXFLAGS = -std=c++17 -Wall -DUNIT_TEST -include namespace.h
 CORE_DIR = ../../core
 INCLUDES = -I../include -I../third_party -I$(CORE_DIR)/include
 

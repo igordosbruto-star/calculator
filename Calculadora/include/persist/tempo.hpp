@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "domain/Tempo.h"
+namespace calculadora {
 
 namespace Persist {
 
@@ -14,3 +15,4 @@ bool loadTempoTemplate(const std::string& nome, std::vector<Operacao>& out);
 
 } // namespace Persist
 
+} // namespace calculadora

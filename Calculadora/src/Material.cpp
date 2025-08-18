@@ -1,6 +1,7 @@
 #include "Material.h"
 #include "core/format.h"
 #include <iostream>
+namespace calculadora {
 
 void Material::iniciar() noexcept {
     area = largura * comprimento;
@@ -35,3 +36,4 @@ void Material::mostrar() const {
               << "Valor por m2  : " << UN_MONE << capPorm2() << "\n\n";
 }
 
+} // namespace calculadora
