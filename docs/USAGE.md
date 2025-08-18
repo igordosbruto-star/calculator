@@ -19,6 +19,25 @@ Carrega o projeto informado para uso na sessão (em desenvolvimento).
 
 As opções podem ser combinadas conforme necessário.
 
+## Subcomandos
+
+Além das opções, é possível utilizar subcomandos para manipular dados persistidos:
+
+```bash
+./app criar
+```
+Cria um novo recurso (em desenvolvimento).
+
+```bash
+./app listar --tipo=linear --ordem=preco:asc
+```
+Lista materiais filtrando por tipo e ordenação.
+
+```bash
+./app comparar --ids=1,2,3
+```
+Compara materiais pelos IDs informados.
+
 ## Configuração do VS Code
 
 Execute `start.bat` para gerar os arquivos de configuração do VS Code.
