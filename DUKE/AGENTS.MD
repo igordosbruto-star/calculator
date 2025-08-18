@@ -7,15 +7,6 @@
 
 ## Estilo de Código
 - Linguagem: C++17
-- Nome de classes # AGENTS.md — Guia do Projeto
-
-## Estrutura
-- Código principal: `/src`
-- Headers: `/include`
-- Testes unitários: `/tests`
-
-## Estilo de Código
-- Linguagem: C++17
 - Nome de classes em PascalCase, funções em camelCase
 - Sempre inicializar variáveis
 - Mensagens de log com `wr:p` (localizado em `/src/utils/logger.cpp`)
@@ -27,7 +18,10 @@
 - Adicionar implementações feitas em `Roadmap.md`
 - Sempre que possível modularizar: preferir vários `.cpp` pequenos em vez de funções longas
 - Verificar `CHECKLIST.md` e marcar entradas
-- Compilar com:  ```sh  g++ -std=c++17 -Wall src/*.cpp -Iinclude -Ithird_party -o app
+- Compilar com:
+  ```sh
+  g++ -std=c++17 -Wall src/*.cpp -Iinclude -Ithird_party -o app
+  ```
 - Executar testes com: ./tests/run_tests
 - Commits no padrão Conventional Commits (`feat:`, `fix:`, `chore:`)
 
