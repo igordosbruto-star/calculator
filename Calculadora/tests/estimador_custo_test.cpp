@@ -33,7 +33,7 @@ void test_estimador_custo() {
     prj.materiais.push_back({reqL, &ml});
     prj.materiais.push_back({reqC, &mc});
 
-    CustoParams cfg{0.05, 0.1, 0.2, 2};
+    CustoParams cfg{0.05, 0.1, 0.0, 0.2, 2};
     double total = est.custoProjeto(prj, cfg);
     assert(total == 558.56);
 }
