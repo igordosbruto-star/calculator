@@ -7,6 +7,16 @@
 using nlohmann::json;
 namespace fs = std::filesystem;
 
+// Atualiza JSON de projeto se necessário
+static bool upgradeIfNeeded(json& j) {
+    bool upgraded = false;
+    if (!j.contains("schema_version")) {
+        j["schema_version"] = 1;
+        upgraded = true;
+    }
+    return upgraded;
+}
+
 // Converte Projeto para JSON
 static json projetoToJson(const Projeto& p) {
     json j;
@@ -86,6 +96,7 @@ static fs::path indexPath() {
 bool Persist::saveProjetoJSON(const Projeto& projeto) {
     try {
         json j = projetoToJson(projeto);
+        upgradeIfNeeded(j);
         if (!Persist::atomicWrite(projetoPath(projeto.id), j.dump(2))) return false;
 
         json idx;
@@ -121,7 +132,9 @@ bool Persist::loadProjetoJSON(const std::string& id, Projeto& out) {
             return false;
         }
         json j; f >> j;
+        bool up = upgradeIfNeeded(j);
         jsonToProjeto(j, out);
+        if (up) Persist::atomicWrite(projetoPath(id), j.dump(2));
         return true;
     } catch (const std::exception& e) {
         wr::p("PERSIST", std::string("loadProjetoJSON exception: ") + e.what(), "Red");

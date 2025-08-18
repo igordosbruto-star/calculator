@@ -1,4 +1,5 @@
 {
+  "schema_version": 1,
   "decimal_places": 2,
   "prefer": "ask"
 }
