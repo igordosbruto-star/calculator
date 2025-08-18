@@ -1,5 +1,6 @@
 #include "ui/Menu.h"
 #include <limits>
+#include <cctype>
 
 namespace ui {
 
@@ -31,6 +32,32 @@ int promptMenu(const std::vector<std::string>& options,
     }
     in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return choice;
+}
+
+int promptMenuKey(const std::vector<std::string>& options,
+                  const std::vector<char>& keys,
+                  std::istream& in,
+                  std::ostream& out) {
+    if (options.size() != keys.size()) return -1;
+    while (true) {
+        for (size_t i = 0; i < options.size(); ++i) {
+            out << keys[i] << ") " << options[i] << "\n";
+        }
+        out << "> ";
+        std::string line;
+        std::getline(in, line);
+        if (line == "?") {
+            out << "Digite a letra correspondente a opcao desejada.\n";
+            continue;
+        }
+        if (line.size() == 1) {
+            char c = static_cast<char>(std::toupper(line[0]));
+            for (size_t i = 0; i < keys.size(); ++i) {
+                if (c == std::toupper(keys[i])) return static_cast<int>(i);
+            }
+        }
+        out << "Opcao invalida. Tente novamente.\n";
+    }
 }
 
 int readInt(const std::string& prompt,

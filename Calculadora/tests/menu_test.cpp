@@ -34,5 +34,11 @@ void test_menu() {
     std::ostringstream out6;
     renderBreadcrumb({"Principal", "Criar"}, out6);
     assert(out6.str() == "Principal > Criar\n");
+
+    std::istringstream in7("?\nC\n");
+    std::ostringstream out7;
+    int k = promptMenuKey({"Criar", "Listar"}, {'C','L'}, in7, out7);
+    assert(k == 0);
+    assert(out7.str().find("Digite a letra") != std::string::npos);
 }
 

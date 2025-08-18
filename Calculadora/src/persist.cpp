@@ -178,5 +178,32 @@ bool updateIndex(const PlanoCorteDTO& plano) {
     }
 }
 
+bool loadIndex(std::vector<PlanoIndexEntry>& out) {
+    const fs::path indexPath = fs::path("out") / "planos" / "index.json";
+    try {
+        std::ifstream f(indexPath);
+        if (!f) return false;
+        json j; f >> j;
+        if (!j.is_object() || !j.contains("planos") || !j["planos"].is_array())
+            return false;
+        out.clear();
+        for (const auto& item : j["planos"]) {
+            PlanoIndexEntry e;
+            e.id = item.value("id", std::string{});
+            e.total_valor = item.value("total_valor", 0.0);
+            e.total_area_m2 = item.value("total_area_m2", 0.0);
+            e.porm2 = item.value("porm2", 0.0);
+            out.push_back(e);
+        }
+        return true;
+    } catch (const std::exception& e) {
+        wr::p("PERSIST", indexPath.string() + " exception: " + e.what(), "Red");
+        return false;
+    } catch (...) {
+        wr::p("PERSIST", indexPath.string() + " unknown exception", "Red");
+        return false;
+    }
+}
+
 } // namespace Persist
 

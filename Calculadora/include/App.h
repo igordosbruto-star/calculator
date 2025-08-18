@@ -21,6 +21,9 @@ private:
     void escolherPreco();
     void solicitarCortes();
     void exportar();
+    void criarMaterial();
+    void listarCortes();
+    void compararMateriais();
 
 public:
     double preco = 0.0; // preço/m² escolhido (menor ou maior)
