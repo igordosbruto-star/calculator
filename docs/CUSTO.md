@@ -1,6 +1,6 @@
 # Cálculo de Custos
 
-Fórmulas utilizadas pela calculadora para estimar despesas.
+Fórmulas utilizadas pelo DUKE para estimar despesas.
 
 ## Fórmulas básicas
 

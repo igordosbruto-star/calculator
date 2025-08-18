@@ -27,7 +27,7 @@ if not exist "%VSCODE_DIR%\tasks.json" (
         echo                 "app"
         echo             ],
         echo             "options": {
-        echo                 "cwd": "${workspaceFolder}/Calculadora"
+        echo                 "cwd": "${workspaceFolder}/DUKE"
         echo             },
         echo             "group": "build",
         echo             "problemMatcher": [
@@ -48,10 +48,10 @@ if not exist "%VSCODE_DIR%\launch.json" (
         echo             "name": "Debug app",
         echo             "type": "cppdbg",
         echo             "request": "launch",
-        echo             "program": "${workspaceFolder}/Calculadora/app",
+        echo             "program": "${workspaceFolder}/DUKE/app",
         echo             "args": [],
         echo             "stopAtEntry": false,
-        echo             "cwd": "${workspaceFolder}/Calculadora",
+        echo             "cwd": "${workspaceFolder}/DUKE",
         echo             "environment": [],
         echo             "externalConsole": false,
         echo             "MIMode": "gdb",
@@ -69,8 +69,8 @@ if not exist "%VSCODE_DIR%\c_cpp_properties.json" (
         echo         {
         echo             "name": "Linux",
         echo             "includePath": [
-        echo                 "${workspaceFolder}/Calculadora/include",
-        echo                 "${workspaceFolder}/Calculadora/third_party"
+        echo                 "${workspaceFolder}/DUKE/include",
+        echo                 "${workspaceFolder}/DUKE/third_party"
         echo             ],
         echo             "defines": [],
         echo             "compilerPath": "/usr/bin/g++",

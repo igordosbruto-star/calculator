@@ -55,8 +55,8 @@
     },
     "makefile.launchConfigurations": [
         {
-            "cwd": "c:\\Users\\fanta\\source\\repos\\calculator\\Calculadora",
-            "binaryPath": "c:\\Users\\fanta\\source\\repos\\calculator\\Calculadora\\app",
+            "cwd": "c:\\Users\\fanta\\source\\repos\\calculator\\DUKE",
+            "binaryPath": "c:\\Users\\fanta\\source\\repos\\calculator\\DUKE\\app",
             "binaryArgs": []
         }
     ],

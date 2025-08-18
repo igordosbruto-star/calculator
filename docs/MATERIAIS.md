@@ -1,6 +1,6 @@
 # Materiais
 
-Visão geral dos tipos de materiais suportados pela calculadora e como os custos são estimados.
+Visão geral dos tipos de materiais suportados pelo DUKE e como os custos são estimados.
 
 ## Tipos
 
