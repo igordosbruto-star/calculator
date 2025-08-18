@@ -63,7 +63,7 @@ namespace {
         }
         for (size_t i = 0; i < base.size(); ++i) {
             const auto& m = base[i];
-            std::cout << i + 1 << ") " << m.nome
+            std::cout << i + 1 << ") " << m.nome << " [" << m.tipo << "]"
                       << " | " << UN_MONE << m.valor
                       << " | " << m.largura << " x " << m.comprimento << UN_AREA
                       << "\n";
@@ -82,6 +82,16 @@ namespace {
         std::cout << "Nome: ";
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::getline(std::cin, m.nome);
+        std::cout << "Tipo (unitario/linear/cubico) [linear]: ";
+        std::string tipo;
+        std::getline(std::cin, tipo);
+        if (!tipo.empty()) {
+            if (tipo == "unitario" || tipo == "linear" || tipo == "cubico") {
+                m.tipo = tipo;
+            } else {
+                wr::p("APP", "Tipo invalido. Usando 'linear'.", "Yellow");
+            }
+        }
         std::cout << "Valor: ";
         std::cin >> m.valor;
         std::cout << "Largura: ";
@@ -157,8 +167,8 @@ void App::importarCSV() {
 }
 
 bool App::carregarJSON() {
-    int version = 0;
-    if (!Persist::loadJSON("materiais.json", base, &version) || base.empty()) {
+    int schemaVersion = 0;
+    if (!Persist::loadJSON("materiais.json", base, &schemaVersion) || base.empty()) {
         wr::p("DATA", "Base nao encontrada. Criando materiais padrao...", "Yellow");
         base = {
             {"Pinus 20cm", 17.00, 0.20, 3.00},
@@ -171,7 +181,7 @@ bool App::carregarJSON() {
         }
     } else {
         std::ostringstream oss;
-        oss << "materiais.json carregado (versao " << version << ")";
+        oss << "materiais.json carregado (versao " << schemaVersion << ")";
         wr::p("DATA", oss.str(), "Green");
     }
 

@@ -345,7 +345,7 @@ Menu Principal
 
 ## 9) Roadmap Sugerido
 **Curto prazo (v0.02)**
-- [ ] Adicionar `tipo` a `MaterialDTO` + migração on‑load.
+ - [x] Adicionar `tipo` a `MaterialDTO` + migração on‑load.
 - [ ] Implementar classes `Unitario/Linear/Cubico` + factory.
 - [ ] Ajustar CLI para cadastro/listagem por tipo.
 - [ ] Implementar menu principal com navegação básica.

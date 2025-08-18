@@ -31,6 +31,12 @@ Com a evolução recente, a camada de persistência agora:
 - Atualiza o índice global de forma atômica por meio de `updateIndex`.
 - Salva automaticamente os planos gerados utilizando `makeId`, `outPlanosDirFor`, `savePlanoJSON/CSV` e `updateIndex`.
 - Permite reabrir planos salvos com `loadPlanoJSON`.
+- Expande `MaterialDTO` com campo `tipo` e migração para arquivos antigos.
+
+## Domínio de Materiais
+
+- Implementadas classes específicas para materiais `unitário`, `linear` e `cúbico`. ✅
+- Adicionada `MaterialFactory::fromDTO` para instanciar o tipo correto a partir de `MaterialDTO`. ✅
 
 ## Melhorias propostas
 

@@ -22,6 +22,7 @@ struct MaterialDTO {
     double valor = 0.0;      // valor total da peça
     double largura = 0.0;    // largura em metros
     double comprimento = 0.0; // comprimento em metros
+    std::string tipo = "linear"; // unitario | linear | cubico
 };
 
 // ------------ JSON ------------
@@ -31,6 +32,7 @@ using nlohmann::json;
 inline void to_json(json& j, const MaterialDTO& m) {
     j = json{
         {"nome", m.nome},
+        {"tipo", m.tipo},
         {"valor", m.valor},
         {"largura", m.largura},
         {"comprimento", m.comprimento}
@@ -39,6 +41,10 @@ inline void to_json(json& j, const MaterialDTO& m) {
 
 inline void from_json(const json& j, MaterialDTO& m) {
     j.at("nome").get_to(m.nome);
+    if (j.contains("tipo"))
+        j.at("tipo").get_to(m.tipo);
+    else
+        m.tipo = "linear"; // migração para arquivos antigos
     j.at("valor").get_to(m.valor);
     j.at("largura").get_to(m.largura);
     j.at("comprimento").get_to(m.comprimento);
@@ -74,6 +80,7 @@ inline bool validar(const MaterialDTO& m) {
     if (m.valor < 0) return false;
     if (m.largura < 0) return false;
     if (m.comprimento < 0) return false;
+    if (m.tipo != "unitario" && m.tipo != "linear" && m.tipo != "cubico") return false;
     return true;
 }
 
@@ -178,7 +185,8 @@ inline std::string to_str_br(double x, int precision = 6) {
 }
 
 // ----------------- JSON: salvar/carregar -----------------
-inline bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v, int version = 1) {
+// Salva materiais em JSON com versão de schema
+inline bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v, int schemaVersion = 1) {
     for (const auto& m : v) {
         if (!validar(m)) {
             wr::p("PERSIST", "Material invalido: " + m.nome, "Red");
@@ -186,12 +194,13 @@ inline bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v,
         }
     }
     json j;
-    j["version"]   = version;
-    j["materiais"] = v; // usa to_json automaticamente
+    j["schema_version"] = schemaVersion;
+    j["materiais"]      = v; // usa to_json automaticamente
     return atomicWrite(fs::path(dataPath(path)), j.dump(2));
 }
 
-inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int* out_version = nullptr) {
+// Carrega materiais de JSON, migrando campos antigos se necessário
+inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int* out_schema_version = nullptr) {
     const std::string p = dataPath(path);
     std::ifstream f(p);
     if (!f) {
@@ -200,9 +209,22 @@ inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int
     }
     try {
         json j; f >> j;
-        if (out_version && j.contains("version")) *out_version = j["version"].get<int>();
+        int schemaVersion = 1;
+        if (j.contains("schema_version"))      schemaVersion = j["schema_version"].get<int>();
+        else if (j.contains("version")) schemaVersion = j["version"].get<int>();
+        if (out_schema_version) *out_schema_version = schemaVersion;
         if (j.contains("materiais")) {
-            out = j["materiais"].get<std::vector<MaterialDTO>>();
+            bool migrated = false;
+            out.clear();
+            for (const auto& item : j["materiais"]) {
+                MaterialDTO m = item.get<MaterialDTO>();
+                if (!item.contains("tipo") || m.tipo.empty()) {
+                    m.tipo = "linear";
+                    migrated = true;
+                }
+                out.push_back(std::move(m));
+            }
+            if (migrated) saveJSON(path, out, schemaVersion);
             return true;
         }
         wr::p("PERSIST", p + " missing 'materiais'", "Red");
@@ -249,8 +271,8 @@ inline bool saveCSV(const std::string& path, const std::vector<MaterialDTO>& ite
 
     std::ostringstream oss;
 
-    // Cabeçalho
-    oss << "nome;valor;largura;comprimento\n";
+    // Cabeçalho com tipo
+    oss << "nome;tipo;valor;largura;comprimento\n";
 
     for (const auto& m : items) {
         // Sanitize simples para não quebrar CSV com ';'
@@ -259,6 +281,7 @@ inline bool saveCSV(const std::string& path, const std::vector<MaterialDTO>& ite
 
         // Números com vírgula decimal (compatível com Planilhas em localidade Brasil)
         oss << safe << ';'
+            << m.tipo << ';'
             << to_str_br(m.valor) << ';'
             << to_str_br(m.largura) << ';'
             << to_str_br(m.comprimento) << "\n";
@@ -278,7 +301,7 @@ inline bool loadCSV(const std::string& path, std::vector<MaterialDTO>& out) {
     out.clear();
     std::string line;
 
-    // Lê primeira linha (cabeçalho). Esperado: nome;valor;largura;comprimento
+    // Lê primeira linha (cabeçalho). Esperado: nome;tipo;valor;largura;comprimento
     if (!std::getline(f, line)) {
         wr::p("PERSIST", p + " header read fail", "Red");
         return false;
@@ -289,19 +312,21 @@ inline bool loadCSV(const std::string& path, std::vector<MaterialDTO>& out) {
 
         // Split por ';'
         std::vector<std::string> cols;
-        cols.reserve(4);
+        cols.reserve(5);
         std::stringstream ss(line);
         std::string item;
         while (std::getline(ss, item, ';')) {
             cols.push_back(item);
         }
-        if (cols.size() < 4) continue; // ignora linhas incompletas
+        if (cols.size() < 5) continue; // ignora linhas incompletas
 
         MaterialDTO m;
         m.nome         = detail::trim(cols[0]);
-        m.valor        = detail::parse_br_double(cols[1]);
-        m.largura      = detail::parse_br_double(cols[2]);
-        m.comprimento  = detail::parse_br_double(cols[3]);
+        m.tipo         = detail::trim(cols[1]);
+        if (m.tipo.empty()) m.tipo = "linear";
+        m.valor        = detail::parse_br_double(cols[2]);
+        m.largura      = detail::parse_br_double(cols[3]);
+        m.comprimento  = detail::parse_br_double(cols[4]);
         out.push_back(std::move(m));
     }
     return true;
