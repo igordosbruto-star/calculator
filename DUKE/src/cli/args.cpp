@@ -48,7 +48,15 @@ CliOptions parseArgs(int argc, char* argv[]) {
                     valor = a.substr(a.find('=') + 1);
                 }
                 if (!valor.empty()) {
-                    opt.finValor = std::stod(valor);
+                    double val{};
+                    auto [ptr, ec] = std::from_chars(valor.data(),
+                                                    valor.data() + valor.size(), val);
+                    if (ec == std::errc() && ptr == valor.data() + valor.size()) {
+                        opt.finValor = val;
+                    } else {
+                        wr::p("CLI", "Valor invalido '" + valor + "'", "Yellow");
+                        opt.ok = false;
+                    }
                 }
             } else if (a.rfind("--data", 0) == 0) {
                 std::string valor;
