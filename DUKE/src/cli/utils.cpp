@@ -1,17 +1,20 @@
 #include <iostream>
 #include "cli/utils.h"
 #include "core/format.h"
+#include "ApplicationCore.h"
 
 namespace duke::cli {
 
 void listarMateriais(const std::vector<MaterialDTO>& base) {
+    ApplicationCore core;
+    auto itens = core.listarMateriais(base);
     std::cout << "\nMateriais cadastrados:\n";
-    if (base.empty()) {
+    if (itens.empty()) {
         std::cout << "(vazio)\n";
         return;
     }
-    for (size_t i = 0; i < base.size(); ++i) {
-        const auto& m = base[i];
+    for (size_t i = 0; i < itens.size(); ++i) {
+        const auto& m = itens[i];
         std::cout << i + 1 << ") " << m.nome << " [" << m.tipo << "]"
                   << " | " << UN_MONE << m.valor
                   << " | " << m.largura << " x " << m.comprimento << UN_AREA
