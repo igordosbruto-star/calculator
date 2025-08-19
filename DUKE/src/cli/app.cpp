@@ -34,6 +34,8 @@ void App::importarCSV() {
     std::cout << "Importar materiais do CSV para JSON? (s/n) | ";
     char imp = 'n';
     if (!(std::cin >> imp)) imp = 'n';
+    // Descarta o restante da linha para evitar interferência em próximas leituras
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     if (imp == 's' || imp == 'S') {
         std::vector<MaterialDTO> tmp;
@@ -296,6 +298,8 @@ void App::exportar() {
     std::cout << "\nExportar base para CSV? (s/n) | ";
     char resp = 'n';
     if (!(std::cin >> resp)) resp = 'n';
+    // Descarta o restante da linha para evitar interferência em próximas leituras
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     if (resp == 's' || resp == 'S') {
         if (::Persist::saveCSV("materiais.csv", base)) {
             wr::p("CSV", "materiais.csv exportado com sucesso.", "Green");
