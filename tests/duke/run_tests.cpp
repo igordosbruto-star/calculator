@@ -8,6 +8,7 @@ void testPersistGolden();
 void test_persist_migration();
 void test_settings_migration();
 void test_extremos();
+void test_extremos_vazio();
 void test_corte();
 void test_duke_api();
 void test_plano_dto();
@@ -33,6 +34,7 @@ int main() {
     test_persist_migration();
     test_settings_migration();
     test_extremos();
+    test_extremos_vazio();
     test_corte();
     test_duke_api();
     test_plano_dto();

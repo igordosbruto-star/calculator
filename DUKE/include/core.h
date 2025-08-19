@@ -29,6 +29,7 @@ namespace core {
     std::vector<Material> reconstruirMateriais(const std::vector<MaterialDTO>& v);
 
     // Calcula materiais com menor e maior preço por m2
+    // Lança `std::invalid_argument` se `mats` estiver vazio
     // Exemplo:
     //   Como c = core::extremosPorM2(mats);
     Como extremosPorM2(const std::vector<Material>& mats);
