@@ -207,9 +207,12 @@ void App::finAdicionar() {
     std::string es = ui::readString("Entrada(E) ou Saida(S): ");
     l.entrada = !(es == "S" || es == "s");
     l.moeda = "BRL";
-    finRepo.add(l);
-    finRepo.save();
-    wr::p("FIN", "Lancamento adicionado.", "Green");
+    if (finRepo.add(l)) {
+        finRepo.save();
+        wr::p("FIN", "Lancamento adicionado.", "Green");
+    } else {
+        wr::p("FIN", "Dados invalidos (valor >0 e data AAAA-MM-DD)", "Red");
+    }
 }
 
 void App::finListar() {

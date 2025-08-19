@@ -5,6 +5,7 @@ void test_filtro();
 void test_tipo_string();
 void test_serialize();
 void test_repo_sum();
+void test_repo_validacao();
 void test_report_mes();
 
 int main() {
@@ -13,6 +14,7 @@ int main() {
     test_tipo_string();
     test_serialize();
     test_repo_sum();
+    test_repo_validacao();
     test_report_mes();
     return 0;
 }

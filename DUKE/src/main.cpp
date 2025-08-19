@@ -34,6 +34,13 @@ int main(int argc, char* argv[]) {
         std::cout << "  --ordem <c:d> : ordena listagem.\n";
         std::cout << "  --ids <1,2,3> : ids para comparacao.\n";
         std::cout << "  --help : mostra esta ajuda e finaliza.\n";
+        if (opt.finCmd != FinCmd::None) {
+            std::cout << "\nFinanceiro:\n";
+            std::cout << "  fin add --tipo=<Tipo> --valor=<V> --data=<AAAA-MM-DD> (--entrada|--saida)"
+                         " [--subtipo=<Sub> --desc=<txt>]\n";
+            std::cout << "    Tipos: Compra, Vendas, Outros, Contas, Investimento, Cofrinho.\n";
+            std::cout << "    Subtipos sugeridos: insumos, ferramenta, salario, energia, recebiveis.\n";
+        }
         return 0;
     }
 
@@ -47,16 +54,34 @@ int main(int argc, char* argv[]) {
         finance::FinanceRepo repo;
         repo.load();
         if (opt.finCmd == FinCmd::Add) {
+            if (!opt.finTipo) {
+                wr::p("FIN", "--tipo obrigatorio", "Red");
+                return 1;
+            }
+            if (!opt.finValor || *opt.finValor <= 0.0) {
+                wr::p("FIN", "--valor deve ser >0", "Red");
+                return 1;
+            }
+            if (opt.finData.empty()) {
+                wr::p("FIN", "--data obrigatoria (AAAA-MM-DD)", "Red");
+                return 1;
+            }
+            if (opt.finSubtipo.empty()) {
+                wr::p("FIN", "Subtipo recomendado. Veja --help para sugestoes", "Yellow");
+            }
             finance::Lancamento l;
             l.id = repo.nextId();
-            l.tipo = opt.finTipo.value_or(finance::Tipo::Outros);
+            l.tipo = *opt.finTipo;
             l.subtipo = opt.finSubtipo;
             l.descricao = opt.finDesc;
-            l.valor = opt.finValor.value_or(0.0);
+            l.valor = *opt.finValor;
             l.moeda = "BRL";
             l.data = opt.finData;
             l.entrada = opt.finEntrada.value_or(true);
-            repo.add(l);
+            if (!repo.add(l)) {
+                wr::p("FIN", "Lancamento invalido", "Red");
+                return 1;
+            }
             repo.save();
             std::cout << "Lancamento " << l.id << " salvo.\n";
         } else if (opt.finCmd == FinCmd::List) {

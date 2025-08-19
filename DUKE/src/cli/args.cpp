@@ -22,7 +22,9 @@ CliOptions parseArgs(int argc, char* argv[]) {
             else if (sub == "sum") opt.finCmd = FinCmd::Sum;
             else opt.naoMapeados.push_back(sub);
         } else if (opt.finCmd != FinCmd::None) {
-            if (a.rfind("--tipo", 0) == 0) {
+            if (a == "--help" || a == "-h") {
+                opt.showHelp = true;
+            } else if (a.rfind("--tipo", 0) == 0) {
                 std::string valor;
                 if (a == "--tipo" && i + 1 < argc) {
                     valor = argv[++i];

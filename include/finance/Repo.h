@@ -20,8 +20,8 @@ public:
     // Gera próximo identificador "FIN-YYYY-MM-DD-XXXX"
     std::string nextId() const;
 
-    // Adiciona um novo lançamento
-    void add(const Lancamento& l);
+    // Adiciona um novo lançamento. Retorna false se inválido
+    bool add(const Lancamento& l);
 
     // Remove lançamento pelo id. Retorna true se removido
     bool remove(const std::string& id);

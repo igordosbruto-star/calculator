@@ -24,6 +24,7 @@ O DUKE evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
 - **Financeiro** (`fin add|list|sum`)
   - CLI para registrar, listar e somar lançamentos com filtros. ✅
   - Relatório mensal com `fin report mes --ano=<AAAA> --mes=<MM>` exportando CSV. ✅
+  - Validações de lançamentos (valor >0, data ISO, tipo obrigatório). ✅
 - **Testes automatizados** (novo diretório `tests/`)
   - Criar casos de teste unitários para validar comparações e rotinas de persistência.
   - Integrar com execução contínua (CI) para evitar regressões.
