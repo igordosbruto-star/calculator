@@ -8,7 +8,7 @@ LIB_DUKE = $(CALC_DIR)/libduke.a
 SRCS := $(wildcard *.cpp)
 
 run_tests: $(SRCS) $(LIB_DUKE) $(LIB_CORE)
-	$(CXX) $(CXXFLAGS) $(SRCS) -I$(CALC_DIR)/include -I$(CALC_DIR)/../third_party -I$(CORE_DIR)/include $(LIB_DUKE) $(LIB_CORE) -o run_tests
+	$(CXX) $(CXXFLAGS) $(SRCS) -I$(CALC_DIR)/include -I$(CALC_DIR)/../include -I$(CALC_DIR)/../third_party -I$(CORE_DIR)/include $(LIB_DUKE) $(LIB_CORE) -o run_tests
 
 $(LIB_DUKE):
 	$(MAKE) -C $(CALC_DIR) libduke.a

@@ -12,7 +12,7 @@ CLI_SRC := src/cli/app.cpp src/cli/args.cpp src/cli/parser.cpp src/cli/utils.cpp
 FIN_SRC := $(wildcard ../src/finance/*.cpp)
 SRC := $(wildcard src/*.cpp) $(CLI_SRC) \
        $(wildcard src/domain/*.cpp) $(wildcard src/custo/*.cpp) \
-       $(wildcard src/ui/*.cpp) $(FIN_SRC)
+       $(wildcard src/ui/*.cpp) $(wildcard src/gui/*.cpp) $(FIN_SRC)
 LIB_SRC := $(filter-out src/main.cpp,$(SRC))
 OBJ := $(LIB_SRC:.cpp=.o)
 

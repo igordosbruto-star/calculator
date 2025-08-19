@@ -1,38 +1,45 @@
 #include "ui/Menu.h"
 #include <limits>
 #include <cctype>
+#include "gui/Navigation.h"
 namespace duke {
 
 namespace ui {
 
 void clearScreen(std::ostream& out) {
-    out << "\033[2J\033[1;1H";
+    gui::ClearScreenWidget w;
+    w.render(out);
 }
 
 void renderBreadcrumb(const std::vector<std::string>& trail,
                       std::ostream& out) {
-    for (size_t i = 0; i < trail.size(); ++i) {
-        if (i > 0) out << " > ";
-        out << trail[i];
-    }
-    out << '\n';
+    gui::BreadcrumbWidget bc(trail);
+    bc.render(out);
 }
 
 int promptMenu(const std::vector<std::string>& options,
                std::istream& in,
                std::ostream& out) {
-    for (size_t i = 0; i < options.size(); ++i) {
-        out << i + 1 << ") " << options[i] << "\n";
-    }
-    out << "> ";
-    int choice = 0;
-    while (!(in >> choice) || choice < 1 || choice > static_cast<int>(options.size())) {
-        in.clear();
+    int escolha = -1;
+    gui::MenuWidget menu(options, [&](int idx){ escolha = idx + 1; });
+    while (escolha < 0) {
+        menu.render(out);
+        if (!(in >> escolha)) {
+            in.clear();
+            in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            out << "Opcao invalida. Tente novamente: ";
+            escolha = -1;
+            continue;
+        }
         in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        out << "Opcao invalida. Tente novamente: ";
+        if (escolha < 1 || escolha > static_cast<int>(options.size())) {
+            out << "Opcao invalida. Tente novamente: ";
+            escolha = -1;
+        } else {
+            menu.onInput(escolha);
+        }
     }
-    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    return choice;
+    return escolha;
 }
 
 int promptMenuKey(const std::vector<std::string>& options,
@@ -40,25 +47,22 @@ int promptMenuKey(const std::vector<std::string>& options,
                   std::istream& in,
                   std::ostream& out) {
     if (options.size() != keys.size()) return -1;
-    while (true) {
-        for (size_t i = 0; i < options.size(); ++i) {
-            out << keys[i] << ") " << options[i] << "\n";
-        }
-        out << "> ";
+    int escolha = -1;
+    gui::MenuKeyWidget menu(options, keys, [&](int idx){ escolha = idx; });
+    while (escolha < 0) {
+        menu.render(out);
         std::string line;
         std::getline(in, line);
         if (line == "?") {
             out << "Digite a letra correspondente a opcao desejada.\n";
             continue;
         }
-        if (line.size() == 1) {
-            char c = static_cast<char>(std::toupper(line[0]));
-            for (size_t i = 0; i < keys.size(); ++i) {
-                if (c == std::toupper(keys[i])) return static_cast<int>(i);
-            }
+        if (!line.empty()) {
+            menu.onKey(line[0]);
         }
-        out << "Opcao invalida. Tente novamente.\n";
+        if (escolha < 0) out << "Opcao invalida. Tente novamente.\n";
     }
+    return escolha;
 }
 
 int readInt(const std::string& prompt,
