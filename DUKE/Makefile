@@ -2,6 +2,9 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Wall -fPIC
 CORE_DIR = ../core
 INCLUDES = -Iinclude -I../include -I../third_party -I$(CORE_DIR)/include
+QT_CFLAGS := $(shell pkg-config --cflags Qt6Widgets)
+QT_LIBS := $(shell pkg-config --libs Qt6Widgets)
+CXXFLAGS += $(QT_CFLAGS)
 
 CORE_LIB = $(CORE_DIR)/libcore.a
 
@@ -19,13 +22,13 @@ libduke.a: $(OBJ) $(CORE_LIB)
 	ar rcs $@ $(OBJ)
 
 libduke.so: $(OBJ) $(CORE_LIB)
-	$(CXX) $(CXXFLAGS) -shared $(OBJ) -L$(CORE_DIR) -lcore -o $@
+	$(CXX) $(CXXFLAGS) -shared $(OBJ) $(QT_LIBS) -L$(CORE_DIR) -lcore -o $@
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 cli: libduke.a $(CORE_LIB) src/main.cpp
-	$(CXX) $(CXXFLAGS) src/main.cpp $(INCLUDES) -L. -lduke -L$(CORE_DIR) -lcore -o app
+	$(CXX) $(CXXFLAGS) src/main.cpp $(INCLUDES) -L. -lduke -L$(CORE_DIR) -lcore $(QT_LIBS) -o app
 
 tests: libduke.a $(CORE_LIB)
 	$(MAKE) -C tests run_tests

@@ -1,5 +1,10 @@
 # Uso via CLI
 
+## Dependências
+
+A CLI utiliza a toolkit [Qt 6](https://www.qt.io/qt-6). Certifique-se de que as
+bibliotecas estejam instaladas e disponíveis via `pkg-config` antes da compilação.
+
 O DUKE pode ser executado com as seguintes opções:
 
 ```bash

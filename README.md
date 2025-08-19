@@ -2,6 +2,12 @@
 
 ERP DUKE é um sistema ERP modular voltado para o planejamento de cortes de materiais e gestão de projetos.
 
+## Requisitos
+
+O sistema depende da toolkit [Qt 6](https://www.qt.io/qt-6).
+Instale as bibliotecas de desenvolvimento e garanta que `pkg-config`
+as encontre antes de compilar.
+
 ## Compilação
 
 O projeto é dividido em módulos compilados separadamente.
