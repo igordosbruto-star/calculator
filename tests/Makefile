@@ -9,10 +9,10 @@ LIB_CALC = $(CALC_DIR)/libduke.a
 
 CALC_SRCS := $(wildcard duke/*.cpp)
 CORE_SRCS := $(wildcard core/*.cpp)
+FIN_SRCS := $(wildcard finance/*.cpp)
 
-.PHONY: all duke core clean
-
-all: duke core
+.PHONY: all duke core finance clean
+all: duke core finance
 
 duke: $(LIB_CALC) $(LIB_CORE)
 ifeq ($(strip $(CALC_SRCS)),)
@@ -33,6 +33,14 @@ else
 	./core/run_tests
 endif
 
+finance:
+ifeq ($(strip $(FIN_SRCS)),)
+	@echo "No finance tests"
+else
+	$(CXX) $(CXXFLAGS) $(FIN_SRCS) -I../include -o finance/run_tests
+	./finance/run_tests
+endif
+
 $(LIB_CALC):
 	$(MAKE) -C $(CALC_DIR) libduke.a
 
@@ -40,4 +48,4 @@ $(LIB_CORE):
 	$(MAKE) -C $(CORE_DIR) libcore.a
 
 clean:
-	rm -f duke/run_tests core/run_tests
+	rm -f duke/run_tests core/run_tests finance/run_tests
