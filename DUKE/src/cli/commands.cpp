@@ -3,6 +3,7 @@
 #include <string>
 #include "cli/commands.h"
 #include "core/Debug.h"
+#include "ui/Menu.h"
 
 namespace duke::cli {
 
@@ -21,12 +22,9 @@ void adicionarMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& ma
             wr::p("APP", "Tipo invalido. Usando 'linear'.", "Yellow");
         }
     }
-    std::cout << "Valor: ";
-    std::cin >> m.valor;
-    std::cout << "Largura: ";
-    std::cin >> m.largura;
-    std::cout << "Comprimento: ";
-    std::cin >> m.comprimento;
+    m.valor = ui::readDouble("Valor: ");
+    m.largura = ui::readDouble("Largura: ");
+    m.comprimento = ui::readDouble("Comprimento: ");
     base.push_back(m);
     salvarReconstruir(base, mats);
 }
@@ -34,35 +32,37 @@ void adicionarMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& ma
 void editarMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
     if (base.empty()) return;
     listarMateriais(base);
-    std::cout << "Indice para editar: ";
     size_t idx = 0;
-    if (!(std::cin >> idx) || idx < 1 || idx > base.size()) {
+    while (true) {
+        int input = ui::readInt("Indice para editar: ");
+        if (input >= 1 && static_cast<size_t>(input) <= base.size()) {
+            idx = static_cast<size_t>(input);
+            break;
+        }
         std::cout << "Indice invalido.\n";
-        return;
     }
     MaterialDTO& m = base[idx - 1];
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::string nome;
     std::cout << "Nome (" << m.nome << "): ";
     std::getline(std::cin, nome);
     if (!nome.empty()) m.nome = nome;
-    std::cout << "Valor (" << m.valor << "): ";
-    std::cin >> m.valor;
-    std::cout << "Largura (" << m.largura << "): ";
-    std::cin >> m.largura;
-    std::cout << "Comprimento (" << m.comprimento << "): ";
-    std::cin >> m.comprimento;
+    m.valor = ui::readDouble("Valor (" + std::to_string(m.valor) + "): ");
+    m.largura = ui::readDouble("Largura (" + std::to_string(m.largura) + "): ");
+    m.comprimento = ui::readDouble("Comprimento (" + std::to_string(m.comprimento) + "): ");
     salvarReconstruir(base, mats);
 }
 
 void removerMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
     if (base.empty()) return;
     listarMateriais(base);
-    std::cout << "Indice para remover: ";
     size_t idx = 0;
-    if (!(std::cin >> idx) || idx < 1 || idx > base.size()) {
+    while (true) {
+        int input = ui::readInt("Indice para remover: ");
+        if (input >= 1 && static_cast<size_t>(input) <= base.size()) {
+            idx = static_cast<size_t>(input);
+            break;
+        }
         std::cout << "Indice invalido.\n";
-        return;
     }
     base.erase(base.begin() + static_cast<long>(idx - 1));
     salvarReconstruir(base, mats);
