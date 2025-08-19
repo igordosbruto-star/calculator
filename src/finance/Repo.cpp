@@ -1,5 +1,6 @@
 #include "finance/Repo.h"
 #include "finance/Serialize.h"
+#include "core/persist.h"
 
 #include <algorithm>
 #include <chrono>
@@ -14,11 +15,20 @@ namespace finance {
 using nlohmann::json;
 
 bool FinanceRepo::load(const std::string& path) {
-    std::ifstream f(path);
+    std::string p = ::Persist::dataPath(path);
+    std::ifstream f(p);
     if (!f.is_open())
         return false;
     json j;
-    f >> j;
+    try {
+        f >> j;
+    } catch (const std::exception& e) {
+        wr::p("FIN", p + " parse error: " + e.what(), "Red");
+        return false;
+    } catch (...) {
+        wr::p("FIN", p + " unknown parse error", "Red");
+        return false;
+    }
     schema_version = j.value("schema_version", 1);
     items.clear();
     if (j.contains("items"))
@@ -27,14 +37,19 @@ bool FinanceRepo::load(const std::string& path) {
 }
 
 bool FinanceRepo::save(const std::string& path) const {
-    std::ofstream f(path);
-    if (!f.is_open())
+    std::string p = ::Persist::dataPath(path);
+    try {
+        json j;
+        j["schema_version"] = schema_version;
+        j["items"] = items;
+        return ::Persist::atomicWrite(std::filesystem::path(p), j.dump(2));
+    } catch (const std::exception& e) {
+        wr::p("FIN", p + " save error: " + e.what(), "Red");
         return false;
-    json j;
-    j["schema_version"] = schema_version;
-    j["items"] = items;
-    f << j.dump(2);
-    return true;
+    } catch (...) {
+        wr::p("FIN", p + " save unknown error", "Red");
+        return false;
+    }
 }
 
 std::string FinanceRepo::nextId() const {
