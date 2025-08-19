@@ -38,7 +38,7 @@ finance:
 ifeq ($(strip $(FIN_SRCS)),)
 	@echo "No finance tests"
 else
-	$(CXX) $(CXXFLAGS) $(FIN_SRCS) $(FIN_LIB_SRCS) -I../include -I../third_party -o finance/run_tests
+	$(CXX) $(CXXFLAGS) $(FIN_SRCS) $(FIN_LIB_SRCS) -I../include -I../third_party -I../core/include -o finance/run_tests
 	./finance/run_tests
 endif
 
