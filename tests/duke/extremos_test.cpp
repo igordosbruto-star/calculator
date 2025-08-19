@@ -2,6 +2,7 @@
 #include "Material.h"
 #include <vector>
 #include <cassert>
+#include <stdexcept>
 
 
 // Testa a comparação de materiais pelo valor por metro quadrado
@@ -14,4 +15,16 @@ void test_extremos() {
     core::Como r = core::extremosPorM2(mats);
     assert(r.menor.nome == "Barato");
     assert(r.maior.nome == "Caro");
+}
+
+// Garante que uma lista vazia gera exceção
+void test_extremos_vazio() {
+    std::vector<Material> mats;
+    bool houveExcecao = false;
+    try {
+        core::extremosPorM2(mats);
+    } catch (const std::invalid_argument&) {
+        houveExcecao = true;
+    }
+    assert(houveExcecao);
 }
