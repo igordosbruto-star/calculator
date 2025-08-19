@@ -24,6 +24,14 @@ void test_projeto() {
     inval.medidas.comprimento = 1.0;
     assert(!prj.adicionarMaterial(inval));
 
+    // Material com dimensões zeradas (válido para materiais unitários)
+    ProjetoItemMaterial matZero;
+    matZero.idMaterial = "mat_unit";
+    matZero.quantidade = 1;
+    matZero.custoUnitario = 3.0;
+    // Medidas permanecem em 0.0
+    assert(prj.adicionarMaterial(matZero));
+
     // Corte válido
     ProjetoItemCorte ct;
     ct.idMaterial = "mat1";
@@ -45,11 +53,12 @@ void test_projeto() {
     ctInv.quantidade = 1;
     assert(!prj.adicionarCorte(ctInv));
 
-    // Resumo de custo
-    assert(prj.resumoCusto() == 2*5.0 + 1*1.0);
+    // Resumo de custo inclui materiais unitários com medidas zeradas
+    assert(prj.resumoCusto() == 2*5.0 + 1*1.0 + 1*3.0);
 
     // Remoção
     assert(prj.removerItem("mat1"));
+    assert(prj.removerItem("mat_unit"));
     assert(prj.materiais.empty());
     assert(prj.cortes.empty());
 

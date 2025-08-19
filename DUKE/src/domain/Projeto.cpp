@@ -7,9 +7,10 @@
 #include "domain/Tempo.h"
 namespace duke {
 
-// Retorna false se qualquer dimensão for menor ou igual a zero
+// Retorna false se alguma dimensão for negativa. Valores zero são aceitos
+// para dimensões não utilizadas, como em materiais unitários.
 static bool medidasValidas(const Medidas& m) {
-    if (m.largura <= 0 || m.altura <= 0 || m.profundidade <= 0 || m.comprimento <= 0)
+    if (m.largura < 0 || m.altura < 0 || m.profundidade < 0 || m.comprimento < 0)
         return false;
     return true;
 }
