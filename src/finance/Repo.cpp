@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+#include <cmath>
 
 namespace finance {
 
@@ -60,8 +61,22 @@ std::string FinanceRepo::nextId() const {
     return oss.str();
 }
 
-void FinanceRepo::add(const Lancamento& l) {
+namespace {
+// Verifica se a data está no formato ISO AAAA-MM-DD
+bool isIsoDate(const std::string& s) {
+    if (s.size() != 10 || s[4] != '-' || s[7] != '-') return false;
+    std::tm tm{};
+    std::istringstream iss(s);
+    iss >> std::get_time(&tm, "%Y-%m-%d");
+    return !iss.fail();
+}
+} // namespace
+
+bool FinanceRepo::add(const Lancamento& l) {
+    if (l.valor <= 0.0 || !isIsoDate(l.data))
+        return false;
     items.push_back(l);
+    return true;
 }
 
 bool FinanceRepo::remove(const std::string& id) {

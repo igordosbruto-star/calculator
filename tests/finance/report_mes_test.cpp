@@ -11,9 +11,9 @@ void test_report_mes() {
     fs::remove_all("out");
 
     FinanceRepo repo;
-    repo.add({"1", Tipo::Compra, "sub", "desc1", 100.0, "BRL", "2025-08-05", false, "", "caixa", {}});
-    repo.add({"2", Tipo::Vendas, "sub2", "desc2", 50.0, "BRL", "2025-08-10", true, "", "banco", {}});
-    repo.add({"3", Tipo::Compra, "sub", "desc3", 30.0, "BRL", "2025-07-01", false, "", "caixa", {}});
+    assert(repo.add({"1", Tipo::Compra, "sub", "desc1", 100.0, "BRL", "2025-08-05", false, "", "caixa", {}}));
+    assert(repo.add({"2", Tipo::Vendas, "sub2", "desc2", 50.0, "BRL", "2025-08-10", true, "", "banco", {}}));
+    assert(repo.add({"3", Tipo::Compra, "sub", "desc3", 30.0, "BRL", "2025-07-01", false, "", "caixa", {}}));
 
     std::ostringstream oss;
     std::string path = reportMes(repo, 2025, 8, oss);
