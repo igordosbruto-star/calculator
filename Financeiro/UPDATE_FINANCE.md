@@ -91,8 +91,8 @@ Registrar e consultar **lançamentos financeiros** (saídas/entradas), filtrando
   - `Principal > Financeiro > Adicionar | Listar | Soma por filtro`
 
 ### D) Relatórios rápidos (texto/CSV)
-- [ ] `fin report mes --ano=2025 --mes=08` → imprime tabela: Data | Tipo | Subtipo | Descrição | ±Valor | Conta
-- [ ] Exportar CSV em `out/finance/2025-08-report.csv`
+- [x] `fin report mes --ano=2025 --mes=08` → imprime tabela: Data | Tipo | Subtipo | Descrição | ±Valor | Conta
+- [x] Exportar CSV em `out/finance/2025-08-report.csv`
 
 ### E) Validações & Regras
 - [ ] `valor > 0`
