@@ -4,10 +4,10 @@
 // ==========================================
 
 #include "cli/args.h"
+#include "core/Debug.h" // para logs coloridos
 #include <string>
 #include <sstream>
 #include <charconv>
-#include <iostream>
 namespace duke {
 
 CliOptions parseArgs(int argc, char* argv[]) {
@@ -58,22 +58,28 @@ CliOptions parseArgs(int argc, char* argv[]) {
                         if (ec == std::errc() && ptr == item.data() + item.size()) {
                             opt.ids.push_back(id);
                         } else {
-                            std::cerr << "Aviso: ID invalido '" << item
-                                      << "' ignorado\n";
+                            // avisa sobre ID inválido
+                            wr::p("CLI", "ID invalido '" + item + "' ignorado", "Yellow");
                         }
                     }
                 }
             }
-        } else if (opt.comando == Comando::Nenhum) {
-            // registra comando principal
-            if (a == "criar") {
-                opt.comando = Comando::Criar;
-            } else if (a == "listar") {
-                opt.comando = Comando::Listar;
-            } else if (a == "comparar") {
-                opt.comando = Comando::Comparar;
-            }
+        } else if (opt.comando == Comando::Nenhum && a == "criar") {
+            opt.comando = Comando::Criar;
+        } else if (opt.comando == Comando::Nenhum && a == "listar") {
+            opt.comando = Comando::Listar;
+        } else if (opt.comando == Comando::Nenhum && a == "comparar") {
+            opt.comando = Comando::Comparar;
+        } else {
+            // argumento desconhecido
+            opt.naoMapeados.push_back(a);
         }
+    }
+    if (!opt.naoMapeados.empty()) {
+        for (const auto& tok : opt.naoMapeados) {
+            wr::p("CLI", "Argumento desconhecido: " + tok, "Yellow");
+        }
+        opt.ok = false; // sinaliza problema para o chamador
     }
     return opt;
 }

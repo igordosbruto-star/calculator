@@ -35,6 +35,11 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
+    // Encerra se houver argumentos desconhecidos
+    if (!opt.ok) {
+        return 1;
+    }
+
     // Se houver comando, apenas registra placeholder
     if (opt.comando != Comando::Nenhum) {
         std::string nome;
