@@ -1,7 +1,7 @@
 #include <cassert>
 #include <sstream>
 #include <string>
-#include "nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
 
 #define private public
 #include "cli/App.h"

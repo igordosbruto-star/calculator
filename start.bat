@@ -22,7 +22,7 @@ if not exist "%VSCODE_DIR%\tasks.json" (
         echo                 "-Wall",
         echo                 "src/*.cpp",
         echo                 "-Iinclude",
-        echo                 "-Ithird_party",
+        echo                 "-I../third_party",
         echo                 "-o",
         echo                 "app"
         echo             ],
@@ -70,7 +70,7 @@ if not exist "%VSCODE_DIR%\c_cpp_properties.json" (
         echo             "name": "Linux",
         echo             "includePath": [
         echo                 "${workspaceFolder}/DUKE/include",
-        echo                 "${workspaceFolder}/DUKE/third_party"
+        echo                 "${workspaceFolder}/third_party"
         echo             ],
         echo             "defines": [],
         echo             "compilerPath": "/usr/bin/g++",

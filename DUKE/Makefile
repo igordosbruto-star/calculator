@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -fPIC
 CORE_DIR = ../core
-INCLUDES = -Iinclude -Ithird_party -I$(CORE_DIR)/include
+INCLUDES = -Iinclude -I../third_party -I$(CORE_DIR)/include
 
 CORE_LIB = $(CORE_DIR)/libcore.a
 
