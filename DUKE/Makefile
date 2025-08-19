@@ -9,6 +9,7 @@ CXXFLAGS += $(QT_CFLAGS)
 CORE_LIB = $(CORE_DIR)/libcore.a
 
 CLI_SRC := src/cli/app.cpp src/cli/args.cpp src/cli/parser.cpp src/cli/utils.cpp src/cli/commands.cpp
+GUI_MAIN = src/gui/main_qt.cpp
 FIN_SRC := $(wildcard ../src/finance/*.cpp)
 SRC := $(wildcard src/*.cpp) $(CLI_SRC) \
        $(wildcard src/domain/*.cpp) $(wildcard src/custo/*.cpp) \
@@ -30,13 +31,16 @@ libduke.so: $(OBJ) $(CORE_LIB)
 cli: libduke.a $(CORE_LIB) src/main.cpp
 	$(CXX) $(CXXFLAGS) src/main.cpp $(INCLUDES) -L. -lduke -L$(CORE_DIR) -lcore $(QT_LIBS) -o app
 
+gui: libduke.a $(CORE_LIB) $(GUI_MAIN)
+	$(CXX) $(CXXFLAGS) $(GUI_MAIN) $(INCLUDES) -L. -lduke -L$(CORE_DIR) -lcore $(QT_LIBS) -o app_gui
+
 tests: libduke.a $(CORE_LIB)
 	$(MAKE) -C tests run_tests
 
 $(CORE_LIB):
 	$(MAKE) -C $(CORE_DIR)
 
-.PHONY: clean cli tests
+.PHONY: clean cli gui tests
 clean:
-	rm -f $(OBJ) libduke.a libduke.so app
-	$(MAKE) -C tests clean
+	        rm -f $(OBJ) libduke.a libduke.so app app_gui
+	        $(MAKE) -C tests clean

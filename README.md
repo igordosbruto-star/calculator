@@ -26,6 +26,10 @@ cd DUKE
 make
 # opcional: gerar CLI
 make cli
+# opcional: gerar GUI
+make gui
+# executar GUI
+./app_gui
 ```
 
 ## Documentação
