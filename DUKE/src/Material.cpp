@@ -18,22 +18,22 @@ Material::Material(const std::string& n, double v, double l, double c)
     iniciar();
 }
 
-const std::string& Material::capNome() const noexcept { return nome; }
-double Material::capValor() const noexcept { return valor; }
-double Material::capArea()  const noexcept { return area; }
-double Material::capLarg()  const noexcept { return largura; }
-double Material::capComp()  const noexcept { return comprimento; }
-double Material::capPorm2() const noexcept { return porm2; }
+const std::string& Material::getNome() const noexcept { return nome; }
+double Material::getValor() const noexcept { return valor; }
+double Material::getArea()  const noexcept { return area; }
+double Material::getLarg()  const noexcept { return largura; }
+double Material::getComp()  const noexcept { return comprimento; }
+double Material::getPorm2() const noexcept { return porm2; }
 
-void Material::aplLarg(double l) { largura = l; iniciar(); }
-void Material::aplComp(double c) { comprimento = c; iniciar(); }
-void Material::aplValor(double v) { valor = v; iniciar(); }
+void Material::setLarg(double l) { largura = l; iniciar(); }
+void Material::setComp(double c) { comprimento = c; iniciar(); }
+void Material::setValor(double v) { valor = v; iniciar(); }
 
 void Material::mostrar() const {
-    std::cout << "Material      : " << capNome() << "\n"
-              << "Area          : " << capArea() << UN_AREA << "\n"
-              << "Valor Total   : " << UN_MONE << capValor() << "\n"
-              << "Valor por m2  : " << UN_MONE << capPorm2() << "\n\n";
+    std::cout << "Material      : " << getNome() << "\n"
+              << "Area          : " << getArea() << UN_AREA << "\n"
+              << "Valor Total   : " << UN_MONE << getValor() << "\n"
+              << "Valor por m2  : " << UN_MONE << getPorm2() << "\n\n";
 }
 
 } // namespace duke

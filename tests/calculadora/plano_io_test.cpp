@@ -12,7 +12,7 @@ void test_plano_io() {
 
     // monta um corte e seu DTO correspondente
     Corte c("Lateral", 2.0, 0.15, 180.0);
-    CorteDTO dto{"Lateral", 2.0, 0.15, 180.0, c.capArea(), c.capValor(), false};
+    CorteDTO dto{"Lateral", 2.0, 0.15, 180.0, c.getArea(), c.getValor(), false};
 
     // monta plano com o corte
     PlanoCorteDTO p;
@@ -20,8 +20,8 @@ void test_plano_io() {
     p.algoritmo = "simples";
     p.porm2_usado = 180.0;
     p.cortes.push_back(dto);
-    p.total_area_m2 = c.capArea();
-    p.total_valor = c.capValor();
+    p.total_area_m2 = c.getArea();
+    p.total_valor = c.getValor();
     p.gerado_em = Persist::nowIso8601();
     p.id = Persist::makeId(p.projeto);
 

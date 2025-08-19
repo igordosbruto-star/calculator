@@ -13,9 +13,9 @@ namespace core {
     }
 
     Como extremosPorM2(const std::vector<Material>& mats) {
-        auto cmp = [](const Material& a, const Material& b){ return a.capPorm2() < b.capPorm2(); };
+        auto cmp = [](const Material& a, const Material& b){ return a.getPorm2() < b.getPorm2(); };
         auto [min_it, max_it] = std::minmax_element(mats.begin(), mats.end(), cmp);
-        return {{min_it->capNome(), min_it->capPorm2()}, {max_it->capNome(), max_it->capPorm2()}};
+        return {{min_it->getNome(), min_it->getPorm2()}, {max_it->getNome(), max_it->getPorm2()}};
     }
 }
 

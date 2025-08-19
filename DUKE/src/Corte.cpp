@@ -13,8 +13,8 @@ Corte::Corte(const std::string& n, double l, double c, double precoPorM2)
     valor = area * porm2;
 }
 
-double Corte::capArea() const noexcept { return area; }
-double Corte::capValor() const noexcept { return valor; }
+double Corte::getArea() const noexcept { return area; }
+double Corte::getValor() const noexcept { return valor; }
 
 void Corte::imprimir() const {
     std::cout << "\nCorte: " << nome << "\n"

@@ -15,8 +15,8 @@ private:
 public:
     Corte(const std::string& n, double l, double c, double precoPorM2);
 
-    double capArea() const noexcept;
-    double capValor() const noexcept;
+    double getArea() const noexcept;
+    double getValor() const noexcept;
 
     void imprimir() const;
 };
