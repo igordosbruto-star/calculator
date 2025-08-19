@@ -53,32 +53,7 @@ void App::importarCSV() {
 }
 
 bool App::carregarJSON() {
-    int schemaVersion = 0;
-    if (!::Persist::loadJSON("materiais.json", base, &schemaVersion) || base.empty()) {
-        wr::p("DATA", "Base nao encontrada. Criando materiais padrao...", "Yellow");
-        base = {
-            {"Pinus 20cm", 17.00, 0.20, 3.00},
-            {"MDF 15mm", 180.00, 1.85, 2.75}
-        };
-        if (::Persist::saveJSON("materiais.json", base, 1)) {
-            wr::p("DATA", "materiais.json criado.", "Green");
-        } else {
-            wr::p("DATA", "Falha ao criar materiais.json", "Red");
-        }
-    } else {
-        std::ostringstream oss;
-        oss << "materiais.json carregado (versao " << schemaVersion << ")";
-        wr::p("DATA", oss.str(), "Green");
-    }
-
-    mats = core::reconstruirMateriais(base);
-
-    if (mats.size() < 2) {
-        wr::p("ERRO", "Precisam existir pelo menos 2 materiais para comparar.", "Red");
-        return false;
-    }
-
-    return true;
+    return core.carregarJSON(base, mats);
 }
 
 void App::menuMateriais() {
@@ -97,7 +72,22 @@ void App::menuMateriais() {
             continue;
         }
         switch (op) {
-            case 1: cli::listarMateriais(base); break;
+            case 1: {
+                auto itens = core.listarMateriais(base);
+                std::cout << "\nMateriais cadastrados:\n";
+                if (itens.empty()) {
+                    std::cout << "(vazio)\n";
+                } else {
+                    for (size_t i = 0; i < itens.size(); ++i) {
+                        const auto& m = itens[i];
+                        std::cout << i + 1 << ") " << m.nome << " [" << m.tipo << "]"
+                                  << " | " << UN_MONE << m.valor
+                                  << " | " << m.largura << " x " << m.comprimento << UN_AREA
+                                  << "\n";
+                    }
+                }
+                break;
+            }
             case 2: cli::adicionarMaterial(base, mats); break;
             case 3: cli::editarMaterial(base, mats); break;
             case 4: cli::removerMaterial(base, mats); break;
@@ -166,7 +156,19 @@ void App::compararMateriais() {
     ui::renderBreadcrumb({ui::toString(ui::MenuState::Principal),
                            ui::toString(ui::MenuState::Comparar),
                            "Materiais"});
-    cli::listarMateriais(base);
+    auto itens = core.listarMateriais(base);
+    std::cout << "\nMateriais cadastrados:\n";
+    if (itens.empty()) {
+        std::cout << "(vazio)\n";
+        return;
+    }
+    for (size_t i = 0; i < itens.size(); ++i) {
+        const auto& m = itens[i];
+        std::cout << i + 1 << ") " << m.nome << " [" << m.tipo << "]"
+                  << " | " << UN_MONE << m.valor
+                  << " | " << m.largura << " x " << m.comprimento << UN_AREA
+                  << "\n";
+    }
     std::string linha = ui::readString("IDs separados por espaco: ");
     std::istringstream iss(linha);
     std::vector<int> ids; int id;
@@ -178,17 +180,15 @@ void App::compararMateriais() {
         std::cout << "Selecione ao menos dois materiais.\n";
         return;
     }
-    std::vector<Material> sel;
-    for (int i : ids) sel.push_back(mats[static_cast<size_t>(i)]);
-    auto [menor, maior] = core::extremosPorM2(sel);
+    auto res = core.compararMateriais(mats, ids);
     std::cout << "ID | Nome | porm2\n";
-    for (int i : ids) {
-        const auto& m = mats[static_cast<size_t>(i)];
+    for (size_t i = 0; i < ids.size(); ++i) {
+        const auto& r = res[i];
         std::string extra;
-        if (m.getNome() == menor.nome) extra = " <menor>";
-        if (m.getNome() == maior.nome) extra = " <maior>";
-        std::cout << i + 1 << " | " << m.getNome() << " | "
-                  << UN_MONE << m.getPorm2() << extra << "\n";
+        if (r.menor) extra = " <menor>";
+        if (r.maior) extra = " <maior>";
+        std::cout << ids[i] + 1 << " | " << r.nome << " | "
+                  << UN_MONE << r.porm2 << extra << "\n";
     }
 }
 

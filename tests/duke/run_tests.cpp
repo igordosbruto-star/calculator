@@ -24,6 +24,7 @@ void test_projeto();
 void test_projeto_custo();
 void test_tempo();
 void test_menu();
+void test_application_core();
 
 // Executa todos os testes
 int main() {
@@ -50,5 +51,6 @@ int main() {
     test_projeto_custo();
     test_tempo();
     test_menu();
+    test_application_core();
     return 0;
 }

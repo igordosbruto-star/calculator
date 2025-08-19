@@ -5,6 +5,7 @@
 #include "core/persist.h"
 #include "Material.h"
 #include "core.h"
+#include "ApplicationCore.h"
 #include "finance/Repo.h"
 namespace duke {
 
@@ -14,6 +15,7 @@ private:
     Settings settings;
     std::vector<MaterialDTO> base;
     std::vector<Material> mats;
+    ApplicationCore core; // camada de regras de negócio
     finance::FinanceRepo finRepo;
 
     void importarCSV();
