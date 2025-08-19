@@ -10,13 +10,14 @@ LIB_CALC = $(CALC_DIR)/libduke.a
 CALC_SRCS := $(wildcard duke/*.cpp)
 CORE_SRCS := $(wildcard core/*.cpp)
 FIN_SRCS := $(wildcard finance/*.cpp)
+FIN_LIB_SRCS := $(wildcard ../src/finance/*.cpp)
 
 .PHONY: all duke core finance clean
 all: duke core finance
 
 duke: $(LIB_CALC) $(LIB_CORE)
 ifeq ($(strip $(CALC_SRCS)),)
-        @echo "No DUKE tests"
+	@echo "No DUKE tests"
 else
 	$(CXX) $(CXXFLAGS) -include duke/namespace.h \
 		$(CALC_SRCS) -I$(CALC_DIR)/include -I../third_party -I$(CORE_DIR)/include \
@@ -37,7 +38,7 @@ finance:
 ifeq ($(strip $(FIN_SRCS)),)
 	@echo "No finance tests"
 else
-	$(CXX) $(CXXFLAGS) $(FIN_SRCS) -I../include -o finance/run_tests
+	$(CXX) $(CXXFLAGS) $(FIN_SRCS) $(FIN_LIB_SRCS) -I../include -I../third_party -o finance/run_tests
 	./finance/run_tests
 endif
 
