@@ -8,13 +8,86 @@
 #include <string>
 #include <sstream>
 #include <charconv>
+#include "finance/Serialize.h"
 namespace duke {
 
 CliOptions parseArgs(int argc, char* argv[]) {
     CliOptions opt; // guarda opções reconhecidas
     for (int i = 1; i < argc; ++i) {
         std::string a = argv[i];
-        if (a == "--help" || a == "-h") {
+        if (opt.finCmd == FinCmd::None && a == "fin" && i + 1 < argc) {
+            std::string sub = argv[++i];
+            if (sub == "add") opt.finCmd = FinCmd::Add;
+            else if (sub == "list") opt.finCmd = FinCmd::List;
+            else if (sub == "sum") opt.finCmd = FinCmd::Sum;
+            else opt.naoMapeados.push_back(sub);
+        } else if (opt.finCmd != FinCmd::None) {
+            if (a.rfind("--tipo", 0) == 0) {
+                std::string valor;
+                if (a == "--tipo" && i + 1 < argc) {
+                    valor = argv[++i];
+                } else if (a.find('=') != std::string::npos) {
+                    valor = a.substr(a.find('=') + 1);
+                }
+                if (!valor.empty()) opt.finTipo = finance::tipo_from_string(valor);
+            } else if (a.rfind("--subtipo", 0) == 0) {
+                std::string valor;
+                if (a == "--subtipo" && i + 1 < argc) {
+                    valor = argv[++i];
+                } else if (a.find('=') != std::string::npos) {
+                    valor = a.substr(a.find('=') + 1);
+                }
+                opt.finSubtipo = valor;
+            } else if (a.rfind("--valor", 0) == 0) {
+                std::string valor;
+                if (a == "--valor" && i + 1 < argc) {
+                    valor = argv[++i];
+                } else if (a.find('=') != std::string::npos) {
+                    valor = a.substr(a.find('=') + 1);
+                }
+                if (!valor.empty()) {
+                    opt.finValor = std::stod(valor);
+                }
+            } else if (a.rfind("--data", 0) == 0) {
+                std::string valor;
+                if (a == "--data" && i + 1 < argc) {
+                    valor = argv[++i];
+                } else if (a.find('=') != std::string::npos) {
+                    valor = a.substr(a.find('=') + 1);
+                }
+                opt.finData = valor;
+            } else if (a.rfind("--desc", 0) == 0) {
+                std::string valor;
+                if (a == "--desc" && i + 1 < argc) {
+                    valor = argv[++i];
+                } else if (a.find('=') != std::string::npos) {
+                    valor = a.substr(a.find('=') + 1);
+                }
+                opt.finDesc = valor;
+            } else if (a == "--entrada") {
+                opt.finEntrada = true;
+            } else if (a == "--saida") {
+                opt.finEntrada = false;
+            } else if (a.rfind("--dt-ini", 0) == 0) {
+                std::string valor;
+                if (a == "--dt-ini" && i + 1 < argc) {
+                    valor = argv[++i];
+                } else if (a.find('=') != std::string::npos) {
+                    valor = a.substr(a.find('=') + 1);
+                }
+                opt.finDtIni = valor;
+            } else if (a.rfind("--dt-fim", 0) == 0) {
+                std::string valor;
+                if (a == "--dt-fim" && i + 1 < argc) {
+                    valor = argv[++i];
+                } else if (a.find('=') != std::string::npos) {
+                    valor = a.substr(a.find('=') + 1);
+                }
+                opt.finDtFim = valor;
+            } else {
+                opt.naoMapeados.push_back(a);
+            }
+        } else if (a == "--help" || a == "-h") {
             opt.showHelp = true;
         } else if (a == "--auto") {
             opt.autoMode = true;

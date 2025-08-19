@@ -7,6 +7,8 @@
 #include "cli/App.h"
 #include "cli/args.h"
 #include <string>
+#include "finance/Repo.h"
+#include "finance/Serialize.h"
 
 using namespace duke;
 
@@ -38,6 +40,50 @@ int main(int argc, char* argv[]) {
     // Encerra se houver argumentos desconhecidos
     if (!opt.ok) {
         return 1;
+    }
+
+    // Comandos financeiros diretos
+    if (opt.finCmd != FinCmd::None) {
+        finance::FinanceRepo repo;
+        repo.load();
+        if (opt.finCmd == FinCmd::Add) {
+            finance::Lancamento l;
+            l.id = repo.nextId();
+            l.tipo = opt.finTipo.value_or(finance::Tipo::Outros);
+            l.subtipo = opt.finSubtipo;
+            l.descricao = opt.finDesc;
+            l.valor = opt.finValor.value_or(0.0);
+            l.moeda = "BRL";
+            l.data = opt.finData;
+            l.entrada = opt.finEntrada.value_or(true);
+            repo.add(l);
+            repo.save();
+            std::cout << "Lancamento " << l.id << " salvo.\n";
+        } else if (opt.finCmd == FinCmd::List) {
+            finance::Filtro f;
+            f.tipo = opt.finTipo;
+            if (!opt.finSubtipo.empty()) f.subtipo = opt.finSubtipo;
+            if (opt.finEntrada) f.entrada = opt.finEntrada;
+            if (!opt.finDtIni.empty()) f.dt_ini = opt.finDtIni;
+            if (!opt.finDtFim.empty()) f.dt_fim = opt.finDtFim;
+            auto itens = repo.query(f);
+            for (const auto& l : itens) {
+                std::cout << l.id << " | " << finance::to_string(l.tipo)
+                          << " | " << l.subtipo << " | "
+                          << (l.entrada?"+":"-") << l.valor
+                          << " | " << l.data << " | " << l.descricao << "\n";
+            }
+        } else if (opt.finCmd == FinCmd::Sum) {
+            finance::Filtro f;
+            f.tipo = opt.finTipo;
+            if (!opt.finSubtipo.empty()) f.subtipo = opt.finSubtipo;
+            if (opt.finEntrada) f.entrada = opt.finEntrada;
+            if (!opt.finDtIni.empty()) f.dt_ini = opt.finDtIni;
+            if (!opt.finDtFim.empty()) f.dt_fim = opt.finDtFim;
+            double total = repo.sum(f);
+            std::cout << total << "\n";
+        }
+        return 0;
     }
 
     // Se houver comando, apenas registra placeholder

@@ -25,6 +25,7 @@
 #include "cli/parser.h"
 #include "cli/utils.h"
 #include "cli/commands.h"
+#include "finance/Serialize.h"
 namespace duke {
 // ------------------------------------------------------------
 // Implementação do App
@@ -191,6 +192,48 @@ void App::compararMateriais() {
     }
 }
 
+// ---------- Financeiro ----------
+
+void App::finAdicionar() {
+    finRepo.load();
+    finance::Lancamento l;
+    l.id = finRepo.nextId();
+    std::string tipo = ui::readString("Tipo: ");
+    if (!tipo.empty()) l.tipo = finance::tipo_from_string(tipo);
+    l.subtipo = ui::readString("Subtipo: ");
+    l.descricao = ui::readString("Descricao: ");
+    l.valor = ui::readDouble("Valor: ");
+    l.data = ui::readString("Data (AAAA-MM-DD): ");
+    std::string es = ui::readString("Entrada(E) ou Saida(S): ");
+    l.entrada = !(es == "S" || es == "s");
+    l.moeda = "BRL";
+    finRepo.add(l);
+    finRepo.save();
+    wr::p("FIN", "Lancamento adicionado.", "Green");
+}
+
+void App::finListar() {
+    finRepo.load();
+    auto itens = finRepo.query({});
+    for (const auto& l : itens) {
+        std::cout << l.id << " | " << finance::to_string(l.tipo)
+                  << " | " << l.subtipo << " | "
+                  << (l.entrada?"+":"-") << l.valor
+                  << " | " << l.data << " | " << l.descricao << "\n";
+    }
+}
+
+void App::finSomar() {
+    finRepo.load();
+    finance::Filtro f;
+    std::string ini = ui::readString("Data inicial (opcional): ");
+    if (!ini.empty()) f.dt_ini = ini;
+    std::string fim = ui::readString("Data final (opcional): ");
+    if (!fim.empty()) f.dt_fim = fim;
+    double total = finRepo.sum(f);
+    std::cout << "Total: " << total << "\n";
+}
+
 void App::escolherPreco() {
     int opcao = 1;
     if      (settings.prefer == "cheapest") opcao = 1;
@@ -344,13 +387,14 @@ void App::iniciar(bool autoMode) {
             case ui::MenuState::Principal: {
                 ui::clearScreen();
                 ui::renderBreadcrumb({ui::toString(ui::MenuState::Principal)});
-                int opt = ui::promptMenuKey({"Criar", "Listar", "Comparar", "Config", "Sair"},
-                                            {'C','L','M','O','S'});
+                int opt = ui::promptMenuKey({"Criar", "Listar", "Comparar", "Financeiro", "Config", "Sair"},
+                                            {'C','L','M','F','O','S'});
                 switch (opt) {
                     case 0: state = ui::MenuState::Criar; break;
                     case 1: state = ui::MenuState::Listar; break;
                     case 2: state = ui::MenuState::Comparar; break;
-                    case 3: state = ui::MenuState::Config; break;
+                    case 3: state = ui::MenuState::Financeiro; break;
+                    case 4: state = ui::MenuState::Config; break;
                     default: state = ui::MenuState::Sair; break;
                 }
                 break;
@@ -403,6 +447,20 @@ void App::iniciar(bool autoMode) {
                 }
                 state = ui::MenuState::Principal;
                 break;
+            case ui::MenuState::Financeiro: {
+                ui::renderBreadcrumb({ui::toString(ui::MenuState::Principal), "Financeiro"});
+                int opt = ui::promptMenuKey({"Adicionar", "Listar", "Soma", "Voltar"}, {'A','L','S','V'});
+                if (opt == 0) {
+                    finAdicionar();
+                } else if (opt == 1) {
+                    finListar();
+                } else if (opt == 2) {
+                    finSomar();
+                }
+                ui::readString("Pressione ENTER para voltar...", std::cin, std::cout);
+                state = ui::MenuState::Principal;
+                break;
+            }
             case ui::MenuState::Sair:
                 break;
         }

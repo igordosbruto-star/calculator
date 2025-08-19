@@ -5,6 +5,7 @@
 #include "core/persist.h"
 #include "Material.h"
 #include "core.h"
+#include "finance/Repo.h"
 namespace duke {
 
 class App {
@@ -13,6 +14,7 @@ private:
     Settings settings;
     std::vector<MaterialDTO> base;
     std::vector<Material> mats;
+    finance::FinanceRepo finRepo;
 
     void importarCSV();
     bool carregarJSON();
@@ -23,6 +25,9 @@ private:
     void criarMaterial();
     void listarCortes();
     void compararMateriais();
+    void finAdicionar();
+    void finListar();
+    void finSomar();
 
 public:
     double preco = 0.0;      // preço/m² escolhido (menor ou maior)
