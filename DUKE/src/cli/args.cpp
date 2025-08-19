@@ -6,6 +6,8 @@
 #include "cli/args.h"
 #include <string>
 #include <sstream>
+#include <charconv>
+#include <iostream>
 namespace duke {
 
 CliOptions parseArgs(int argc, char* argv[]) {
@@ -50,7 +52,15 @@ CliOptions parseArgs(int argc, char* argv[]) {
                 std::string item;
                 while (std::getline(ss, item, ',')) {
                     if (!item.empty()) {
-                        opt.ids.push_back(std::stoi(item));
+                        int id{};
+                        auto [ptr, ec] = std::from_chars(item.data(),
+                                                      item.data() + item.size(), id);
+                        if (ec == std::errc() && ptr == item.data() + item.size()) {
+                            opt.ids.push_back(id);
+                        } else {
+                            std::cerr << "Aviso: ID invalido '" << item
+                                      << "' ignorado\n";
+                        }
                     }
                 }
             }
