@@ -15,6 +15,7 @@ O DUKE evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
   - Função para carregar PlanoCorteDTO em JSON (`loadPlanoJSON`). ✅
   - Índice global de planos com atualização atômica (`updateIndex`). ✅
   - Persistência automática de planos gerados com `makeId`, `outPlanosDirFor`, `savePlanoJSON/CSV` e `updateIndex`. ✅
+  - Tratamento de falhas na gravação de planos, abortando o fluxo e avisando o usuário. ✅
 - **Interface de linha de comando** (`DUKE/main.cpp`)
   - Adicionar opções de ajuda e parâmetros para cálculos automatizados. ✅
   - Melhorar mensagens de erro para entradas inválidas.
