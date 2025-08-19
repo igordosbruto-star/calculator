@@ -5,6 +5,8 @@
 // ----------------------------------------------------------
 #include <string>
 #include <vector>
+#include <optional>
+#include "finance/Tipos.h"
 namespace duke {
 
 // Comandos reconhecidos pela aplicação (ainda não implementados)
@@ -15,6 +17,14 @@ enum class Comando {
     Comparar  // comparar dados
 };
 
+// Subcomandos para o módulo financeiro
+enum class FinCmd {
+    None,
+    Add,
+    List,
+    Sum
+};
+
 struct CliOptions {
     bool showHelp = false;       // exibir ajuda
     bool autoMode = false;       // modo automático
@@ -23,6 +33,15 @@ struct CliOptions {
     std::string ordem;           // ordem de listagem
     std::vector<int> ids;        // ids informados para comparação
     Comando comando = Comando::Nenhum; // comando solicitado
+    FinCmd finCmd = FinCmd::None; // comando financeiro
+    std::optional<finance::Tipo> finTipo; // tipo de lançamento
+    std::string finSubtipo;      // subtipo
+    std::optional<double> finValor; // valor
+    std::string finData;         // data do lançamento
+    std::string finDesc;         // descrição
+    std::optional<bool> finEntrada; // entrada ou saída
+    std::string finDtIni;        // filtro data inicial
+    std::string finDtFim;        // filtro data final
     std::vector<std::string> naoMapeados; // argumentos não reconhecidos
     bool ok = true;             // falso se houve tokens não mapeados
 };

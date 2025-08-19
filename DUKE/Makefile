@@ -1,14 +1,15 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -fPIC
 CORE_DIR = ../core
-INCLUDES = -Iinclude -I../third_party -I$(CORE_DIR)/include
+INCLUDES = -Iinclude -I../include -I../third_party -I$(CORE_DIR)/include
 
 CORE_LIB = $(CORE_DIR)/libcore.a
 
 CLI_SRC := src/cli/app.cpp src/cli/args.cpp src/cli/parser.cpp src/cli/utils.cpp src/cli/commands.cpp
+FIN_SRC := $(wildcard ../src/finance/*.cpp)
 SRC := $(wildcard src/*.cpp) $(CLI_SRC) \
        $(wildcard src/domain/*.cpp) $(wildcard src/custo/*.cpp) \
-       $(wildcard src/ui/*.cpp)
+       $(wildcard src/ui/*.cpp) $(FIN_SRC)
 LIB_SRC := $(filter-out src/main.cpp,$(SRC))
 OBJ := $(LIB_SRC:.cpp=.o)
 

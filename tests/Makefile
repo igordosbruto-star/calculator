@@ -20,7 +20,7 @@ ifeq ($(strip $(CALC_SRCS)),)
 	@echo "No DUKE tests"
 else
 	$(CXX) $(CXXFLAGS) -include duke/namespace.h \
-		$(CALC_SRCS) -I$(CALC_DIR)/include -I../third_party -I$(CORE_DIR)/include \
+		$(CALC_SRCS) -I$(CALC_DIR)/include -I../include -I../third_party -I$(CORE_DIR)/include \
 		$(LIB_CALC) $(LIB_CORE) -o duke/run_tests
 	./duke/run_tests
 endif

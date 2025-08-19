@@ -21,6 +21,8 @@ O DUKE evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
   - Melhorar mensagens de erro para entradas inválidas.
   - Suporte inicial a `--projeto` e registro dos comandos `abrir`, `listar` e `comparar`. ✅
   - Modularizar CLI em `parser`, `commands` e utilitários. ✅
+- **Financeiro** (`fin add|list|sum`)
+  - CLI para registrar, listar e somar lançamentos com filtros. ✅
 - **Testes automatizados** (novo diretório `tests/`)
   - Criar casos de teste unitários para validar comparações e rotinas de persistência.
   - Integrar com execução contínua (CI) para evitar regressões.
