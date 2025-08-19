@@ -7,11 +7,9 @@
 #include "domain/Tempo.h"
 namespace duke {
 
-// Valida se medidas são estritamente positivas
+// Retorna false se qualquer dimensão for menor ou igual a zero
 static bool medidasValidas(const Medidas& m) {
-    if (m.largura <= 0 && m.altura <= 0 && m.profundidade <= 0 && m.comprimento <= 0)
-        return false;
-    if (m.largura < 0 || m.altura < 0 || m.profundidade < 0 || m.comprimento < 0)
+    if (m.largura <= 0 || m.altura <= 0 || m.profundidade <= 0 || m.comprimento <= 0)
         return false;
     return true;
 }
