@@ -47,7 +47,7 @@ public:
 
     // Adiciona um material ao projeto. Retorna falso em caso de validação falha.
     // Exemplo:
-    //   ProjetoItemMaterial it{"madeira", 2, {}, 10.0};
+    //   ProjetoItemMaterial it{"madeira", 2, {}, 10.0}; // dimensões não usadas podem ser zero
     //   prj.adicionarMaterial(it);
     bool adicionarMaterial(const ProjetoItemMaterial& item);
 
