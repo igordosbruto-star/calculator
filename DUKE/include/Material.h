@@ -19,16 +19,16 @@ public:
     explicit Material(const std::string& n);
     Material(const std::string& n, double v, double l, double c);
 
-    const std::string& capNome() const noexcept;
-    double capValor() const noexcept;
-    double capArea()  const noexcept;
-    double capLarg()  const noexcept;
-    double capComp()  const noexcept;
-    double capPorm2() const noexcept;
+    const std::string& getNome() const noexcept;
+    double getValor() const noexcept;
+    double getArea()  const noexcept;
+    double getLarg()  const noexcept;
+    double getComp()  const noexcept;
+    double getPorm2() const noexcept;
 
-    void aplLarg(double l);
-    void aplComp(double c);
-    void aplValor(double v);
+    void setLarg(double l);
+    void setComp(double c);
+    void setValor(double v);
 
     void mostrar() const;
 };

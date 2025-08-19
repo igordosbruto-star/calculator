@@ -182,10 +182,10 @@ void App::compararMateriais() {
     for (int i : ids) {
         const auto& m = mats[static_cast<size_t>(i)];
         std::string extra;
-        if (m.capNome() == menor.nome) extra = " <menor>";
-        if (m.capNome() == maior.nome) extra = " <maior>";
-        std::cout << i + 1 << " | " << m.capNome() << " | "
-                  << UN_MONE << m.capPorm2() << extra << "\n";
+        if (m.getNome() == menor.nome) extra = " <menor>";
+        if (m.getNome() == maior.nome) extra = " <maior>";
+        std::cout << i + 1 << " | " << m.getNome() << " | "
+                  << UN_MONE << m.getPorm2() << extra << "\n";
     }
 }
 
@@ -253,11 +253,11 @@ void App::solicitarCortes() {
 
         Corte c(nome, largura, comprimento, preco);
         cortes.push_back(c);
-        totalArea += c.capArea();
-        totalValor += c.capValor();
+        totalArea += c.getArea();
+        totalValor += c.getValor();
 
         // Constrói o DTO correspondente
-        CorteDTO dto{nome, largura, comprimento, preco, c.capArea(), c.capValor(), false};
+        CorteDTO dto{nome, largura, comprimento, preco, c.getArea(), c.getValor(), false};
         cortesDTO.push_back(dto);
 
         std::cout << "Adicionar outro corte? (s/n) | ";
