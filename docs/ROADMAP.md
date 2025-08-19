@@ -21,6 +21,8 @@ O DUKE evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
   - Melhorar mensagens de erro para entradas inválidas.
   - Suporte inicial a `--projeto` e registro dos comandos `abrir`, `listar` e `comparar`. ✅
   - Modularizar CLI em `parser`, `commands` e utilitários. ✅
+- **Interface gráfica básica** (`DUKE/gui/MainWindow`)
+  - Janela principal com botão para selecionar material. ✅
 - **Financeiro** (`fin add|list|sum`)
   - CLI para registrar, listar e somar lançamentos com filtros. ✅
   - Relatório mensal com `fin report mes --ano=<AAAA> --mes=<MM>` exportando CSV. ✅
