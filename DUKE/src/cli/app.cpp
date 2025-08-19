@@ -286,9 +286,21 @@ void App::solicitarCortes() {
 
     // Persiste o plano em disco
     const std::string dir = Persist::outPlanosDirFor(projeto, plano.id);
-    Persist::savePlanoJSON(dir, plano);
-    Persist::savePlanoCSV(dir, plano);
-    Persist::updateIndex(plano);
+    // Verifica se salvamento em JSON foi bem-sucedido
+    if (!Persist::savePlanoJSON(dir, plano)) {
+        wr::p("PERSIST", "Falha ao salvar plano em JSON. Operacao abortada.", "Red");
+        return;
+    }
+    // Garante exportacao para CSV
+    if (!Persist::savePlanoCSV(dir, plano)) {
+        wr::p("PERSIST", "Falha ao salvar plano em CSV. Operacao abortada.", "Red");
+        return;
+    }
+    // Atualiza indice global; aborta se falhar
+    if (!Persist::updateIndex(plano)) {
+        wr::p("PERSIST", "Falha ao atualizar indice de planos. Operacao abortada.", "Red");
+        return;
+    }
 
     // Exibe ao usuário onde foi salvo
     wr::p("PERSIST", "Plano salvo em: " + dir, "Green");
