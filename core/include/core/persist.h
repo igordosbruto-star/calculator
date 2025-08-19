@@ -351,7 +351,23 @@ inline bool loadCSV(const std::string& path, std::vector<MaterialDTO>& out, cons
         return false;
     }
 
+    auto parseNum = [](const std::string& s, double& outVal) -> bool {
+        std::string tmp = detail::trim(s);
+        for (auto& ch : tmp) if (ch == ',') ch = '.';
+        try {
+            size_t idx = 0;
+            outVal = std::stod(tmp, &idx);
+            if (idx != tmp.size()) return false;
+            return true;
+        } catch (...) {
+            return false;
+        }
+    };
+
+    size_t lineNo = 1; // já leu o cabeçalho
+    int invalidLines = 0;
     while (std::getline(f, line)) {
+        ++lineNo;
         if (line.empty()) continue;
 
         // Split por ';'
@@ -362,17 +378,27 @@ inline bool loadCSV(const std::string& path, std::vector<MaterialDTO>& out, cons
         while (std::getline(ss, item, ';')) {
             cols.push_back(item);
         }
-        if (cols.size() < 5) continue; // ignora linhas incompletas
+        if (cols.size() != 5) {
+            wr::p("PERSIST", p + ":" + std::to_string(lineNo) + " coluna invalida", "Yellow");
+            ++invalidLines;
+            continue;
+        }
 
         MaterialDTO m;
-        m.nome         = detail::trim(cols[0]);
-        m.tipo         = detail::trim(cols[1]);
+        m.nome = detail::trim(cols[0]);
+        m.tipo = detail::trim(cols[1]);
         if (m.tipo.empty()) m.tipo = "linear";
-        m.valor        = detail::parse_br_double(cols[2]);
-        m.largura      = detail::parse_br_double(cols[3]);
-        m.comprimento  = detail::parse_br_double(cols[4]);
+        bool ok = parseNum(cols[2], m.valor) &&
+                  parseNum(cols[3], m.largura) &&
+                  parseNum(cols[4], m.comprimento);
+        if (!ok || !validar(m)) {
+            wr::p("PERSIST", p + ":" + std::to_string(lineNo) + " dados invalidos", "Yellow");
+            ++invalidLines;
+            continue;
+        }
         out.push_back(std::move(m));
     }
+    if (out.empty() && invalidLines > 0) return false;
     return true;
 }
 
