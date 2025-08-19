@@ -46,4 +46,10 @@ void test_cli() {
     CliOptions o9 = parseArgs(3, const_cast<char**>(a9));
     assert(o9.ids.size() == 3);
     assert(o9.ids[0] == 1 && o9.ids[1] == 3 && o9.ids[2] == 5);
+
+    // testa --valor malformado
+    const char* a10[] = {"app", "fin", "add", "--valor", "abc"};
+    CliOptions o10 = parseArgs(5, const_cast<char**>(a10));
+    assert(!o10.finValor.has_value());
+    assert(!o10.ok);
 }
