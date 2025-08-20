@@ -3,6 +3,7 @@
 #include <sstream>
 #include "finance/Repo.h"
 #include "finance/SupplierRepo.h"
+#include <chrono>
 
 AdminApp::AdminApp() : repo_(new finance::FinanceRepo()) {
     repo_->load();
@@ -30,6 +31,10 @@ int AdminApp::run(int argc, char** argv) {
     } else {
         std::cerr << "Unknown command: " << command << "\n";
         showHelp();
+    }
+    auto alerts = notifications_.dueAlerts(std::chrono::system_clock::now());
+    for (const auto& a : alerts) {
+        std::cout << "Alerta: entrega vencida para " << a << "\n";
     }
     return 0;
 }
@@ -105,5 +110,10 @@ void AdminApp::handleSuppliers() const {
     for (const auto& s : srepo.all()) {
         std::cout << s.id << " " << s.nome << "\n";
     }
+}
+
+void AdminApp::addDeliveryDate(const std::string& id,
+                               std::chrono::system_clock::time_point due) {
+    notifications_.addDelivery(id, due);
 }
 
