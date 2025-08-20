@@ -119,6 +119,28 @@ inline std::string dataPath(const std::string& filename, const std::string& base
     return (fs::path(baseDir) / filename).string();
 }
 
+inline bool hasWritePermission(const fs::path& p) {
+    std::error_code ec;
+    fs::perms perms = fs::status(p, ec).permissions();
+    if (ec) return false;
+    return (perms & fs::perms::owner_write) != fs::perms::none ||
+           (perms & fs::perms::group_write) != fs::perms::none ||
+           (perms & fs::perms::others_write) != fs::perms::none;
+}
+
+inline bool restoreBackup(const fs::path& finalPath) {
+    const fs::path bakPath = finalPath.string() + ".bak";
+    std::error_code ec;
+    if (!fs::exists(bakPath)) return false;
+    fs::copy_file(bakPath, finalPath, fs::copy_options::overwrite_existing, ec);
+    if (ec) {
+        wr::p("PERSIST", finalPath.string() + " restore fail: " + ec.message(), "Red");
+        return false;
+    }
+    wr::p("PERSIST", finalPath.string() + " restored from backup.", "Yellow");
+    return true;
+}
+
 // ----------------------------------------------
 // Escrita atômica com .tmp e backup .bak
 // Exemplo:
@@ -138,6 +160,10 @@ inline bool atomicWrite(const fs::path& finalPath, const std::string& content) {
         }
 
         bool existed = fs::exists(finalPath);
+        if (existed && !hasWritePermission(finalPath)) {
+            wr::p("PERSIST", finalPath.string() + " sem permissao de escrita", "Red");
+            return false;
+        }
         const fs::path tmpPath = finalPath.string() + ".tmp";
         const fs::path bakPath = finalPath.string() + ".bak";
 
@@ -174,6 +200,8 @@ inline bool atomicWrite(const fs::path& finalPath, const std::string& content) {
             fs::rename(tmpPath, finalPath, ec2);
             if (ec2) {
                 wr::p("PERSIST", finalPath.string() + " rename fail: " + ec2.message(), "Red");
+                std::error_code ec4; fs::remove(tmpPath, ec4);
+                if (existed) restoreBackup(finalPath);
                 return false;
             }
         }
@@ -182,9 +210,11 @@ inline bool atomicWrite(const fs::path& finalPath, const std::string& content) {
         return true;
     } catch (const std::exception& e) {
         wr::p("PERSIST", finalPath.string() + " exception: " + e.what(), "Red");
+        restoreBackup(finalPath);
         return false;
     } catch (...) {
         wr::p("PERSIST", finalPath.string() + " unknown exception", "Red");
+        restoreBackup(finalPath);
         return false;
     }
 }

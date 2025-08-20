@@ -36,7 +36,7 @@ core: $(LIB_CORE)
 ifeq ($(strip $(CORE_SRCS)),)
 	@echo "No core tests"
 else
-	$(CXX) $(CXXFLAGS) $(CORE_SRCS) -I$(CORE_DIR)/include $(LIB_CORE) -o core/run_tests
+	$(CXX) $(CXXFLAGS) $(CORE_SRCS) -I$(CORE_DIR)/include -I../third_party $(LIB_CORE) -o core/run_tests
 	./core/run_tests
 endif
 
