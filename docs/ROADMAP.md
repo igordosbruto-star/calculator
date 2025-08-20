@@ -21,6 +21,11 @@ O DUKE evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
 
 - [ ] [P2] Implementar módulo Designer (canvas de montagem, associação de materiais, histórico).
 
+## v1.3
+
+- [ ] [P2] Implementar sistema de alertas de prazos e reposição de materiais.
+- [ ] [P3] Garantir comunicação de notificações entre módulos.
+
 ## Concluído
 
 ### Persistência de dados
