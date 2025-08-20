@@ -17,13 +17,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y g++ make nlohmann-json3-dev
 
+      - name: Build core
+        run: make -C core
+
       - name: Build
         run: |
-          cd DUKE
-          g++ -std=c++17 -Wall src/*.cpp -Iinclude -Ithird_party -o app
+          cd third_party/DUKE
+          make
 
       - name: Test
         run: |
-          cd DUKE
+          cd third_party/DUKE
           make -C tests
           ./tests/run_tests
