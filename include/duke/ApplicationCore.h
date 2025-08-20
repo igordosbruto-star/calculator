@@ -24,10 +24,10 @@ public:
     //   bool ok = core.carregar(base, mats);
     bool carregar(std::vector<MaterialDTO>& base, std::vector<Material>& mats);
 
-    // Lista materiais disponíveis. O retorno é uma cópia dos dados para exibição.
+    // Lista materiais disponíveis. O retorno é uma referência constante para os dados.
     // Exemplo:
-    //   auto itens = core.listarMateriais(base);
-    std::vector<MaterialDTO> listarMateriais(const std::vector<MaterialDTO>& base) const;
+    //   const auto& itens = core.listarMateriais(base);
+    const std::vector<MaterialDTO>& listarMateriais(const std::vector<MaterialDTO>& base) const;
 
     // Resultado da comparação de materiais com destaque para menor e maior preço por m².
     // Compara materiais selecionados pelos índices (base 0).
@@ -55,7 +55,7 @@ public:
     std::vector<Order> listarPedidos() const;
 
     // Consulta o estoque de materiais carregado.
-    std::vector<MaterialDTO> listarEstoque() const;
+    const std::vector<MaterialDTO>& listarEstoque() const;
 
     // ----- APIs do módulo financeiro -----
     // Carrega lançamentos financeiros do repositório padrão.

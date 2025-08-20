@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <vector>
 #include <cassert>
+#include <type_traits>
 
 // Testa criação de pedido
 void test_criar_pedido() {
@@ -48,7 +49,11 @@ void test_consulta_estoque() {
     Persist::save("materiais.json", mats);
 
     ApplicationCore core; core.carregar();
-    auto estoque = core.listarEstoque();
+    static_assert(std::is_same_v<decltype(core.listarEstoque()), const std::vector<MaterialDTO>&>);
+    const auto& estoque = core.listarEstoque();
+    auto copia = estoque;
+    copia[0].nome = "Mudado";
+    assert(estoque[0].nome != copia[0].nome);
     assert(estoque.size() == 1);
     assert(estoque[0].nome == "Estoque");
     std::filesystem::remove_all("tmp_sales_inv");

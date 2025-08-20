@@ -2,6 +2,7 @@
 #include <cassert>
 #include <filesystem>
 #include <stdexcept>
+#include <type_traits>
 #include "core/persist.h"
 
 void test_application_core() {
@@ -27,8 +28,13 @@ void test_application_core() {
     base.clear();
     mats.clear();
     assert(core.carregar(base, mats));
-    auto lista = core.listarMateriais(base);
+    static_assert(std::is_same_v<decltype(core.listarMateriais(base)), const std::vector<MaterialDTO>&>);
+    const auto& lista = core.listarMateriais(base);
+    assert(&lista == &base);
     assert(lista.size() == 2);
+    auto copiaLista = lista;
+    copiaLista[0].nome = "Alterado";
+    assert(lista[0].nome != copiaLista[0].nome);
     auto comps = core.compararMateriais(mats, {0, 1});
     assert(comps.size() == 2);
     bool menor = false, maior = false;
@@ -60,7 +66,12 @@ void test_application_core() {
     Persist::setConfig(cfg2);
     ApplicationCore core2;
     assert(core2.carregar());
-    auto estoque = core2.listarEstoque();
+    static_assert(std::is_same_v<decltype(core2.listarEstoque()), const std::vector<MaterialDTO>&>);
+    const auto& estoque = core2.listarEstoque();
+    auto backupNome = estoque[0].nome;
+    auto copiaEstoque = estoque;
+    copiaEstoque[0].nome = "Outro";
+    assert(estoque[0].nome == backupNome);
     assert(estoque.size() == 2);
     assert(estoque[0].nome == "Pinus 20cm");
     assert(estoque[1].nome == "MDF 15mm");

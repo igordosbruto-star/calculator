@@ -75,7 +75,7 @@ void App::menuMateriais() {
         }
         switch (op) {
             case 1: {
-                auto itens = core.listarMateriais(base);
+                const auto& itens = core.listarMateriais(base);
                 std::cout << "\nMateriais cadastrados:\n";
                 if (itens.empty()) {
                     std::cout << "(vazio)\n";
@@ -159,7 +159,7 @@ void App::compararMateriais() {
     ui::renderBreadcrumb({ui::toString(ui::MenuState::Principal),
                            ui::toString(ui::MenuState::Comparar),
                            "Materiais"});
-    auto itens = core.listarMateriais(base);
+    const auto& itens = core.listarMateriais(base);
     std::cout << "\nMateriais cadastrados:\n";
     if (itens.empty()) {
         std::cout << "(vazio)\n";
