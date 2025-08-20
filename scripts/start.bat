@@ -16,18 +16,12 @@ if not exist "%VSCODE_DIR%\tasks.json" (
         echo         {
         echo             "label": "build",
         echo             "type": "shell",
-        echo             "command": "g++",
+        echo             "command": "make",
         echo             "args": [
-        echo                 "-std=c++17",
-        echo                 "-Wall",
-        echo                 "src/*.cpp",
-        echo                 "-Iinclude",
-        echo                 "-I../third_party",
-        echo                 "-o",
-        echo                 "app"
+        echo                 "cli"
         echo             ],
         echo             "options": {
-        echo                 "cwd": "${workspaceFolder}/third_party/DUKE"
+        echo                 "cwd": "${workspaceFolder}/src/duke"
         echo             },
         echo             "group": "build",
         echo             "problemMatcher": [
@@ -48,10 +42,10 @@ if not exist "%VSCODE_DIR%\launch.json" (
         echo             "name": "Debug app",
         echo             "type": "cppdbg",
         echo             "request": "launch",
-        echo             "program": "${workspaceFolder}/third_party/DUKE/app",
+        echo             "program": "${workspaceFolder}/src/duke/app",
         echo             "args": [],
         echo             "stopAtEntry": false,
-        echo             "cwd": "${workspaceFolder}/third_party/DUKE",
+        echo             "cwd": "${workspaceFolder}/src/duke",
         echo             "environment": [],
         echo             "externalConsole": false,
         echo             "MIMode": "gdb",
@@ -85,4 +79,3 @@ if not exist "%VSCODE_DIR%\c_cpp_properties.json" (
 )
 
 echo VSCode configuration created.
-
