@@ -6,15 +6,15 @@
 
 namespace duke {
 
-bool ApplicationCore::carregarJSON(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
+bool ApplicationCore::carregar(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
     int schemaVersion = 0;
-    if (!::Persist::loadJSON("materiais.json", base, &schemaVersion) || base.empty()) {
+    if (!::Persist::load("materiais.json", base, &schemaVersion) || base.empty()) {
         wr::p("DATA", "Base nao encontrada. Criando materiais padrao...", "Yellow");
         base = {
             {"Pinus 20cm", 17.00, 0.20, 3.00, "linear"},
             {"MDF 15mm", 180.00, 1.85, 2.75, "linear"}
         };
-        if (::Persist::saveJSON("materiais.json", base, 1)) {
+        if (::Persist::save("materiais.json", base, 1)) {
             wr::p("DATA", "materiais.json criado.", "Green");
         } else {
             wr::p("DATA", "Falha ao criar materiais.json", "Red");
@@ -45,16 +45,16 @@ ApplicationCore::compararMateriais(const std::vector<Material>& mats,
 }
 
 // ----- APIs do módulo de vendas -----
-bool ApplicationCore::carregarJSON() {
+bool ApplicationCore::carregar() {
     // Carrega materiais reutilizando a função existente
     int schemaVersion = 0;
-    if (!::Persist::loadJSON("materiais.json", base_, &schemaVersion) || base_.empty()) {
+    if (!::Persist::load("materiais.json", base_, &schemaVersion) || base_.empty()) {
         wr::p("DATA", "Base nao encontrada. Criando materiais padrao...", "Yellow");
         base_ = {
             {"Pinus 20cm", 17.00, 0.20, 3.00, "linear"},
             {"MDF 15mm", 180.00, 1.85, 2.75, "linear"}
         };
-        ::Persist::saveJSON("materiais.json", base_, 1);
+        ::Persist::save("materiais.json", base_, 1);
     }
     mats_ = core::reconstruirMateriais(base_);
 

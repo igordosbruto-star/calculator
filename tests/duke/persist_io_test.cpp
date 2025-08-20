@@ -25,7 +25,15 @@ void test_persist_io() {
     assert(carregado[0].valor == 10.0);
     assert(carregado[0].tipo == "linear");
 
+    // Salva e carrega XML usando API unificada
+    assert(Persist::save("teste_io.xml", itens));
+    carregado.clear();
+    assert(Persist::load("teste_io.xml", carregado));
+    assert(carregado.size() == 1);
+    assert(carregado[0].nome == "Madeira");
+
     // Limpa arquivos de teste
     std::filesystem::remove("data/teste_io.json");
     std::filesystem::remove("data/teste_io.csv");
+    std::filesystem::remove("data/teste_io.xml");
 }

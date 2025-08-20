@@ -10,12 +10,12 @@ void test_criar_pedido() {
     std::filesystem::remove_all("tmp_sales");
     Persist::Config cfg; cfg.baseDir = "tmp_sales"; Persist::setConfig(cfg);
     std::vector<MaterialDTO> mats{{"Prod", 10.0, 1.0, 1.0, "linear"}};
-    Persist::saveJSON("materiais.json", mats);
+    Persist::save("materiais.json", mats);
     std::vector<Customer> clientes{Customer{"Ana"}};
     Persist::saveJSONVec("clientes.json", clientes, "clientes");
 
     ApplicationCore core;
-    core.carregarJSON();
+    core.carregar();
     assert(core.criarPedido("Ana", "Prod", 1));
     auto pedidos = core.listarPedidos();
     assert(pedidos.size() == 1);
@@ -30,9 +30,9 @@ void test_listar_clientes() {
     Persist::Config cfg; cfg.baseDir = "tmp_sales_cli"; Persist::setConfig(cfg);
     std::vector<Customer> clientes{Customer{"Bia"}, Customer{"Carlos"}};
     Persist::saveJSONVec("clientes.json", clientes, "clientes");
-    Persist::saveJSON("materiais.json", std::vector<MaterialDTO>{{"X",1,1,1,"linear"}});
+    Persist::save("materiais.json", std::vector<MaterialDTO>{{"X",1,1,1,"linear"}});
 
-    ApplicationCore core; core.carregarJSON();
+    ApplicationCore core; core.carregar();
     auto lista = core.listarClientes();
     assert(lista.size() == 2);
     assert(lista[0].nome == "Bia");
@@ -45,9 +45,9 @@ void test_consulta_estoque() {
     std::filesystem::remove_all("tmp_sales_inv");
     Persist::Config cfg; cfg.baseDir = "tmp_sales_inv"; Persist::setConfig(cfg);
     std::vector<MaterialDTO> mats{{"Estoque", 5.0, 1.0, 1.0, "linear"}};
-    Persist::saveJSON("materiais.json", mats);
+    Persist::save("materiais.json", mats);
 
-    ApplicationCore core; core.carregarJSON();
+    ApplicationCore core; core.carregar();
     auto estoque = core.listarEstoque();
     assert(estoque.size() == 1);
     assert(estoque[0].nome == "Estoque");
