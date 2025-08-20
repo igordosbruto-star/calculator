@@ -15,15 +15,14 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y g++ make nlohmann-json3-dev
+          sudo apt-get install -y g++ make nlohmann-json3-dev qt6-base-dev
 
-      - name: Build
+      - name: Build core and DUKE
         run: |
-          cd DUKE
-          g++ -std=c++17 -Wall src/*.cpp -Iinclude -Ithird_party -o app
+          make -C core
+          make -C third_party/DUKE
 
       - name: Test
         run: |
-          cd DUKE
           make -C tests
           ./tests/run_tests

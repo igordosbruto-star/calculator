@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# iterate over subdirectories inside tests and run their test binaries if present
+for test_bin in "$(dirname "$0")"/*/run_tests; do
+  if [ -x "$test_bin" ]; then
+    "$test_bin"
+  fi
+done
