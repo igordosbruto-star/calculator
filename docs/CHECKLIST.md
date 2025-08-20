@@ -20,7 +20,7 @@
 ## 📑 Documentação
 - [x] Adicionar comentários em português explicando intenções do código
 - [x] Exemplos mínimos nas funções públicas
-- [x] Atualizar `Roadmap.md` com novas implementações
+- [x] Atualizar `ROADMAP.md` com novas implementações
 
 ## 🛠️ Build & Lint
 - [x] Compilar a aplicação com:
