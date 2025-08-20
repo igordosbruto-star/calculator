@@ -64,7 +64,7 @@ if not exist "%VSCODE_DIR%\c_cpp_properties.json" (
         echo             "name": "Linux",
         echo             "includePath": [
         echo                 "${workspaceFolder}/include",
-        echo                 "${workspaceFolder}/third_party"
+        echo                 "${workspaceFolder}/third_party/nlohmann"
         echo             ],
         echo             "defines": [],
         echo             "compilerPath": "/usr/bin/g++",
