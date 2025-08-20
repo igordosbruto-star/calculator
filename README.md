@@ -13,14 +13,26 @@ as encontre antes de compilar.
 ## Instalação
 
 Antes de compilar, verifique se as dependências básicas estão presentes.
-O script abaixo detecta o sistema e checa ferramentas como `g++`, `make`
-e bibliotecas do Qt 6, oferecendo a opção de instalá-las automaticamente:
+Para Linux e macOS, o script `check_deps.sh` detecta o sistema e checa
+ferramentas como `g++`, `make` e bibliotecas do Qt 6, oferecendo a opção de
+instalá-las automaticamente. No Windows há uma versão equivalente em
+PowerShell (`check_deps.ps1`) que usa `winget` ou `choco` para instalar
+pacotes faltantes.
+
+Linux/macOS:
 
 ```sh
 ./scripts/check_deps.sh
 ```
 
-Execute-o sempre que configurar um novo ambiente de desenvolvimento.
+Windows (PowerShell):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\check_deps.ps1
+```
+
+Execute o script apropriado sempre que configurar um novo ambiente de
+desenvolvimento.
 
 ## Compilação
 
