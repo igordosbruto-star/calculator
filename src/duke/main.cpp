@@ -8,8 +8,6 @@
 #include "duke/duke.hpp"
 #include <string>
 
-using namespace duke;
-
 // ----------------------------------------------------------
 // Entrada principal da aplicação
 // Processa argumentos e executa o App
@@ -20,11 +18,11 @@ using namespace duke;
 #ifndef UNIT_TEST
 int main(int argc, char* argv[]) {
     // Interpreta opções da linha de comando
-    CliOptions opt = parseArgs(argc, argv);
+    duke::CliOptions opt = duke::parseArgs(argc, argv);
     if (!opt.errors.empty()) {
         return static_cast<int>(opt.errors.front().code);
     }
     // Processa comandos através da interface pública
-    return processarComando(opt);
+    return duke::processarComando(opt);
 }
 #endif // UNIT_TEST

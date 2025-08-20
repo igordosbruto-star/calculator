@@ -7,14 +7,13 @@
 #include <type_traits>
 
 void test_application_core() {
-    using namespace duke;
     std::filesystem::remove_all("tmp_appcore");
     Persist::Config cfg; cfg.baseDir = "tmp_appcore";
     Persist::setConfig(cfg);
 
-    ApplicationCore core;
+    duke::ApplicationCore core;
     std::vector<MaterialDTO> base;
-    std::vector<Material> mats;
+    std::vector<duke::Material> mats;
     // Carregamento padrão quando o arquivo não existe
     assert(core.carregar(base, mats));
     assert(base.size() == 2);
@@ -65,7 +64,7 @@ void test_application_core() {
     std::filesystem::remove_all("tmp_appcore2");
     Persist::Config cfg2; cfg2.baseDir = "tmp_appcore2";
     Persist::setConfig(cfg2);
-    ApplicationCore core2;
+    duke::ApplicationCore core2;
     assert(core2.carregar());
     static_assert(std::is_same_v<decltype(core2.listarEstoque()), const std::vector<MaterialDTO>&>);
     const auto& estoque = core2.listarEstoque();

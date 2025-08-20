@@ -3,16 +3,15 @@
 #include "core.h"
 
 void test_comparison() {
-    using namespace duke;
     std::vector<MaterialDTO> base = {
         {"Madeira", 100.0, 2.0, 3.0, "linear"},
         {"Aco", 200.0, 1.0, 4.0, "linear"}
     };
-    auto mats = core::reconstruirMateriais(base);
+    auto mats = duke::core::reconstruirMateriais(base);
 
     // caso valido
-    auto sel = comparison::selecionarMateriais("1 2", mats);
-    auto comps = comparison::compararMateriais(sel.materiais);
+    auto sel = duke::comparison::selecionarMateriais("1 2", mats);
+    auto comps = duke::comparison::compararMateriais(sel.materiais);
     assert(comps.size() == 2);
     bool menor = false, maior = false;
     for (const auto& c : comps) {
@@ -24,7 +23,7 @@ void test_comparison() {
     // id invalido
     bool threw = false;
     try {
-        comparison::selecionarMateriais("1 3", mats);
+        duke::comparison::selecionarMateriais("1 3", mats);
     } catch (const std::out_of_range&) {
         threw = true;
     }
@@ -33,7 +32,7 @@ void test_comparison() {
     // ids insuficientes
     threw = false;
     try {
-        comparison::selecionarMateriais("1", mats);
+        duke::comparison::selecionarMateriais("1", mats);
     } catch (const std::invalid_argument&) {
         threw = true;
     }
@@ -42,7 +41,7 @@ void test_comparison() {
     // token nao numerico
     threw = false;
     try {
-        comparison::selecionarMateriais("1 a", mats);
+        duke::comparison::selecionarMateriais("1 a", mats);
     } catch (const std::invalid_argument&) {
         threw = true;
     }
@@ -51,7 +50,7 @@ void test_comparison() {
     // indice duplicado
     threw = false;
     try {
-        comparison::selecionarMateriais("1 1", mats);
+        duke::comparison::selecionarMateriais("1 1", mats);
     } catch (const std::invalid_argument&) {
         threw = true;
     }
