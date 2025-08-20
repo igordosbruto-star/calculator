@@ -1,8 +1,9 @@
+---
 name: CI
 
-on:
+'on':
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
 
 jobs:
@@ -11,7 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -19,11 +19,6 @@ jobs:
 
       - name: Build core
         run: make -C core
-
-      - name: Build
-        run: |
-          cd third_party/DUKE
-          make
 
       - name: Test
         run: |
