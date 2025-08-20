@@ -10,6 +10,18 @@ O sistema depende da toolkit [Qt 6](https://www.qt.io/qt-6).
 Instale as bibliotecas de desenvolvimento e garanta que `pkg-config`
 as encontre antes de compilar.
 
+## Instalação
+
+Antes de compilar, verifique se as dependências básicas estão presentes.
+O script abaixo detecta o sistema e checa ferramentas como `g++`, `make`
+e bibliotecas do Qt 6, oferecendo a opção de instalá-las automaticamente:
+
+```sh
+./scripts/check_deps.sh
+```
+
+Execute-o sempre que configurar um novo ambiente de desenvolvimento.
+
 ## Compilação
 
 O projeto é dividido em módulos compilados separadamente.
