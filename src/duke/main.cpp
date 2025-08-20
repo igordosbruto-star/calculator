@@ -21,7 +21,9 @@ using namespace duke;
 int main(int argc, char* argv[]) {
     // Interpreta opções da linha de comando
     CliOptions opt = parseArgs(argc, argv);
-
+    if (!opt.errors.empty()) {
+        return static_cast<int>(opt.errors.front().code);
+    }
     // Processa comandos através da interface pública
     return processarComando(opt);
 }

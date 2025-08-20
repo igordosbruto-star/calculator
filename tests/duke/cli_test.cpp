@@ -1,4 +1,5 @@
 #include "duke/cli/args.h"
+#include "duke/error.h"
 #include <cassert>
 
 // Testa o parsing de argumentos basicos
@@ -51,5 +52,7 @@ void test_cli() {
     const char* a10[] = {"app", "fin", "add", "--valor", "abc"};
     CliOptions o10 = parseArgs(5, const_cast<char**>(a10));
     assert(!o10.finValor.has_value());
-    assert(!o10.ok);
+    assert(o10.errors.size() == 1);
+    assert(o10.errors[0].code == ErrorCode::InvalidNumber);
+    assert(errorMessage(o10.errors[0].code, o10.errors[0].field).find("valor") != std::string::npos);
 }

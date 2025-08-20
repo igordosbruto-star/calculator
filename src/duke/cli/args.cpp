@@ -9,6 +9,7 @@
 #include <sstream>
 #include <charconv>
 #include "finance/Serialize.h"
+#include "duke/error.h"
 namespace duke {
 
 CliOptions parseArgs(int argc, char* argv[]) {
@@ -20,7 +21,10 @@ CliOptions parseArgs(int argc, char* argv[]) {
             if (sub == "add") opt.finCmd = FinCmd::Add;
             else if (sub == "list") opt.finCmd = FinCmd::List;
             else if (sub == "sum") opt.finCmd = FinCmd::Sum;
-            else opt.naoMapeados.push_back(sub);
+            else {
+                opt.errors.push_back({ErrorCode::UnknownArgument, sub});
+                wr::p("CLI", errorMessage(ErrorCode::UnknownArgument, sub), "Yellow");
+            }
         } else if (opt.finCmd != FinCmd::None) {
             if (a == "--help" || a == "-h") {
                 opt.showHelp = true;
@@ -54,8 +58,8 @@ CliOptions parseArgs(int argc, char* argv[]) {
                     if (ec == std::errc() && ptr == valor.data() + valor.size()) {
                         opt.finValor = val;
                     } else {
-                        wr::p("CLI", "Valor invalido '" + valor + "'", "Yellow");
-                        opt.ok = false;
+                        opt.errors.push_back({ErrorCode::InvalidNumber, "valor"});
+                        wr::p("CLI", errorMessage(ErrorCode::InvalidNumber, "valor") + " '" + valor + "'", "Yellow");
                     }
                 }
             } else if (a.rfind("--data", 0) == 0) {
@@ -95,7 +99,8 @@ CliOptions parseArgs(int argc, char* argv[]) {
                 }
                 opt.finDtFim = valor;
             } else {
-                opt.naoMapeados.push_back(a);
+                opt.errors.push_back({ErrorCode::UnknownArgument, a});
+                wr::p("CLI", errorMessage(ErrorCode::UnknownArgument, a), "Yellow");
             }
         } else if (a == "--help" || a == "-h") {
             opt.showHelp = true;
@@ -141,8 +146,8 @@ CliOptions parseArgs(int argc, char* argv[]) {
                         if (ec == std::errc() && ptr == item.data() + item.size()) {
                             opt.ids.push_back(id);
                         } else {
-                            // avisa sobre ID inválido
-                            wr::p("CLI", "ID invalido '" + item + "' ignorado", "Yellow");
+                            opt.errors.push_back({ErrorCode::InvalidId, item});
+                            wr::p("CLI", errorMessage(ErrorCode::InvalidId, item), "Yellow");
                         }
                     }
                 }
@@ -155,14 +160,9 @@ CliOptions parseArgs(int argc, char* argv[]) {
             opt.comando = Comando::Comparar;
         } else {
             // argumento desconhecido
-            opt.naoMapeados.push_back(a);
+            opt.errors.push_back({ErrorCode::UnknownArgument, a});
+            wr::p("CLI", errorMessage(ErrorCode::UnknownArgument, a), "Yellow");
         }
-    }
-    if (!opt.naoMapeados.empty()) {
-        for (const auto& tok : opt.naoMapeados) {
-            wr::p("CLI", "Argumento desconhecido: " + tok, "Yellow");
-        }
-        opt.ok = false; // sinaliza problema para o chamador
     }
     return opt;
 }

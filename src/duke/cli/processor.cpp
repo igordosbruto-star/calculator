@@ -5,6 +5,7 @@
 #include "core/Debug.h"
 #include "ApplicationCore.h"
 #include "finance/Serialize.h"
+#include "duke/error.h"
 
 namespace duke {
 
@@ -33,8 +34,8 @@ int processarComando(const CliOptions& opt) {
         return 0;
     }
 
-    if (!opt.ok) {
-        return 1;
+    if (!opt.errors.empty()) {
+        return static_cast<int>(opt.errors.front().code);
     }
 
     if (opt.finCmd != FinCmd::None) {
@@ -42,19 +43,19 @@ int processarComando(const CliOptions& opt) {
         core.carregarFinanceiro();
         if (opt.finCmd == FinCmd::Add) {
             if (!opt.finTipo) {
-                wr::p("FIN", "--tipo obrigatorio", "Red");
-                return 1;
+                wr::p("FIN", errorMessage(ErrorCode::MissingField, "--tipo"), "Red");
+                return static_cast<int>(ErrorCode::MissingField);
             }
             if (!opt.finValor || *opt.finValor <= 0.0) {
-                wr::p("FIN", "--valor deve ser >0", "Red");
-                return 1;
+                wr::p("FIN", errorMessage(ErrorCode::InvalidNumber, "--valor"), "Red");
+                return static_cast<int>(ErrorCode::InvalidNumber);
             }
             if (opt.finData.empty()) {
-                wr::p("FIN", "--data obrigatoria (AAAA-MM-DD)", "Red");
-                return 1;
+                wr::p("FIN", errorMessage(ErrorCode::MissingField, "--data"), "Red");
+                return static_cast<int>(ErrorCode::MissingField);
             }
             if (opt.finSubtipo.empty()) {
-                wr::p("FIN", "Subtipo recomendado. Veja --help para sugestoes", "Yellow");
+                wr::p("FIN", errorMessage(ErrorCode::MissingField, "--subtipo"), "Yellow");
             }
             finance::Lancamento l;
             l.id = core.proximoIdLancamento();
