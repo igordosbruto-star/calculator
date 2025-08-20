@@ -66,6 +66,35 @@ private:
 };
 
 // ==========================================
+// Widget: MainMenuWidget
+// Descrição: menu principal com filtro de busca,
+//            tooltips e destaques para opções obrigatórias.
+// Exemplo de uso:
+//   MainMenuWidget w(opts, tips, req, [](int i){ /*...*/ });
+//   w.filter("Cli");
+//   w.render(std::cout);
+//   w.onInput(1);
+// ==========================================
+class MainMenuWidget {
+public:
+    MainMenuWidget(std::vector<std::string> opts,
+                   std::vector<std::string> tooltips,
+                   std::vector<bool> required,
+                   std::function<void(int)> onSelect);
+
+    void render(std::ostream& out) const;
+    void onInput(int idx);
+    void filter(const std::string& term);
+
+private:
+    std::vector<std::string> m_opts;
+    std::vector<std::string> m_tooltips;
+    std::vector<bool> m_required;
+    std::vector<int> m_filteredIdx;
+    std::function<void(int)> m_onSelect;
+};
+
+// ==========================================
 // Widget: BreadcrumbWidget
 // Descrição: exibe trilha de navegação.
 // Exemplo de uso:

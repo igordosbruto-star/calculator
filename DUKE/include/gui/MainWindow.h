@@ -1,11 +1,15 @@
 #pragma once
 
 #include <QMainWindow>
+#include <vector>
 
 QT_BEGIN_NAMESPACE
 class QWidget;
 class QVBoxLayout;
 class QPushButton;
+class QLineEdit;
+class QMenuBar;
+class QAction;
 QT_END_NAMESPACE
 
 #include "gui/GuiBridge.h"
@@ -35,6 +39,9 @@ private:
     QWidget* m_centralWidget;
     QVBoxLayout* m_layout;
     QPushButton* m_selectButton;
+    QLineEdit* m_searchField;
+    QMenuBar* m_menuBar;
+    std::vector<QAction*> m_actions;
 };
 
 } // namespace gui
