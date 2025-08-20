@@ -1,13 +1,6 @@
 #include "gui/MainWindow.h"
 
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QPushButton>
-#include <QObject>
-#include <QLineEdit>
-#include <QMenuBar>
-#include <QAction>
-#include <QMenu>
+#include <wx/wx.h>
 #include <vector>
 #include <utility>
 
@@ -16,42 +9,49 @@ namespace gui {
 
 // Construtor: inicializa widgets e conecta eventos.
 MainWindow::MainWindow(gui::GuiBridge* bridge,
-                       QWidget* centralWidget,
-                       QVBoxLayout* layout,
-                       QPushButton* selectButton)
-    : QMainWindow(nullptr),
+                       wxPanel* centralPanel,
+                       wxBoxSizer* layout,
+                       wxButton* selectButton)
+    : wxFrame(nullptr, wxID_ANY, "Duke Calculator"),
       m_bridge(bridge),
-      m_centralWidget(centralWidget),
+      m_centralPanel(centralPanel),
       m_layout(layout),
       m_selectButton(selectButton),
       m_searchField(nullptr),
       m_menuBar(nullptr) {
-    // cria widget central se não informado
-    if (!m_centralWidget) {
-        m_centralWidget = new QWidget(this);
-    }
-    // cria layout vertical se não informado
+    // cria sizer vertical se não informado
     if (!m_layout) {
-        m_layout = new QVBoxLayout(m_centralWidget);
+        m_layout = new wxBoxSizer(wxVERTICAL);
     }
+    SetSizer(m_layout);
+
+    // cria painel central se não informado
+    if (!m_centralPanel) {
+        m_centralPanel = new wxPanel(this);
+    }
+    m_layout->Add(m_centralPanel, 1, wxEXPAND | wxALL, 5);
+
+    // sizer interno do painel
+    wxBoxSizer* panelSizer = new wxBoxSizer(wxVERTICAL);
+    m_centralPanel->SetSizer(panelSizer);
+
+    // campo de busca com tooltip e destaque
+    m_searchField = new wxTextCtrl(m_centralPanel, wxID_ANY);
+    m_searchField->SetHint("Buscar...");
+    m_searchField->SetToolTip("Digite para filtrar opções");
+    m_searchField->SetBackgroundColour(*wxRED);
+    panelSizer->Add(m_searchField, 0, wxEXPAND | wxALL, 5);
+
     // cria botão de seleção se não informado
     if (!m_selectButton) {
-        m_selectButton = new QPushButton("Selecionar", m_centralWidget);
+        m_selectButton = new wxButton(m_centralPanel, wxID_ANY, "Selecionar");
     }
-    // associa hierarquia de widgets
-    setCentralWidget(m_centralWidget);
-    // campo de busca com tooltip e destaque
-    m_searchField = new QLineEdit(m_centralWidget);
-    m_searchField->setObjectName("searchField");
-    m_searchField->setPlaceholderText("Buscar...");
-    m_searchField->setToolTip("Digite para filtrar opções");
-    m_searchField->setStyleSheet("border: 2px solid red");
-    m_layout->addWidget(m_searchField);
+    panelSizer->Add(m_selectButton, 0, wxEXPAND | wxALL, 5);
 
-    // menu principal com ações e tooltips
-    m_menuBar = new QMenuBar(this);
-    setMenuBar(m_menuBar);
-    const std::vector<std::pair<QString, QString>> menus{
+    // menu principal com itens
+    m_menuBar = new wxMenuBar();
+    SetMenuBar(m_menuBar);
+    const std::vector<std::pair<wxString, wxString>> menus{
         {"Clientes", "Gerenciar clientes"},
         {"Vendas", "Registrar vendas"},
         {"Produção", "Controle de produção"},
@@ -59,28 +59,35 @@ MainWindow::MainWindow(gui::GuiBridge* bridge,
         {"Relatórios", "Visualizar relatórios"},
         {"Configurações", "Preferências do sistema"}};
     for (const auto& m : menus) {
-        QAction* act = m_menuBar->addAction(m.first);
-        act->setToolTip(m.second);
-        m_actions.push_back(act);
+        wxMenu* menu = new wxMenu();
+        m_menuBar->Append(menu, m.first);
+        m_menus.push_back({menu, m.first});
     }
 
     // filtro de busca para o menu
-    QObject::connect(m_searchField, &QLineEdit::textChanged,
-                     [this](const QString& txt) {
-                         if (txt.isEmpty()) {
-                             m_searchField->setStyleSheet("border: 2px solid red");
-                         } else {
-                             m_searchField->setStyleSheet("");
-                         }
-                         for (auto* act : m_actions) {
-                             act->setVisible(act->text().contains(txt, Qt::CaseInsensitive));
-                         }
-                     });
+    m_searchField->Bind(wxEVT_TEXT, [this](wxCommandEvent& evt) {
+        wxString txt = evt.GetString();
+        if (txt.IsEmpty()) {
+            m_searchField->SetBackgroundColour(*wxRED);
+        } else {
+            m_searchField->SetBackgroundColour(wxNullColour);
+        }
+        m_searchField->Refresh();
+        for (auto& pair : m_menus) {
+            int pos = m_menuBar->FindMenu(pair.second);
+            if (pos != wxNOT_FOUND) {
+                bool vis = pair.second.Lower().Find(txt.Lower()) != wxNOT_FOUND;
+                m_menuBar->EnableTop(pos, vis);
+            }
+        }
+    });
 
-    m_layout->addWidget(m_selectButton);
     // conecta clique do botão à ponte de seleção
-    QObject::connect(m_selectButton, &QPushButton::clicked,
-                     [this]() { if (m_bridge) m_bridge->selecionarMaterial(0); });
+    m_selectButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) {
+        if (m_bridge) {
+            m_bridge->selecionarMaterial(0);
+        }
+    });
 }
 
 } // namespace gui
