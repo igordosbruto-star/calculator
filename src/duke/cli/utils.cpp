@@ -7,7 +7,7 @@ namespace duke::cli {
 
 void listarMateriais(const std::vector<MaterialDTO>& base) {
     ApplicationCore core;
-    auto itens = core.listarMateriais(base);
+    const auto& itens = core.listarMateriais(base);
     std::cout << "\nMateriais cadastrados:\n";
     if (itens.empty()) {
         std::cout << "(vazio)\n";

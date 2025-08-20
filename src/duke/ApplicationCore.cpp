@@ -37,7 +37,7 @@ bool ApplicationCore::carregar(std::vector<MaterialDTO>& base, std::vector<Mater
     return true;
 }
 
-std::vector<MaterialDTO> ApplicationCore::listarMateriais(const std::vector<MaterialDTO>& base) const {
+const std::vector<MaterialDTO>& ApplicationCore::listarMateriais(const std::vector<MaterialDTO>& base) const {
     return base;
 }
 
@@ -84,7 +84,7 @@ std::vector<Customer> ApplicationCore::listarClientes() const { return clientes_
 
 std::vector<Order> ApplicationCore::listarPedidos() const { return pedidos_; }
 
-std::vector<MaterialDTO> ApplicationCore::listarEstoque() const { return base_; }
+const std::vector<MaterialDTO>& ApplicationCore::listarEstoque() const { return base_; }
 
 // ----- APIs do módulo financeiro -----
 bool ApplicationCore::carregarFinanceiro() { return finRepo_.load(); }

@@ -72,7 +72,7 @@ void SalesApp::handleListCustomers() const {
 }
 
 void SalesApp::handleInventory() const {
-    auto estoque = core_->listarEstoque();
+    const auto& estoque = core_->listarEstoque();
     for (const auto& m : estoque) {
         std::cout << "- " << m.nome << " (R$" << m.valor << ")\n";
     }
