@@ -2,7 +2,7 @@
 CXXFLAGS = -std=c++17 -Wall -DUNIT_TEST
 
 CORE_DIR = ../core
-CALC_DIR = ../DUKE
+CALC_DIR = ../third_party/DUKE
 
 LIB_CORE = $(CORE_DIR)/libcore.a
 LIB_CALC = $(CALC_DIR)/libduke.a

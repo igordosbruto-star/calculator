@@ -4,10 +4,10 @@ O DUKE evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
 
 ## Módulos planejados
 
-- **Núcleo do aplicativo** (`DUKE/app.cpp`)
+- **Núcleo do aplicativo** (`third_party/DUKE/app.cpp`)
   - Extrair a lógica de comparação e seleção de materiais em funções reutilizáveis.
   - Preparar o arquivo para futura divisão em múltiplos módulos.
-- **Persistência de dados** (`DUKE/persist.h`)
+- **Persistência de dados** (`third_party/DUKE/persist.h`)
   - Centralizar leitura/escrita em formatos adicionais (ex.: XML).
   - Integrar validação de dados antes de salvar. ✅
   - Suporte a serialização de planos de corte (CorteDTO e PlanoCorteDTO). ✅
@@ -16,12 +16,12 @@ O DUKE evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
   - Índice global de planos com atualização atômica (`updateIndex`). ✅
   - Persistência automática de planos gerados com `makeId`, `outPlanosDirFor`, `savePlanoJSON/CSV` e `updateIndex`. ✅
   - Tratamento de falhas na gravação de planos, abortando o fluxo e avisando o usuário. ✅
-- **Interface de linha de comando** (`DUKE/main.cpp`)
+- **Interface de linha de comando** (`third_party/DUKE/main.cpp`)
   - Adicionar opções de ajuda e parâmetros para cálculos automatizados. ✅
   - Melhorar mensagens de erro para entradas inválidas.
   - Suporte inicial a `--projeto` e registro dos comandos `abrir`, `listar` e `comparar`. ✅
   - Modularizar CLI em `parser`, `commands` e utilitários. ✅
-- **Interface gráfica básica** (`DUKE/gui/MainWindow`)
+- **Interface gráfica básica** (`third_party/DUKE/gui/MainWindow`)
   - Janela principal com botão para selecionar material. ✅
 - **Financeiro** (`fin add|list|sum`)
   - CLI para registrar, listar e somar lançamentos com filtros. ✅

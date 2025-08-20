@@ -22,7 +22,7 @@ make
 ### Módulo principal `DUKE`
 
 ```sh
-cd DUKE
+cd third_party/DUKE
 make
 # opcional: gerar CLI
 make cli

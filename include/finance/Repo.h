@@ -12,10 +12,10 @@ namespace finance {
 class FinanceRepo {
 public:
     // Carrega lançamentos de um arquivo JSON
-    bool load(const std::string& path = "data/financeiro/lancamentos.json");
+    bool load(const std::string& path = "docs/financeiro/lancamentos.json");
 
     // Salva lançamentos em um arquivo JSON
-    bool save(const std::string& path = "data/financeiro/lancamentos.json") const;
+    bool save(const std::string& path = "docs/financeiro/lancamentos.json") const;
 
     // Gera próximo identificador "FIN-YYYY-MM-DD-XXXX"
     std::string nextId() const;
