@@ -11,9 +11,11 @@ CALC_SRCS := $(wildcard duke/*.cpp)
 CORE_SRCS := $(wildcard core/*.cpp)
 FIN_SRCS := $(wildcard finance/*.cpp)
 FIN_LIB_SRCS := $(wildcard ../src/finance/*.cpp)
+PROD_SRCS := $(wildcard production/*.cpp)
+PROD_APP_SRCS := ../apps/production/ProductionApp.cpp ../src/production/ModeloProducao.cpp
 
-.PHONY: all duke core finance clean
-all: duke core finance
+.PHONY: all duke core finance production clean
+all: duke core finance production
 
 duke: $(LIB_CALC) $(LIB_CORE)
 ifeq ($(strip $(CALC_SRCS)),)
@@ -42,6 +44,14 @@ else
 	./finance/run_tests
 endif
 
+production:
+ifeq ($(strip $(PROD_SRCS)),)
+	@echo "No production tests"
+else
+	$(CXX) $(CXXFLAGS) $(PROD_SRCS) $(PROD_APP_SRCS) -Iproduction -I.. -I../include -o production/run_tests
+	./production/run_tests
+endif
+
 $(LIB_CALC):
 	$(MAKE) -C $(CALC_DIR) libduke.a
 
@@ -49,4 +59,4 @@ $(LIB_CORE):
 	$(MAKE) -C $(CORE_DIR) libcore.a
 
 clean:
-	rm -f duke/run_tests core/run_tests finance/run_tests
+	rm -f duke/run_tests core/run_tests finance/run_tests production/run_tests
