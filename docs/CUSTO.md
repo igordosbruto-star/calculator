@@ -1,12 +1,12 @@
 # Cálculo de Custos
 
-Fórmulas utilizadas pelo DUKE para estimar despesas.
+Fórmulas utilizadas pelo DUKE para estimar despesas. Este documento centraliza todas as expressões de cálculo de custos.
 
-## Fórmulas básicas
+## Fórmulas
 
-- **Unitário:** `custo = preco_unitario * quantidade`
-- **Linear:** `custo = preco_metro * comprimento`
-- **Cúbico:** `custo = preco_m3 * (largura * altura * profundidade)`
+- **Unitário:** `custo_total = preco_unitario * quantidade`
+- **Linear:** `custo_total = preco_metro * comprimento`
+- **Cúbico:** `custo_total = preco_m3 * largura * altura * profundidade`
 
 ## Navegação
 

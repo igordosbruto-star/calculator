@@ -1,18 +1,12 @@
 # Materiais
 
-Visão geral dos tipos de materiais suportados pelo DUKE e como os custos são estimados.
+Visão geral dos tipos de materiais suportados pelo DUKE e como os custos são estimados. As fórmulas de cálculo estão documentadas em [Cálculo de Custos](CUSTO.md).
 
 ## Tipos
 
 - **Unitário** – itens contados em peças individuais.
 - **Linear** – materiais comercializados por metro.
 - **Cúbico** – produtos vendidos por volume (m³).
-
-## Fórmulas
-
-- Unitário: `custo_total = preco_unitario * quantidade`
-- Linear: `custo_total = preco_metro * comprimento`
-- Cúbico: `custo_total = preco_m3 * largura * altura * profundidade`
 
 ## Navegação
 
