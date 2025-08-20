@@ -10,9 +10,16 @@ CORE_LIB = $(CORE_DIR)/libcore.a
 
 CLI_SRC := cli/app.cpp cli/args.cpp cli/parser.cpp cli/utils.cpp cli/commands.cpp
 FIN_SRC := $(wildcard ../finance/*.cpp)
-SRC := $(wildcard *.cpp) $(CLI_SRC)        $(wildcard domain/*.cpp) $(wildcard custo/*.cpp)        $(wildcard ui/*.cpp) $(FIN_SRC)
-LIB_SRC := $(filter-out main.cpp,$(SRC))
+GUI_MAIN := gui/main_qt.cpp
+GUI_SRC := $(filter-out $(GUI_MAIN),$(wildcard gui/*.cpp))
+SRC := $(wildcard *.cpp) $(CLI_SRC) \
+$(wildcard domain/*.cpp) $(wildcard custo/*.cpp) \
+$(wildcard ui/*.cpp) $(FIN_SRC)
+LIB_SRC := $(filter-out main.cpp,$(SRC)) $(GUI_SRC)
 OBJ := $(LIB_SRC:.cpp=.o)
+
+GUI_OBJ := $(GUI_SRC:.cpp=.o)
+GUI_MAIN_OBJ := $(GUI_MAIN:.cpp=.o)
 
 all: libduke.a libduke.so
 
@@ -29,9 +36,12 @@ libduke.so: $(OBJ) $(CORE_LIB)
 cli: libduke.a $(CORE_LIB) main.cpp
 	$(CXX) $(CXXFLAGS) main.cpp $(INCLUDES) -L. -lduke -L$(CORE_DIR) -lcore $(QT_LIBS) -o app
 
-.PHONY: clean cli
+gui: libduke.a $(CORE_LIB) $(GUI_OBJ) $(GUI_MAIN_OBJ)
+	        $(CXX) $(CXXFLAGS) $(GUI_OBJ) $(GUI_MAIN_OBJ) $(INCLUDES) -L. -lduke -L$(CORE_DIR) -lcore $(QT_LIBS) -o app_gui
+
+.PHONY: clean cli gui
 clean:
-	rm -f $(OBJ) libduke.a libduke.so app
+	        rm -f $(OBJ) $(GUI_OBJ) $(GUI_MAIN_OBJ) libduke.a libduke.so app app_gui
 
 $(CORE_LIB):
 	$(MAKE) -C $(CORE_DIR)
