@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -fPIC
-INCLUDES = -Iinclude
+INCLUDES = -Iinclude -I../include
 QT_CFLAGS := $(shell pkg-config --cflags Qt6Core)
 QT_LIBS := $(shell pkg-config --libs Qt6Core)
 CXXFLAGS += $(QT_CFLAGS)
