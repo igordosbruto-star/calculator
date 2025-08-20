@@ -15,7 +15,7 @@
 ## Workflow
 - Revisar todos os arquivos antes de fazer as alterações
 - Toda modificação deve vir acompanhada de testes em `/tests`
-- Adicionar implementações feitas em `Roadmap.md`
+- Adicionar implementações feitas em `ROADMAP.md`
 - Sempre que possível modularizar: preferir vários `.cpp` pequenos em vez de funções longas
 - Verificar `CHECKLIST.md` e marcar entradas
 - Compilar com:

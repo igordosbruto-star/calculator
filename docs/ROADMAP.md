@@ -4,8 +4,8 @@ O DUKE evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
 
 ## v1.0
 
+- [ ] [P1] Separar a lógica do app em módulos (`src/duke/ApplicationCore.cpp`, `include/duke/duke.hpp`, `src/duke/main.cpp`).
 - [ ] [P1] Extrair a lógica de comparação e seleção de materiais em funções reutilizáveis.
-- [ ] [P2] Preparar o arquivo para futura divisão em múltiplos módulos.
 - [ ] [P1] Centralizar leitura/escrita em formatos adicionais (ex.: XML).
 - [ ] [P2] Melhorar mensagens de erro para entradas inválidas.
 - [ ] [P1] Criar casos de teste unitários para validar comparações e rotinas de persistência.
