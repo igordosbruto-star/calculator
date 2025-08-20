@@ -6,6 +6,7 @@ void test_monthly_summary();
 void test_generate_report();
 void test_overdue_alert();
 void test_persist_validar_message();
+void test_persist_load_save();
 
 int main() {
     return run_tests({
@@ -14,6 +15,7 @@ int main() {
         test_monthly_summary,
         test_generate_report,
         test_overdue_alert,
-        test_persist_validar_message
+        test_persist_validar_message,
+        test_persist_load_save
     });
 }

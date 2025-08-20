@@ -1,6 +1,7 @@
 #include "duke/ApplicationCore.h"
 #include <cassert>
 #include <filesystem>
+#include <stdexcept>
 #include "core/persist.h"
 
 void test_application_core() {
@@ -28,4 +29,20 @@ void test_application_core() {
         if (c.maior) maior = true;
     }
     assert(menor && maior);
+
+    bool threw = false;
+    try {
+        core.compararMateriais(mats, {0, 2});
+    } catch (const std::out_of_range&) {
+        threw = true;
+    }
+    assert(threw);
+
+    std::vector<MaterialDTO> single = {
+        {"Madeira", 100.0, 2.0, 3.0, "linear"}
+    };
+    Persist::save("materiais.json", single);
+    base.clear();
+    mats.clear();
+    assert(!core.carregar(base, mats));
 }

@@ -9,7 +9,7 @@ LIB_CALC = $(CALC_DIR)/libduke.a
 XML_LIBS := $(shell pkg-config --libs tinyxml2 2>/dev/null || echo -ltinyxml2)
 
 CALC_SRCS := $(wildcard duke/*.cpp)
-CORE_SRCS := $(wildcard core/*.cpp)
+CORE_SRCS := $(wildcard core/*_test.cpp) core/run_tests.cpp
 FIN_SRCS := $(wildcard finance/*.cpp)
 FIN_LIB_SRCS := $(wildcard ../src/finance/*.cpp)
 
