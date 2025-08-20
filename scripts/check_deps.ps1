@@ -9,20 +9,15 @@ $deps = @{
     "make"      = @{winget="GnuWin32.Make"; choco="make"; cmd="make"}
     "gdb"       = @{winget="GnuWin32.GDB";  choco="gdb";  cmd="gdb"}
     "pkg-config"= @{winget="pkgconfiglite.pkgconfiglite"; choco="pkgconfiglite"; cmd="pkg-config"}
-    "Qt6Core"   = @{winget="Qt.Qt6";        choco="qt6-base"; cmd="pkg-config --exists Qt6Core"}
+    "wxWidgets" = @{winget="wxWidgets.wxWidgets"; choco="wxwidgets"; cmd="wx-config"}
 }
 
 $missing = @()
 
 foreach ($name in $deps.Keys) {
     $checkCmd = $deps[$name].cmd
-    if ($name -eq "Qt6Core") {
-        $p = Start-Process -FilePath pkg-config -ArgumentList "--exists", "Qt6Core" -NoNewWindow -PassThru -Wait -ErrorAction SilentlyContinue
-        if ($p.ExitCode -ne 0) { $missing += $name }
-    } else {
-        if (-not (Get-Command $checkCmd.Split()[0] -ErrorAction SilentlyContinue)) {
-            $missing += $name
-        }
+    if (-not (Get-Command $checkCmd.Split()[0] -ErrorAction SilentlyContinue)) {
+        $missing += $name
     }
 }
 

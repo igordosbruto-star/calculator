@@ -2,9 +2,9 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Wall -fPIC
 CORE_DIR = ../../core
 INCLUDES = -I../../include -I../../include/duke -I../../third_party/nlohmann -I$(CORE_DIR)/include
-QT_CFLAGS := $(shell pkg-config --cflags Qt6Widgets 2>/dev/null)
-QT_LIBS := $(shell pkg-config --libs Qt6Widgets 2>/dev/null)
-CXXFLAGS += $(QT_CFLAGS)
+WX_CXXFLAGS := $(shell wx-config --cxxflags)
+WX_LIBS := $(shell wx-config --libs)
+CXXFLAGS += $(WX_CXXFLAGS)
 
 CORE_LIB = $(CORE_DIR)/libcore.a
 
@@ -27,17 +27,17 @@ libduke.a: $(OBJ) $(CORE_LIB)
 	ar rcs $@ $(OBJ)
 
 libduke.so: $(OBJ) $(CORE_LIB)
-	$(CXX) $(CXXFLAGS) -shared $(OBJ) $(QT_LIBS) -L$(CORE_DIR) -lcore -o $@
+	$(CXX) $(CXXFLAGS) -shared $(OBJ) $(WX_LIBS) -L$(CORE_DIR) -lcore -o $@
 
 %.o: %.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 cli: libduke.a $(CORE_LIB) main.cpp
-	$(CXX) $(CXXFLAGS) main.cpp $(INCLUDES) -L. -lduke -L$(CORE_DIR) -lcore $(QT_LIBS) -o app
+	$(CXX) $(CXXFLAGS) main.cpp $(INCLUDES) -L. -lduke -L$(CORE_DIR) -lcore $(WX_LIBS) -o app
 
 gui: libduke.a $(CORE_LIB) $(GUI_OBJ) $(GUI_MAIN_OBJ)
-	        $(CXX) $(CXXFLAGS) $(GUI_OBJ) $(GUI_MAIN_OBJ) $(INCLUDES) -L. -lduke -L$(CORE_DIR) -lcore $(QT_LIBS) -o app_gui
+	$(CXX) $(CXXFLAGS) $(GUI_OBJ) $(GUI_MAIN_OBJ) $(INCLUDES) -L. -lduke -L$(CORE_DIR) -lcore $(WX_LIBS) -o app_gui
 
 .PHONY: clean cli gui
 clean:

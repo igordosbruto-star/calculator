@@ -16,7 +16,7 @@ declare -A deps=(
     ["g++"]="g++"
     ["make"]="make"
     ["pkg-config"]="pkg-config"
-    ["Qt6Core"]="qt6-base-dev"
+    ["wx-config"]="libwxgtk3.2-dev"
 )
 
 missing=()
@@ -24,16 +24,9 @@ packages=()
 
 for dep in "${!deps[@]}"; do
     pkg="${deps[$dep]}"
-    if [[ "$dep" == Qt6Core ]]; then
-        if ! pkg-config --exists "$dep" 2>/dev/null; then
-            missing+=("$dep")
-            packages+=("$pkg")
-        fi
-    else
-        if ! command -v "$dep" >/dev/null 2>&1; then
-            missing+=("$dep")
-            packages+=("$pkg")
-        fi
+    if ! command -v "$dep" >/dev/null 2>&1; then
+        missing+=("$dep")
+        packages+=("$pkg")
     fi
 done
 
