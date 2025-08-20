@@ -2,8 +2,35 @@
 
 ## Dependências
 
-A CLI utiliza a toolkit [Qt 6](https://www.qt.io/qt-6). Certifique-se de que as
-bibliotecas estejam instaladas e disponíveis via `pkg-config` antes da compilação.
+A CLI utiliza a toolkit [wxWidgets 3](https://www.wxwidgets.org). Certifique-se de que as
+bibliotecas estejam instaladas e disponíveis via `wx-config` antes da compilação.
+
+No Debian/Ubuntu, por exemplo, instale com:
+
+```sh
+sudo apt install libwxgtk3.2-dev
+```
+
+Após a instalação, compile um programa simples para validar o ambiente:
+
+```cpp
+#include <wx/wx.h>
+
+class MyApp : public wxApp {
+public:
+    bool OnInit() override {
+        new wxFrame(nullptr, wxID_ANY, "Teste")->Show();
+        return true;
+    }
+};
+
+wxIMPLEMENT_APP(MyApp);
+```
+
+```sh
+g++ teste.cpp $(wx-config --cxxflags --libs) -o teste
+./teste
+```
 
 O DUKE pode ser executado com as seguintes opções:
 

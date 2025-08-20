@@ -6,18 +6,28 @@ ERP DUKE é um sistema ERP modular voltado para o planejamento de cortes de mate
 
 ## Requisitos
 
-O sistema depende da toolkit [Qt 6](https://www.qt.io/qt-6).
-Instale as bibliotecas de desenvolvimento e garanta que `pkg-config`
-as encontre antes de compilar.
+O sistema depende da toolkit [wxWidgets 3](https://www.wxwidgets.org).
+Instale as bibliotecas de desenvolvimento e garanta que `wx-config`
+esteja disponível antes de compilar.
 
 ## Instalação
 
 Antes de compilar, verifique se as dependências básicas estão presentes.
 Para Linux e macOS, o script `check_deps.sh` detecta o sistema e checa
-ferramentas como `g++`, `make` e bibliotecas do Qt 6, oferecendo a opção de
+ferramentas como `g++`, `make` e bibliotecas do wxWidgets, oferecendo a opção de
 instalá-las automaticamente. No Windows há uma versão equivalente em
 PowerShell (`check_deps.ps1`) que usa `winget` ou `choco` para instalar
 pacotes faltantes.
+
+Caso prefira instalar manualmente, utilize o gerenciador de pacotes do seu sistema:
+
+```sh
+# Debian/Ubuntu
+sudo apt install libwxgtk3.2-dev
+
+# macOS (Homebrew)
+brew install wxwidgets
+```
 
 Linux/macOS:
 
@@ -76,7 +86,29 @@ make gui        # gera app_gui
 ./app_gui       # executa
 ```
 
-Certifique-se de que o Qt 6 esteja instalado e que `pkg-config` consiga encontrá-lo.
+Certifique-se de que o wxWidgets esteja instalado e que `wx-config` esteja acessível.
+
+Para compilar manualmente um exemplo mínimo com `wx-config`:
+
+```cpp
+#include <wx/wx.h>
+
+class MyApp : public wxApp {
+public:
+    bool OnInit() override {
+        auto *frame = new wxFrame(nullptr, wxID_ANY, "Demo");
+        frame->Show();
+        return true;
+    }
+};
+
+wxIMPLEMENT_APP(MyApp);
+```
+
+```sh
+g++ exemplo.cpp $(wx-config --cxxflags --libs) -o exemplo
+./exemplo
+```
 
 ## Testes
 
@@ -85,7 +117,6 @@ O status das execuções automatizadas está disponível no badge de CI acima.
 Para rodar todos os testes localmente:
 
 ```sh
-export QT_QPA_PLATFORM=offscreen
 make -C tests
 ```
 

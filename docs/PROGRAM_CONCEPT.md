@@ -89,7 +89,7 @@ O DUKE será dividido logicamente em três grandes módulos (ou programas) dentr
 
 ## 5. Requisitos Técnicos
 
-- **Plataforma/Frameworks:** Qt 6 (GUI e CLI), C++ (lógica)
+- **Plataforma/Frameworks:** wxWidgets 3 (GUI), C++ (lógica)
 - **Persistência de dados:** JSON e CSV; integração futura com banco de dados (ex.: SQLite)
 - **Arquitetura:** Modular (Core, DUKE, Financeiro), API pública
 - **Internacionalização:** Suporte a múltiplos idiomas (inicialmente português)
