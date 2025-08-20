@@ -65,5 +65,46 @@ ApplicationCore::compararMateriais(const std::vector<Material>& mats,
     return res;
 }
 
+// ----- APIs do módulo de vendas -----
+bool ApplicationCore::carregarJSON() {
+    // Carrega materiais reutilizando a função existente
+    int schemaVersion = 0;
+    if (!::Persist::loadJSON("materiais.json", base_, &schemaVersion) || base_.empty()) {
+        wr::p("DATA", "Base nao encontrada. Criando materiais padrao...", "Yellow");
+        base_ = {
+            {"Pinus 20cm", 17.00, 0.20, 3.00, "linear"},
+            {"MDF 15mm", 180.00, 1.85, 2.75, "linear"}
+        };
+        ::Persist::saveJSON("materiais.json", base_, 1);
+    }
+    mats_ = core::reconstruirMateriais(base_);
+
+    // Carrega clientes e pedidos (se inexistentes, mantém vetores vazios)
+    ::Persist::loadJSONVec("clientes.json", clientes_, "clientes");
+    ::Persist::loadJSONVec("pedidos.json", pedidos_, "pedidos");
+    if (!pedidos_.empty()) {
+        nextId_ = pedidos_.back().id + 1;
+    }
+    return true;
+}
+
+bool ApplicationCore::criarPedido(const std::string& cliente, const std::string& item, int quantidade) {
+    Order o(nextId_++, cliente, item, quantidade);
+    pedidos_.push_back(o);
+    bool ok = ::Persist::saveJSONVec("pedidos.json", pedidos_, "pedidos");
+    if (ok) {
+        wr::p("SALES", "Pedido registrado", "Green");
+    } else {
+        wr::p("SALES", "Falha ao salvar pedido", "Red");
+    }
+    return ok;
+}
+
+std::vector<Customer> ApplicationCore::listarClientes() const { return clientes_; }
+
+std::vector<Order> ApplicationCore::listarPedidos() const { return pedidos_; }
+
+std::vector<MaterialDTO> ApplicationCore::listarEstoque() const { return base_; }
+
 } // namespace duke
 

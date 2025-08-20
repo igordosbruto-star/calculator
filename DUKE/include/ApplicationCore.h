@@ -5,6 +5,8 @@
 #include "core/persist.h"
 #include "Material.h"
 #include "core.h"
+#include "Customer.h"
+#include "Order.h"
 
 namespace duke {
 
@@ -37,6 +39,34 @@ public:
     //   auto r = core.compararMateriais(mats, {0,1});
     std::vector<MaterialComparado> compararMateriais(const std::vector<Material>& mats,
                                                      const std::vector<int>& ids) const;
+
+    // ----- APIs do módulo de vendas -----
+    // Carrega materiais, clientes e pedidos usando os arquivos JSON padrão.
+    // Exemplo:
+    //   ApplicationCore core;
+    //   core.carregarJSON();
+    bool carregarJSON();
+
+    // Cria e persiste um novo pedido.
+    // Exemplo:
+    //   core.criarPedido("Ana", "Produto", 2);
+    bool criarPedido(const std::string& cliente, const std::string& item, int quantidade);
+
+    // Lista clientes cadastrados.
+    std::vector<Customer> listarClientes() const;
+
+    // Lista pedidos registrados.
+    std::vector<Order> listarPedidos() const;
+
+    // Consulta o estoque de materiais carregado.
+    std::vector<MaterialDTO> listarEstoque() const;
+
+private:
+    std::vector<MaterialDTO> base_;
+    std::vector<Material> mats_;
+    std::vector<Customer> clientes_;
+    std::vector<Order> pedidos_;
+    int nextId_ = 1;
 };
 
 } // namespace duke
