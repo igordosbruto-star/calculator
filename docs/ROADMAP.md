@@ -27,6 +27,12 @@ O DUKE evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
 - [ ] [P3] Garantir comunicação de notificações entre módulos.
 - [ ] [P3] Importar listas de preços externas e comparar automaticamente.
 
+## v2.0
+
+- [ ] [P1] Migrar persistência para SQLite.
+- [ ] [P2] Implementar internacionalização (i18n).
+- [ ] [P2] Adicionar rotina automática de backup e checagem de permissões.
+
 ## Concluído
 
 ### Persistência de dados
