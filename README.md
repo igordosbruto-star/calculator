@@ -1,5 +1,7 @@
 # ERP DUKE
 
+[![CI](https://github.com/OWNER/calculator/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/calculator/actions/workflows/ci.yml)
+
 ERP DUKE é um sistema ERP modular voltado para o planejamento de cortes de materiais e gestão de projetos.
 
 ## Requisitos
@@ -51,6 +53,17 @@ make gui        # gera app_gui
 ```
 
 Certifique-se de que o Qt 6 esteja instalado e que `pkg-config` consiga encontrá-lo.
+
+## Testes
+
+O status das execuções automatizadas está disponível no badge de CI acima.
+
+Para rodar todos os testes localmente:
+
+```sh
+export QT_QPA_PLATFORM=offscreen
+make -C tests
+```
 
 ## Documentação
 
