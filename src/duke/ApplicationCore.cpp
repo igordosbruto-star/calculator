@@ -106,5 +106,23 @@ std::vector<Order> ApplicationCore::listarPedidos() const { return pedidos_; }
 
 std::vector<MaterialDTO> ApplicationCore::listarEstoque() const { return base_; }
 
+// ----- APIs do módulo financeiro -----
+bool ApplicationCore::carregarFinanceiro() { return finRepo_.load(); }
+
+std::string ApplicationCore::proximoIdLancamento() { return finRepo_.nextId(); }
+
+bool ApplicationCore::adicionarLancamento(const finance::Lancamento& l) {
+    if (!finRepo_.add(l)) return false;
+    return finRepo_.save();
+}
+
+std::vector<finance::Lancamento> ApplicationCore::listarLancamentos(const finance::Filtro& f) const {
+    return finRepo_.query(f);
+}
+
+double ApplicationCore::somarLancamentos(const finance::Filtro& f) const {
+    return finRepo_.sum(f);
+}
+
 } // namespace duke
 
