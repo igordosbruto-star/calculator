@@ -17,6 +17,10 @@ O DUKE evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
 - [ ] [P3] Guia de contribuições explicando estilo e práticas de codificação.
 - [ ] [P2] Centralizar constantes de formatação em `format.h` para reutilização.
 
+## v1.2
+
+- [ ] [P2] Implementar módulo Designer (canvas de montagem, associação de materiais, histórico).
+
 ## Concluído
 
 ### Persistência de dados
