@@ -9,7 +9,7 @@
 #ifndef UNIT_TEST
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
-    MainWindow w;
+    duke::gui::MainWindow w;
     w.show();
     return app.exec();
 }
