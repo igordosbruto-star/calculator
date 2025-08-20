@@ -2,6 +2,8 @@
 
 #include <string>
 #include <vector>
+#include <map>
+#include "production/ModeloProducao.h"
 
 namespace duke {
 class ApplicationCore;
@@ -22,5 +24,16 @@ private:
     void handleFinishOrder(const std::vector<std::string>& args);
 
     duke::ApplicationCore* core_;
+
+    struct ProductionOrder {
+        std::string id;
+        const production::ModeloProducao* modelo;
+        bool started = false;
+        bool finished = false;
+    };
+
+    std::vector<production::ModeloProducao> modelos_;
+    std::vector<ProductionOrder> orders_;
+    std::map<std::string, double> estoque_;
 };
 

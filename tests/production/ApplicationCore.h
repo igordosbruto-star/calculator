@@ -1,0 +1,7 @@
+#pragma once
+namespace duke {
+class ApplicationCore {
+public:
+    void carregarJSON() {}
+};
+}
