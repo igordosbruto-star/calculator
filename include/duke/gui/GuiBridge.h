@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <QObject>
 #include "ApplicationCore.h"
 #include "Material.h"
 #include "core.h"
@@ -17,19 +16,14 @@ namespace gui {
 //   GuiBridge b(core, base, mats);
 //   b.selecionarMaterial(0);
 // ==========================================
-class GuiBridge : public QObject {
-    Q_OBJECT
-
+class GuiBridge {
 public:
     GuiBridge(ApplicationCore& core,
               const std::vector<MaterialDTO>& base,
-              const std::vector<Material>& mats,
-              QObject* parent = nullptr);
+              const std::vector<Material>& mats);
 
-public slots:
     void selecionarMaterial(int idx);
 
-public:
     int ultimaSelecao() const { return m_last; }
 
 private:

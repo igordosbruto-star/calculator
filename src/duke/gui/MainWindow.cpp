@@ -7,6 +7,11 @@
 namespace duke {
 namespace gui {
 
+wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
+    EVT_TEXT(wxID_ANY, MainWindow::OnSearchFieldText)
+    EVT_BUTTON(wxID_ANY, MainWindow::OnSelectButton)
+wxEND_EVENT_TABLE()
+
 // Construtor: inicializa widgets e conecta eventos.
 MainWindow::MainWindow(gui::GuiBridge* bridge,
                        wxPanel* centralPanel,
@@ -63,31 +68,30 @@ MainWindow::MainWindow(gui::GuiBridge* bridge,
         m_menuBar->Append(menu, m.first);
         m_menus.push_back({menu, m.first});
     }
+}
 
-    // filtro de busca para o menu
-    m_searchField->Bind(wxEVT_TEXT, [this](wxCommandEvent& evt) {
-        wxString txt = evt.GetString();
-        if (txt.IsEmpty()) {
-            m_searchField->SetBackgroundColour(*wxRED);
-        } else {
-            m_searchField->SetBackgroundColour(wxNullColour);
+void MainWindow::OnSearchFieldText(wxCommandEvent& evt) {
+    wxString txt = evt.GetString();
+    if (txt.IsEmpty()) {
+        m_searchField->SetBackgroundColour(*wxRED);
+    } else {
+        m_searchField->SetBackgroundColour(wxNullColour);
+    }
+    m_searchField->Refresh();
+    for (auto& pair : m_menus) {
+        int pos = m_menuBar->FindMenu(pair.second);
+        if (pos != wxNOT_FOUND) {
+            bool vis = pair.second.Lower().Find(txt.Lower()) != wxNOT_FOUND;
+            m_menuBar->EnableTop(pos, vis);
         }
-        m_searchField->Refresh();
-        for (auto& pair : m_menus) {
-            int pos = m_menuBar->FindMenu(pair.second);
-            if (pos != wxNOT_FOUND) {
-                bool vis = pair.second.Lower().Find(txt.Lower()) != wxNOT_FOUND;
-                m_menuBar->EnableTop(pos, vis);
-            }
-        }
-    });
+    }
+}
 
-    // conecta clique do botão à ponte de seleção
-    m_selectButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) {
-        if (m_bridge) {
-            m_bridge->selecionarMaterial(0);
-        }
-    });
+void MainWindow::OnSelectButton(wxCommandEvent& evt) {
+    (void)evt;
+    if (m_bridge) {
+        m_bridge->selecionarMaterial(0);
+    }
 }
 
 } // namespace gui

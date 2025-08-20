@@ -1,6 +1,7 @@
 #pragma once
 
 #include <wx/frame.h>
+#include <wx/event.h>
 #include <vector>
 #include <utility>
 
@@ -10,6 +11,7 @@ class wxButton;
 class wxTextCtrl;
 class wxMenuBar;
 class wxMenu;
+class wxCommandEvent;
 
 #include "gui/GuiBridge.h"
 
@@ -34,6 +36,12 @@ public:
     ~MainWindow() override = default;
 
 private:
+    // Handlers de eventos
+    void OnSearchFieldText(wxCommandEvent& evt);
+    void OnSelectButton(wxCommandEvent& evt);
+
+    wxDECLARE_EVENT_TABLE();
+
     gui::GuiBridge* m_bridge;
     wxPanel* m_centralPanel;
     wxBoxSizer* m_layout;
