@@ -38,4 +38,22 @@ void test_comparison() {
         threw = true;
     }
     assert(threw);
+
+    // token nao numerico
+    threw = false;
+    try {
+        comparison::selecionarMateriais("1 a", mats);
+    } catch (const std::invalid_argument&) {
+        threw = true;
+    }
+    assert(threw);
+
+    // indice duplicado
+    threw = false;
+    try {
+        comparison::selecionarMateriais("1 1", mats);
+    } catch (const std::invalid_argument&) {
+        threw = true;
+    }
+    assert(threw);
 }
