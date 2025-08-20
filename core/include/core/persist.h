@@ -282,6 +282,53 @@ inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int
     }
 }
 
+// ------------------------------------------------------------
+// Funções genéricas para salvar/carregar vetores em JSON.
+// A chave do array é parametrizada para reutilização com
+// diferentes entidades (ex.: clientes, pedidos).
+// Exemplo:
+//   std::vector<duke::Customer> c{{"Ana"}};
+//   Persist::saveJSONVec("clientes.json", c, "clientes");
+// ------------------------------------------------------------
+template <typename T>
+inline bool saveJSONVec(const std::string& path, const std::vector<T>& v,
+                        const std::string& key, int schemaVersion = 1,
+                        const std::string& baseDir = config().baseDir) {
+    json j;
+    j["schema_version"] = schemaVersion;
+    j[key] = v;
+    return atomicWrite(fs::path(dataPath(path, baseDir)), j.dump(2));
+}
+
+template <typename T>
+inline bool loadJSONVec(const std::string& path, std::vector<T>& out,
+                        const std::string& key, int* out_schema_version = nullptr,
+                        const std::string& baseDir = config().baseDir) {
+    const std::string p = dataPath(path, baseDir);
+    std::ifstream f(p);
+    if (!f) {
+        wr::p("PERSIST", p + " open fail", "Red");
+        return false;
+    }
+    try {
+        json j; f >> j;
+        int schemaVersion = j.value("schema_version", 1);
+        if (out_schema_version) *out_schema_version = schemaVersion;
+        if (j.contains(key) && j[key].is_array()) {
+            out = j[key].template get<std::vector<T>>();
+            return true;
+        }
+        wr::p("PERSIST", p + " missing '" + key + "'", "Red");
+        return false;
+    } catch (const std::exception& e) {
+        wr::p("PERSIST", p + " parse error: " + e.what(), "Red");
+        return false;
+    } catch (...) {
+        wr::p("PERSIST", p + " unknown parse error", "Red");
+        return false;
+    }
+}
+
 // -------------------- CSV helpers --------------------
 namespace detail {
     inline std::string trim(std::string s) {
