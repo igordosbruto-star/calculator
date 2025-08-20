@@ -11,6 +11,7 @@
 #include <vector>
 #include <algorithm> // std::clamp
 #include <sstream>
+#include <stdexcept>
 
 // Bibliotecas Personalizadas
 #include "cli/App.h"
@@ -26,6 +27,7 @@
 #include "cli/utils.h"
 #include "cli/commands.h"
 #include "finance/Serialize.h"
+#include "comparison.h"
 namespace duke {
 // ------------------------------------------------------------
 // Implementação do App
@@ -170,25 +172,20 @@ void App::compararMateriais() {
                   << "\n";
     }
     std::string linha = ui::readString("IDs separados por espaco: ");
-    std::istringstream iss(linha);
-    std::vector<int> ids; int id;
-    while (iss >> id) {
-        if (id >= 1 && id <= static_cast<int>(mats.size()))
-            ids.push_back(id - 1);
-    }
-    if (ids.size() < 2) {
-        std::cout << "Selecione ao menos dois materiais.\n";
-        return;
-    }
-    auto res = core.compararMateriais(mats, ids);
-    std::cout << "ID | Nome | porm2\n";
-    for (size_t i = 0; i < ids.size(); ++i) {
-        const auto& r = res[i];
-        std::string extra;
-        if (r.menor) extra = " <menor>";
-        if (r.maior) extra = " <maior>";
-        std::cout << ids[i] + 1 << " | " << r.nome << " | "
-                  << UN_MONE << r.porm2 << extra << "\n";
+    try {
+        auto sel = comparison::selecionarMateriais(linha, mats);
+        auto res = comparison::compararMateriais(sel.materiais);
+        std::cout << "ID | Nome | porm2\n";
+        for (size_t i = 0; i < res.size(); ++i) {
+            const auto& r = res[i];
+            std::string extra;
+            if (r.menor) extra = " <menor>";
+            if (r.maior) extra = " <maior>";
+            std::cout << sel.indices[i] + 1 << " | " << r.nome << " | "
+                      << UN_MONE << r.porm2 << extra << "\n";
+        }
+    } catch (const std::exception& e) {
+        std::cout << e.what() << "\n";
     }
 }
 

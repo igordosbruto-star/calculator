@@ -5,6 +5,7 @@
 #include "core/persist.h"
 #include "Material.h"
 #include "core.h"
+#include "comparison.h"
 #include "Customer.h"
 #include "Order.h"
 #include "finance/Repo.h"
@@ -28,18 +29,11 @@ public:
     std::vector<MaterialDTO> listarMateriais(const std::vector<MaterialDTO>& base) const;
 
     // Resultado da comparação de materiais com destaque para menor e maior preço por m².
-    struct MaterialComparado {
-        std::string nome;
-        double porm2 = 0.0;
-        bool menor = false;
-        bool maior = false;
-    };
-
     // Compara materiais selecionados pelos índices (base 0).
     // Exemplo:
     //   auto r = core.compararMateriais(mats, {0,1});
-    std::vector<MaterialComparado> compararMateriais(const std::vector<Material>& mats,
-                                                     const std::vector<int>& ids) const;
+    std::vector<comparison::MaterialComparado> compararMateriais(
+        const std::vector<Material>& mats, const std::vector<int>& ids) const;
 
     // ----- APIs do módulo de vendas -----
     // Carrega materiais, clientes e pedidos usando os arquivos JSON padrão.
