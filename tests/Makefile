@@ -55,9 +55,9 @@ ifeq ($(strip $(PROD_SRCS)),)
 	@echo "No production tests"
 else
 	@mkdir -p production
-	$(CXX) $(CXXFLAGS) $(PROD_SRCS) $(PROD_APP_SRCS) \
-	-Iproduction -I.. -I../include -I../include/duke -I../core/include \
-	$(LIB_CORE) $(XML_LIBS) \
+	$(CXX) $(CXXFLAGS) $(PROD_SRCS) $(PROD_APP_SRCS) $(FIN_LIB_SRCS) \
+	-Iproduction -I.. -I../include -I../include/duke -I../core/include -I../third_party/nlohmann \
+	$(LIB_CALC) $(LIB_CORE) $(XML_LIBS) \
 	-o production/run_tests
 	./production/run_tests
 endif
@@ -87,7 +87,7 @@ designer:
 ifeq ($(strip $(DES_SRCS)),)
 	@echo "No designer tests"
 else
-	$(CXX) $(CXXFLAGS) $(DES_SRCS) ../apps/designer/DesignerApp.cpp $(PROD_LIB_SRCS) \
+	$(CXX) $(CXXFLAGS) $(DES_SRCS) ../apps/designer/DesignerApp.cpp $(PROD_LIB_SRCS) $(FIN_LIB_SRCS) \
 	-I../apps/designer -I../include -I../include/duke -I../third_party/nlohmann -I../core/include $(LIB_CORE) $(XML_LIBS) -o designer/run_tests
 	./designer/run_tests
 endif
