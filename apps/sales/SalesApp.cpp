@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "ApplicationCore.h" // Provided by the existing DUKE project
+#include <chrono>
 
 SalesApp::SalesApp() : core_(new duke::ApplicationCore()) {
     // Load materials and customers on startup
@@ -29,6 +30,10 @@ int SalesApp::run(int argc, char** argv) {
     } else {
         std::cerr << "Unknown command: " << command << "\n";
         showHelp();
+    }
+    auto alerts = notifications_.dueAlerts(std::chrono::system_clock::now());
+    for (const auto& a : alerts) {
+        std::cout << "Alerta: entrega vencida para " << a << "\n";
     }
     return 0;
 }
@@ -66,5 +71,10 @@ void SalesApp::handleInventory() const {
     for (const auto& m : estoque) {
         std::cout << "- " << m.nome << " (R$" << m.valor << ")\n";
     }
+}
+
+void SalesApp::addDeliveryDate(const std::string& id,
+                               std::chrono::system_clock::time_point due) {
+    notifications_.addDelivery(id, due);
 }
 

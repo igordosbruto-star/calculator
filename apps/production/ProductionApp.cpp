@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include "ApplicationCore.h"
+#include <chrono>
 
 ProductionApp::ProductionApp() : core_(new duke::ApplicationCore()) {
     // Carrega dados básicos (stubbed na versão de testes)
@@ -56,6 +57,10 @@ int ProductionApp::run(int argc, char** argv) {
     } else {
         std::cerr << "Unknown command: " << command << "\n";
         showHelp();
+    }
+    auto alerts = notifications_.dueAlerts(std::chrono::system_clock::now());
+    for (const auto& a : alerts) {
+        std::cout << "Alerta: entrega vencida para " << a << "\n";
     }
     return 0;
 }
@@ -140,5 +145,10 @@ void ProductionApp::handleFinishOrder(const std::vector<std::string>& args) {
     }
     ord.finished = true;
     std::cout << "Order " << ord.id << " finished\n";
+}
+
+void ProductionApp::addDeliveryDate(const std::string& id,
+                                    std::chrono::system_clock::time_point due) {
+    notifications_.addDelivery(id, due);
 }
 
