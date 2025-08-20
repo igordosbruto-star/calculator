@@ -58,3 +58,19 @@ void test_consulta_estoque() {
     assert(estoque[0].nome == "Estoque");
     std::filesystem::remove_all("tmp_sales_inv");
 }
+
+// Testa rejeição de entradas inválidas ao criar pedido
+void test_pedido_invalido() {
+    using namespace duke;
+    std::filesystem::remove_all("tmp_sales_bad");
+    Persist::Config cfg; cfg.baseDir = "tmp_sales_bad"; Persist::setConfig(cfg);
+    Persist::save("materiais.json", std::vector<MaterialDTO>{{"Prod", 1,1,1,"linear"}});
+    Persist::saveJSONVec("clientes.json", std::vector<Customer>{Customer{"Ana"}}, "clientes");
+
+    ApplicationCore core; core.carregar();
+    assert(!core.criarPedido("", "Prod", 1));
+    assert(!core.criarPedido("Ana", "", 1));
+    assert(!core.criarPedido("Ana", "Prod", 0));
+    assert(core.listarPedidos().empty());
+    std::filesystem::remove_all("tmp_sales_bad");
+}

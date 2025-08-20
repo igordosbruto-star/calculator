@@ -69,6 +69,11 @@ bool ApplicationCore::carregar() {
 }
 
 bool ApplicationCore::criarPedido(const std::string& cliente, const std::string& item, int quantidade) {
+    if (cliente.empty() || item.empty() || quantidade <= 0) {
+        wr::p("SALES", "Dados de pedido invalidos", "Red");
+        return false;
+    }
+
     Order o(nextId_++, cliente, item, quantidade);
     pedidos_.push_back(o);
     bool ok = ::Persist::saveJSONVec("pedidos.json", pedidos_, "pedidos");
