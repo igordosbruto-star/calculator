@@ -2,54 +2,57 @@
 
 O DUKE evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
 
-## Módulos planejados
+## v1.0
 
-- **Núcleo do aplicativo** (`src/duke/ApplicationCore.cpp`)
-  - Extrair a lógica de comparação e seleção de materiais em funções reutilizáveis.
-  - Preparar o arquivo para futura divisão em múltiplos módulos.
-- **Persistência de dados** (`include/duke/persist.hpp`)
-  - Centralizar leitura/escrita em formatos adicionais (ex.: XML).
-  - Integrar validação de dados antes de salvar. ✅
-  - Suporte a serialização de planos de corte (CorteDTO e PlanoCorteDTO). ✅
-  - Funções para salvar PlanoCorteDTO em JSON e CSV. ✅
-  - Função para carregar PlanoCorteDTO em JSON (`loadPlanoJSON`). ✅
-  - Índice global de planos com atualização atômica (`updateIndex`). ✅
-  - Persistência automática de planos gerados com `makeId`, `outPlanosDirFor`, `savePlanoJSON/CSV` e `updateIndex`. ✅
-  - Tratamento de falhas na gravação de planos, abortando o fluxo e avisando o usuário. ✅
-- **Interface de linha de comando** (`src/duke/main.cpp`)
-  - Adicionar opções de ajuda e parâmetros para cálculos automatizados. ✅
-  - Melhorar mensagens de erro para entradas inválidas.
-  - Suporte inicial a `--projeto` e registro dos comandos `abrir`, `listar` e `comparar`. ✅
-  - Modularizar CLI em `parser`, `commands` e utilitários. ✅
-- **Interface gráfica básica** (`src/duke/gui/MainWindow`)
-  - Janela principal com botão para selecionar material. ✅
-- **Financeiro** (`fin add|list|sum`)
-  - CLI para registrar, listar e somar lançamentos com filtros. ✅
-  - Relatório mensal com `fin report mes --ano=<AAAA> --mes=<MM>` exportando CSV. ✅
-  - Validações de lançamentos (valor >0, data ISO, tipo obrigatório). ✅
-- **Testes automatizados** (novo diretório `tests/`)
-  - Criar casos de teste unitários para validar comparações e rotinas de persistência.
-  - Integrar com execução contínua (CI) para evitar regressões.
+- [ ] [P1] Extrair a lógica de comparação e seleção de materiais em funções reutilizáveis.
+- [ ] [P2] Preparar o arquivo para futura divisão em múltiplos módulos.
+- [ ] [P1] Centralizar leitura/escrita em formatos adicionais (ex.: XML).
+- [ ] [P2] Melhorar mensagens de erro para entradas inválidas.
+- [ ] [P1] Criar casos de teste unitários para validar comparações e rotinas de persistência.
+- [ ] [P2] Integrar com execução contínua (CI) para evitar regressões.
 
-## Novas capacidades de persistência
+## v1.1
 
-Com a evolução recente, a camada de persistência agora:
+- [ ] [P2] Documentação expandida em `docs/` para cobrir uso e desenvolvimento.
+- [ ] [P3] Guia de contribuições explicando estilo e práticas de codificação.
+- [ ] [P2] Centralizar constantes de formatação em `format.h` para reutilização.
 
-- Serializa planos de corte em JSON e CSV.
-- Atualiza o índice global de forma atômica por meio de `updateIndex`.
-- Salva automaticamente os planos gerados utilizando `makeId`, `outPlanosDirFor`, `savePlanoJSON/CSV` e `updateIndex`.
-- Permite reabrir planos salvos com `loadPlanoJSON`.
-- Expande `MaterialDTO` com campo `tipo` e migração para arquivos antigos.
+## Concluído
 
-## Domínio de Materiais
+### Persistência de dados
 
-- Implementadas classes específicas para materiais `unitário`, `linear` e `cúbico`. ✅
-- Adicionada `MaterialFactory::fromDTO` para instanciar o tipo correto a partir de `MaterialDTO`. ✅
+- [x] [P1] Integrar validação de dados antes de salvar. ([d80557b](https://github.com/igordosbruto/calculator/commit/d80557b))
+- [x] [P1] Suporte a serialização de planos de corte (CorteDTO e PlanoCorteDTO). ([cde9655](https://github.com/igordosbruto/calculator/commit/cde9655))
+- [x] [P1] Funções para salvar `PlanoCorteDTO` em JSON e CSV. ([cde9655](https://github.com/igordosbruto/calculator/commit/cde9655))
+- [x] [P1] Função para carregar `PlanoCorteDTO` em JSON (`loadPlanoJSON`). ([3b6680c](https://github.com/igordosbruto/calculator/commit/3b6680c))
+- [x] [P1] Índice global de planos com atualização atômica (`updateIndex`). ([cde9655](https://github.com/igordosbruto/calculator/commit/cde9655))
+- [x] [P1] Persistência automática de planos gerados com `makeId`, `outPlanosDirFor`, `savePlanoJSON/CSV` e `updateIndex`. ([cde9655](https://github.com/igordosbruto/calculator/commit/cde9655))
+- [x] [P1] Tratamento de falhas na gravação de planos, abortando o fluxo e avisando o usuário. ([cde9655](https://github.com/igordosbruto/calculator/commit/cde9655))
 
-## Melhorias propostas
+### Interface de linha de comando
 
-- Documentação expandida em `docs/` para cobrir uso e desenvolvimento.
-- Guia de contribuições explicando estilo e práticas de codificação.
-- Centralizar constantes de formatação em `format.h` para reutilização.
-- API pública simplificada via `duke.hpp`. ✅
+- [x] [P2] Adicionar opções de ajuda e parâmetros para cálculos automatizados. ([f8b4824](https://github.com/igordosbruto/calculator/commit/f8b4824))
+- [x] [P2] Suporte inicial a `--projeto` e registro dos comandos `abrir`, `listar` e `comparar`. ([f173bed](https://github.com/igordosbruto/calculator/commit/f173bed))
+- [x] [P2] Modularizar CLI em `parser`, `commands` e utilitários. ([adc0100](https://github.com/igordosbruto/calculator/commit/adc0100))
+
+### Interface gráfica
+
+- [x] [P3] Janela principal com botão para selecionar material. ([ab3505f](https://github.com/igordosbruto/calculator/commit/ab3505f))
+
+### Financeiro
+
+- [x] [P2] CLI para registrar, listar e somar lançamentos com filtros. ([0c69d4d](https://github.com/igordosbruto/calculator/commit/0c69d4d))
+- [x] [P2] Relatório mensal com `fin report mes --ano=<AAAA> --mes=<MM>` exportando CSV. ([9359cce](https://github.com/igordosbruto/calculator/commit/9359cce))
+- [x] [P2] Validações de lançamentos (valor >0, data ISO, tipo obrigatório). ([a9f87c8](https://github.com/igordosbruto/calculator/commit/a9f87c8))
+
+### Domínio de Materiais
+
+- [x] [P2] Implementadas classes específicas para materiais `unitário`, `linear` e `cúbico`. ([0449975](https://github.com/igordosbruto/calculator/commit/0449975))
+- [x] [P2] Adicionada `MaterialFactory::fromDTO` para instanciar o tipo correto a partir de `MaterialDTO`. ([a089912](https://github.com/igordosbruto/calculator/commit/a089912))
+- [x] [P2] Expande `MaterialDTO` com campo `tipo` e migração para arquivos antigos.
+
+### Outros
+
+- [x] [P3] API pública simplificada via `duke.hpp`. ([7892e10](https://github.com/igordosbruto/calculator/commit/7892e10))
+
 
