@@ -1,6 +1,9 @@
 #include "comparison.h"
+#include <algorithm>
+#include <cctype>
 #include <sstream>
 #include <stdexcept>
+#include <unordered_set>
 #include "core.h"
 
 namespace duke::comparison {
@@ -25,9 +28,19 @@ Selecionados selecionarMateriais(const std::string& ids,
                                  const std::vector<Material>& mats) {
     std::istringstream iss(ids);
     std::vector<int> vecIds;
-    int id = 0;
-    while (iss >> id) {
-        vecIds.push_back(id - 1);
+    std::unordered_set<int> vistos;
+    std::string token;
+    while (iss >> token) {
+        if (token.empty() ||
+            !std::all_of(token.begin(), token.end(),
+                         [](unsigned char c) { return std::isdigit(c); })) {
+            throw std::invalid_argument("Token nao numerico");
+        }
+        int idx = std::stoi(token) - 1;
+        if (!vistos.insert(idx).second) {
+            throw std::invalid_argument("Indice duplicado");
+        }
+        vecIds.push_back(idx);
     }
     Selecionados sel;
     sel.materiais = selecionarMateriais(vecIds, mats);
