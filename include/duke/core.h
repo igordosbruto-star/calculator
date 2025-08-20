@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include "Material.h"
-#include "core/persist.h"
+#include "core/MaterialDTO.h"
 namespace duke {
 
 namespace core {

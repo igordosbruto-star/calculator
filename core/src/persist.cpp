@@ -1,4 +1,4 @@
-#include "core/persist.h"
+#include "core/MaterialDTO.h"
 
 namespace Persist {
 

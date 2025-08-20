@@ -2,7 +2,8 @@
 
 #include <vector>
 #include <string>
-#include "core/persist.h"
+#include "core/MaterialDTO.h"
+#include "core/paths.h"
 #include "Material.h"
 #include "core.h"
 #include "comparison.h"

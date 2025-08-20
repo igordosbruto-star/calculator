@@ -1,6 +1,7 @@
 #include "finance/Repo.h"
 #include "finance/Serialize.h"
-#include "core/persist.h"
+#include "core/paths.h"
+#include "core/atomic_write.h"
 
 #include <algorithm>
 #include <chrono>

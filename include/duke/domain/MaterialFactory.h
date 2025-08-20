@@ -2,7 +2,7 @@
 
 #include <memory>
 #include "domain/MaterialBase.h"
-#include "core/persist.h"
+#include "core/MaterialDTO.h"
 namespace duke {
 
 // Factory para criar materiais a partir de um MaterialDTO

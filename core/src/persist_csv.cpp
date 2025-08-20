@@ -1,5 +1,16 @@
-#include "core/persist.h"
+#include "core/MaterialDTO.h"
 #include <sstream>
+#include <algorithm>
+#include <cctype>
+
+namespace {
+static std::string trim(std::string s) {
+    auto not_space = [](unsigned char c){ return !std::isspace(c); };
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), not_space));
+    s.erase(std::find_if(s.rbegin(), s.rend(), not_space).base(), s.end());
+    return s;
+}
+} // namespace
 
 namespace Persist {
 
@@ -45,7 +56,7 @@ bool loadCSV(const std::string& path, std::vector<MaterialDTO>& out,
     }
 
     auto parseNum = [](const std::string& s, double& outVal) -> bool {
-        std::string tmp = detail::trim(s);
+        std::string tmp = trim(s);
         for (auto& ch : tmp) if (ch == ',') ch = '.';
         try {
             size_t idx = 0;
@@ -76,8 +87,8 @@ bool loadCSV(const std::string& path, std::vector<MaterialDTO>& out,
         }
 
         MaterialDTO m;
-        m.nome = detail::trim(cols[0]);
-        m.tipo = detail::trim(cols[1]);
+        m.nome = trim(cols[0]);
+        m.tipo = trim(cols[1]);
         if (m.tipo.empty()) m.tipo = "linear";
         bool ok = parseNum(cols[2], m.valor) &&
                   parseNum(cols[3], m.largura) &&

@@ -6,7 +6,6 @@
 #include <iomanip>
 #include <sstream>
 
-namespace fs = std::filesystem;
 
 namespace finance {
 
@@ -44,7 +43,7 @@ std::string reportMes(const FinanceRepo& repo, int ano, int mes, std::ostream& o
     }
 
     std::string csvPath = "out/finance/" + anoStr + "-" + mesStr + "-report.csv";
-    fs::create_directories(fs::path(csvPath).parent_path());
+    std::filesystem::create_directories(std::filesystem::path(csvPath).parent_path());
     std::ofstream csv(csvPath);
     csv << "Data,Tipo,Subtipo,Descricao,Valor,Conta\n";
     for (const auto& l : itens) {

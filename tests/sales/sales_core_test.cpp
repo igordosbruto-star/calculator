@@ -1,5 +1,6 @@
 #include "duke/ApplicationCore.h"
-#include "core/persist.h"
+#include "core/MaterialDTO.h"
+#include "core/paths.h"
 #include <filesystem>
 #include <vector>
 #include <cassert>

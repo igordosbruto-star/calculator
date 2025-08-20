@@ -1,7 +1,10 @@
-#include "core/persist.h"
+#include "core/MaterialDTO.h"
 #include "duke/Material.h"
+#include "duke/error.h"
 #include <cassert>
 #include <stdexcept>
+
+using duke::ErrorCode;
 
 // Testa Persist::validar para tipos de material
 void testValidarMaterialPorTipo() {

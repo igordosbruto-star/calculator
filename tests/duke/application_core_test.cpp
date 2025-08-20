@@ -1,9 +1,10 @@
 #include "duke/ApplicationCore.h"
+#include "core/MaterialDTO.h"
+#include "core/paths.h"
 #include <cassert>
 #include <filesystem>
 #include <stdexcept>
 #include <type_traits>
-#include "core/persist.h"
 
 void test_application_core() {
     using namespace duke;
