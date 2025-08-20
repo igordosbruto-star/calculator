@@ -50,6 +50,50 @@ void MenuWidget::onInput(int idx) {
     }
 }
 
+MainMenuWidget::MainMenuWidget(std::vector<std::string> opts,
+                               std::vector<std::string> tooltips,
+                               std::vector<bool> required,
+                               std::function<void(int)> onSelect)
+    : m_opts(std::move(opts)),
+      m_tooltips(std::move(tooltips)),
+      m_required(std::move(required)),
+      m_onSelect(std::move(onSelect)) {
+    for (size_t i = 0; i < m_opts.size(); ++i) {
+        m_filteredIdx.push_back(static_cast<int>(i));
+    }
+}
+
+void MainMenuWidget::render(std::ostream& out) const {
+    for (size_t pos = 0; pos < m_filteredIdx.size(); ++pos) {
+        int i = m_filteredIdx[pos];
+        out << pos + 1 << ") " << m_opts[i];
+        if (i < static_cast<int>(m_required.size()) && m_required[i]) {
+            out << " *";
+        }
+        out << " - " << m_tooltips[i] << "\n";
+    }
+    out << "> ";
+}
+
+void MainMenuWidget::onInput(int idx) {
+    if (idx >= 1 && static_cast<size_t>(idx) <= m_filteredIdx.size()) {
+        if (m_onSelect) m_onSelect(m_filteredIdx[idx - 1]);
+    }
+}
+
+void MainMenuWidget::filter(const std::string& term) {
+    m_filteredIdx.clear();
+    for (size_t i = 0; i < m_opts.size(); ++i) {
+        std::string opt = m_opts[i];
+        std::string t = term;
+        for (auto& c : opt) c = static_cast<char>(std::tolower(c));
+        for (auto& c : t) c = static_cast<char>(std::tolower(c));
+        if (opt.find(t) != std::string::npos) {
+            m_filteredIdx.push_back(static_cast<int>(i));
+        }
+    }
+}
+
 BreadcrumbWidget::BreadcrumbWidget(const std::vector<std::string>& trail)
     : m_trail(trail) {}
 

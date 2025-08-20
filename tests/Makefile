@@ -49,15 +49,16 @@ else
 endif
   
   # --- Alvos unitários -------------------------------------------------
-production:
+production: $(LIB_CORE)
 ifeq ($(strip $(PROD_SRCS)),)
-	@echo "No production tests"
+		@echo "No production tests"
 else
-	@mkdir -p production
-	$(CXX) $(CXXFLAGS) $(PROD_SRCS) $(PROD_APP_SRCS) \
-		-Iproduction -I.. -I../include \
+		@mkdir -p production
+		$(CXX) $(CXXFLAGS) $(PROD_SRCS) $(PROD_APP_SRCS) \
+		-Iproduction -I.. -I../include -I../core/include \
+		$(LIB_CORE) \
 		-o production/run_tests
-	./production/run_tests
+		./production/run_tests
 endif
 
 sales: $(LIB_CALC) $(LIB_CORE)
@@ -73,12 +74,12 @@ else
 endif
 
 
-admin:
+admin: $(LIB_CORE)
 ifeq ($(strip $(ADMIN_SRCS)),)
-	@echo "No admin tests"
+		@echo "No admin tests"
 else
-	$(CXX) $(CXXFLAGS) $(ADMIN_SRCS) $(ADMIN_APP_SRCS) $(FIN_LIB_SRCS) -I.. -I../include -I../third_party -I../core/include -o admin/run_tests
-	./admin/run_tests
+		$(CXX) $(CXXFLAGS) $(ADMIN_SRCS) $(ADMIN_APP_SRCS) $(FIN_LIB_SRCS) -I.. -I../include -I../third_party -I../core/include $(LIB_CORE) -o admin/run_tests
+		./admin/run_tests
 endif
 
 designer:

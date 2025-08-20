@@ -3,6 +3,8 @@
 #include <sstream>
 #include "finance/Repo.h"
 #include "finance/SupplierRepo.h"
+#include "core/reports.h"
+#include <chrono>
 
 AdminApp::AdminApp() : repo_(new finance::FinanceRepo()) {
     repo_->load();
@@ -27,9 +29,15 @@ int AdminApp::run(int argc, char** argv) {
         handleSumTransactions(args);
     } else if (command == "suppliers") {
         handleSuppliers();
+    } else if (command == "report") {
+        handleReport(args);
     } else {
         std::cerr << "Unknown command: " << command << "\n";
         showHelp();
+    }
+    auto alerts = notifications_.dueAlerts(std::chrono::system_clock::now());
+    for (const auto& a : alerts) {
+        std::cout << "Alerta: entrega vencida para " << a << "\n";
     }
     return 0;
 }
@@ -40,6 +48,7 @@ void AdminApp::showHelp() const {
     std::cout << "  fin-list              List all financial transactions\n";
     std::cout << "  fin-sum <filters>     Sum transactions by criteria\n";
     std::cout << "  suppliers             Manage supplier catalogue\n";
+    std::cout << "  report <ano> <mes>    Generate consolidated report\n";
 }
 
 void AdminApp::handleAddTransaction(const std::vector<std::string>& args) {
@@ -105,5 +114,22 @@ void AdminApp::handleSuppliers() const {
     for (const auto& s : srepo.all()) {
         std::cout << s.id << " " << s.nome << "\n";
     }
+}
+
+
+void AdminApp::handleReport(const std::vector<std::string>& args) const {
+    if (args.size() < 2) {
+        std::cerr << "Usage: report <year> <month>\n";
+        return;
+    }
+    int year = std::stoi(args[0]);
+    int month = std::stoi(args[1]);
+    auto paths = core::reports::generateMonthlyReport(*repo_, year, month);
+    std::cout << "CSV: " << paths.first << "\nPDF: " << paths.second << "\n";
+}
+
+void AdminApp::addDeliveryDate(const std::string& id,
+                               std::chrono::system_clock::time_point due) {
+    notifications_.addDelivery(id, due);
 }
 

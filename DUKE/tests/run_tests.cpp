@@ -7,6 +7,7 @@ void test_importarCSV_ignore();
 void test_exportar_ignore();
 void test_parseArgs_unknown();
 void test_menu_key_widget_calls_core();
+void test_main_menu_widget_filter_and_select();
 void test_main_window_button_calls_bridge();
 
 int main() {
@@ -16,6 +17,7 @@ int main() {
     test_exportar_ignore();
     test_parseArgs_unknown();
     test_menu_key_widget_calls_core();
+    test_main_menu_widget_filter_and_select();
     test_main_window_button_calls_bridge();
     int gui_res = std::system("./gui_mainwindow.test");
     assert(gui_res == 0);
