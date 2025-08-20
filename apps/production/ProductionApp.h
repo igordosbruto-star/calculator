@@ -22,6 +22,7 @@ private:
     void handleListOrders() const;
     void handleStartOrder(const std::vector<std::string>& args);
     void handleFinishOrder(const std::vector<std::string>& args);
+    void handleReport(const std::vector<std::string>& args) const;
 
     duke::ApplicationCore* core_;
 
