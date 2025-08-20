@@ -30,6 +30,18 @@ make cli
 ./app
 ```
 
+### Interface gráfica
+
+Para compilar e executar a interface gráfica:
+
+```sh
+cd src/duke
+make gui        # gera app_gui
+./app_gui       # executa
+```
+
+Certifique-se de que o Qt 6 esteja instalado e que `pkg-config` consiga encontrá-lo.
+
 ## Documentação
 
 A documentação detalhada está disponível na pasta [`docs/`](docs/):
