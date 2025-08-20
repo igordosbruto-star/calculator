@@ -22,14 +22,12 @@ make
 ### Módulo principal `DUKE`
 
 ```sh
-cd third_party/DUKE
+cd src/duke
 make
 # opcional: gerar CLI
 make cli
-# opcional: gerar GUI
-make gui
-# executar GUI
-./app_gui
+# executar CLI
+./app
 ```
 
 ## Documentação
