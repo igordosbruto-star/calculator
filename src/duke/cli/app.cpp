@@ -195,9 +195,9 @@ void App::compararMateriais() {
 // ---------- Financeiro ----------
 
 void App::finAdicionar() {
-    finRepo.load();
+    core.carregarFinanceiro();
     finance::Lancamento l;
-    l.id = finRepo.nextId();
+    l.id = core.proximoIdLancamento();
     std::string tipo = ui::readString("Tipo: ");
     if (!tipo.empty()) l.tipo = finance::tipo_from_string(tipo);
     l.subtipo = ui::readString("Subtipo: ");
@@ -207,8 +207,7 @@ void App::finAdicionar() {
     std::string es = ui::readString("Entrada(E) ou Saida(S): ");
     l.entrada = !(es == "S" || es == "s");
     l.moeda = "BRL";
-    if (finRepo.add(l)) {
-        finRepo.save();
+    if (core.adicionarLancamento(l)) {
         wr::p("FIN", "Lancamento adicionado.", "Green");
     } else {
         wr::p("FIN", "Dados invalidos (valor >0 e data AAAA-MM-DD)", "Red");
@@ -216,8 +215,8 @@ void App::finAdicionar() {
 }
 
 void App::finListar() {
-    finRepo.load();
-    auto itens = finRepo.query({});
+    core.carregarFinanceiro();
+    auto itens = core.listarLancamentos({});
     for (const auto& l : itens) {
         std::cout << l.id << " | " << finance::to_string(l.tipo)
                   << " | " << l.subtipo << " | "
@@ -227,13 +226,13 @@ void App::finListar() {
 }
 
 void App::finSomar() {
-    finRepo.load();
+    core.carregarFinanceiro();
     finance::Filtro f;
     std::string ini = ui::readString("Data inicial (opcional): ");
     if (!ini.empty()) f.dt_ini = ini;
     std::string fim = ui::readString("Data final (opcional): ");
     if (!fim.empty()) f.dt_fim = fim;
-    double total = finRepo.sum(f);
+    double total = core.somarLancamentos(f);
     std::cout << "Total: " << total << "\n";
 }
 

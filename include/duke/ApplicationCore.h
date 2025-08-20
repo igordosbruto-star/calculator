@@ -7,6 +7,7 @@
 #include "core.h"
 #include "Customer.h"
 #include "Order.h"
+#include "finance/Repo.h"
 
 namespace duke {
 
@@ -61,12 +62,29 @@ public:
     // Consulta o estoque de materiais carregado.
     std::vector<MaterialDTO> listarEstoque() const;
 
+    // ----- APIs do módulo financeiro -----
+    // Carrega lançamentos financeiros do repositório padrão.
+    bool carregarFinanceiro();
+
+    // Gera próximo identificador de lançamento.
+    std::string proximoIdLancamento();
+
+    // Adiciona e persiste um novo lançamento financeiro.
+    bool adicionarLancamento(const finance::Lancamento& l);
+
+    // Lista lançamentos conforme filtros informados.
+    std::vector<finance::Lancamento> listarLancamentos(const finance::Filtro& f) const;
+
+    // Soma valores dos lançamentos filtrados.
+    double somarLancamentos(const finance::Filtro& f) const;
+
 private:
     std::vector<MaterialDTO> base_;
     std::vector<Material> mats_;
     std::vector<Customer> clientes_;
     std::vector<Order> pedidos_;
     int nextId_ = 1;
+    finance::FinanceRepo finRepo_;
 };
 
 } // namespace duke

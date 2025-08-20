@@ -8,7 +8,7 @@ CXXFLAGS += $(QT_CFLAGS)
 
 CORE_LIB = $(CORE_DIR)/libcore.a
 
-CLI_SRC := cli/app.cpp cli/args.cpp cli/parser.cpp cli/utils.cpp cli/commands.cpp
+CLI_SRC := cli/app.cpp cli/args.cpp cli/parser.cpp cli/utils.cpp cli/commands.cpp cli/processor.cpp
 FIN_SRC := $(wildcard ../finance/*.cpp)
 GUI_MAIN := gui/main_qt.cpp
 GUI_SRC := $(filter-out $(GUI_MAIN),$(wildcard gui/*.cpp))

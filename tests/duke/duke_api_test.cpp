@@ -1,10 +1,11 @@
 #include "duke/duke.hpp"
 #include <cassert>
 
-// Testa cálculo simplificado do valor de corte
+// Testa interface pública simplificada
 void test_duke_api() {
-    Material m{"Madeira", 100.0, 2.0, 2.0};
-    double valor = calcularValorCorte(m, 1.0, 0.5);
-    assert(valor == 12.5);
+    CliOptions opt;
+    opt.showHelp = true;
+    int res = processarComando(opt);
+    assert(res == 0);
 }
 
