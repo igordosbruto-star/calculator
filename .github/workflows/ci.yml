@@ -23,6 +23,5 @@ jobs:
 
       - name: Test
         run: |
-          cd third_party/DUKE
+          export QT_QPA_PLATFORM=offscreen
           make -C tests
-          ./tests/run_tests

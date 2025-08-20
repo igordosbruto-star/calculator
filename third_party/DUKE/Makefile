@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -fPIC
-CORE_DIR = ../core
-INCLUDES = -Iinclude -I../include -I../third_party -I$(CORE_DIR)/include
+CORE_DIR = ../../core
+INCLUDES = -Iinclude -I../../include -I../../third_party -I$(CORE_DIR)/include
 QT_CFLAGS := $(shell pkg-config --cflags Qt6Widgets)
 QT_LIBS := $(shell pkg-config --libs Qt6Widgets)
 CXXFLAGS += $(QT_CFLAGS)
@@ -10,11 +10,11 @@ CORE_LIB = $(CORE_DIR)/libcore.a
 
 CLI_SRC := src/cli/app.cpp src/cli/args.cpp src/cli/parser.cpp src/cli/utils.cpp src/cli/commands.cpp
 GUI_MAIN = src/gui/main_qt.cpp
-FIN_SRC := $(wildcard ../src/finance/*.cpp)
+FIN_SRC := $(wildcard ../../src/finance/*.cpp)
 SRC := $(wildcard src/*.cpp) $(CLI_SRC) \
        $(wildcard src/domain/*.cpp) $(wildcard src/custo/*.cpp) \
        $(wildcard src/ui/*.cpp) $(wildcard src/gui/*.cpp) $(FIN_SRC)
-LIB_SRC := $(filter-out src/main.cpp,$(SRC))
+LIB_SRC := $(filter-out src/main.cpp src/gui/main_qt.cpp,$(SRC))
 OBJ := $(LIB_SRC:.cpp=.o)
 
 all: libduke.a libduke.so
