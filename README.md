@@ -59,6 +59,7 @@ A documentação detalhada está disponível na pasta [`docs/`](docs/):
 - [Visão geral de uso](docs/USAGE.md)
 - [Descrição dos módulos](docs/MODULES.md)
 - [Roadmap](docs/ROADMAP.md)
+- [Changelog](docs/CHANGELOG.md)
 
 ## Módulos
 
