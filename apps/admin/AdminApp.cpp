@@ -1,6 +1,8 @@
 #include "AdminApp.h"
 #include <iostream>
+#include <sstream>
 #include "finance/Repo.h"
+#include "finance/SupplierRepo.h"
 
 AdminApp::AdminApp() : repo_(new finance::FinanceRepo()) {
     repo_->load();
@@ -41,22 +43,67 @@ void AdminApp::showHelp() const {
 }
 
 void AdminApp::handleAddTransaction(const std::vector<std::string>& args) {
-    std::cout << "Adding transaction...\n";
-    // TODO: parse arguments and call repo_->add(...)
+    if (args.size() < 2) {
+        std::cerr << "Uso: fin-add <descricao> <valor> [entrada|saida]\n";
+        return;
+    }
+    finance::Lancamento l;
+    l.id = repo_->nextId();
+    l.tipo = finance::Tipo::Outros;
+    l.subtipo.clear();
+    l.descricao = args[0];
+    std::stringstream ss(args[1]);
+    ss >> l.valor;
+    if (!ss || l.valor <= 0.0) {
+        std::cerr << "Valor invalido\n";
+        return;
+    }
+    l.moeda = "BRL";
+    l.data = l.id.substr(4, 10);
+    l.entrada = true;
+    if (args.size() >= 3) {
+        if (args[2] == "saida") l.entrada = false;
+    }
+    l.projeto_id.clear();
+    l.conta.clear();
+    l.tags.clear();
+    if (!repo_->add(l)) {
+        std::cerr << "Falha ao adicionar lancamento\n";
+        return;
+    }
+    if (!repo_->save()) {
+        std::cerr << "Falha ao salvar\n";
+        return;
+    }
+    std::cout << "Adicionado " << l.id << "\n";
 }
 
 void AdminApp::handleListTransactions() const {
-    std::cout << "Listing transactions...\n";
-    // TODO: iterate over repo_ entries
+    auto vec = repo_->query(finance::Filtro{});
+    for (const auto& l : vec) {
+        std::cout << l.id << " " << l.descricao << " "
+                  << (l.entrada ? "+" : "-") << l.valor << "\n";
+    }
 }
 
 void AdminApp::handleSumTransactions(const std::vector<std::string>& args) const {
-    std::cout << "Summing transactions...\n";
-    // TODO: call repo_->sum(...) with filters
+    finance::Filtro f;
+    if (!args.empty()) {
+        if (args[0] == "entrada") f.entrada = true;
+        else if (args[0] == "saida") f.entrada = false;
+    }
+    double total = repo_->sum(f);
+    std::cout << "Total: " << total << "\n";
 }
 
 void AdminApp::handleSuppliers() const {
-    std::cout << "Managing suppliers...\n";
-    // TODO: implement supplier management
+    finance::SupplierRepo srepo;
+    if (!srepo.load()) {
+        std::cout << "Nenhum fornecedor cadastrado\n";
+        return;
+    }
+    for (const auto& s : srepo.all()) {
+        std::cout << s.id << " " << s.nome << "\n";
+    }
 }
 
