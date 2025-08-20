@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -fPIC
 CORE_DIR = ../../core
-INCLUDES = -I../../include -I../../include/duke -I../../third_party -I$(CORE_DIR)/include
+INCLUDES = -I../../include -I../../include/duke -I../../third_party/nlohmann -I$(CORE_DIR)/include
 QT_CFLAGS := $(shell pkg-config --cflags Qt6Widgets 2>/dev/null)
 QT_LIBS := $(shell pkg-config --libs Qt6Widgets 2>/dev/null)
 CXXFLAGS += $(QT_CFLAGS)
