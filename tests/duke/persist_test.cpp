@@ -1,4 +1,4 @@
-#include "core/persist.h"
+#include "core/MaterialDTO.h"
 #include <cassert>
 
 // Testa validacao antes de salvar materiais

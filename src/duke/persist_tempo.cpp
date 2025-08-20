@@ -1,12 +1,12 @@
 #include "persist/tempo.hpp"
-#include "core/persist.h"
+#include "core/paths.h"
+#include "core/atomic_write.h"
 
 #include <filesystem>
 #include <fstream>
 namespace duke {
 
 using nlohmann::json;
-namespace fs = std::filesystem;
 
 // Atualiza JSON de template de tempo se necessário
 static bool upgradeIfNeeded(json& j) {
@@ -28,7 +28,7 @@ using ::Persist::atomicWrite;
 
 bool loadTempoTemplate(const std::string& nome, std::vector<Operacao>& out) {
     try {
-        const fs::path p = fs::path(dataPath("templates/tempos/" + nome + ".json"));
+        const std::filesystem::path p = std::filesystem::path(dataPath("templates/tempos/" + nome + ".json"));
         std::ifstream f(p);
         if (!f) {
             wr::p("PERSIST", p.string() + " open fail", "Red");

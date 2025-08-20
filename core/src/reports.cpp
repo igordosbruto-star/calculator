@@ -5,7 +5,6 @@
 #include <iomanip>
 #include <sstream>
 
-namespace fs = std::filesystem;
 
 namespace core {
 namespace reports {
@@ -41,7 +40,7 @@ std::pair<std::string, std::string> generateMonthlyReport(const finance::Finance
     std::string ano = fourDigits(year);
     std::string mes = twoDigits(month);
     std::string base = "out/reports/" + ano + "-" + mes;
-    fs::create_directories(fs::path(base).parent_path());
+    std::filesystem::create_directories(std::filesystem::path(base).parent_path());
 
     std::string csvPath = base + ".csv";
     std::ofstream csv(csvPath);

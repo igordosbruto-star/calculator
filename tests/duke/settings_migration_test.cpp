@@ -1,4 +1,6 @@
-#include "core/persist.h"
+#include "core/Settings.h"
+#include "core/paths.h"
+#include "core/atomic_write.h"
 #include <cassert>
 #include <filesystem>
 #include <fstream>

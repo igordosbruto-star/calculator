@@ -1,4 +1,5 @@
-#include "core/persist.h"
+#include "core/MaterialDTO.h"
+#include "core/paths.h"
 #include <cassert>
 #include <filesystem>
 

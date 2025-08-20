@@ -1,6 +1,6 @@
 #include <cassert>
 #include <filesystem>
-#include "core/persist.h"
+#include "core/paths.h"
 #include <cstdlib>
 
 // Testa dataPath com diretório padrão, ambiente e parâmetro explícito

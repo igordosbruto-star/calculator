@@ -1,5 +1,7 @@
 #include "persist.hpp"
-#include "core/persist.h" // para atomicWrite e utilidades
+#include "core/MaterialDTO.h"
+#include "core/atomic_write.h"
+#include "core/paths.h" // para atomicWrite e utilidades
 
 #include <chrono>
 #include <ctime>
@@ -12,7 +14,6 @@
 #include <system_error>
 namespace duke {
 
-namespace fs = std::filesystem;
 
 namespace Persist {
 using ::Persist::atomicWrite;
@@ -53,9 +54,9 @@ std::string makeId(const std::string& projeto) {
 
 std::string outPlanosDirFor(const std::string& projeto, const std::string& id) {
     (void)projeto; // id já contém o nome do projeto
-    const fs::path dir = fs::path("out") / "planos" / id;
+    const std::filesystem::path dir = std::filesystem::path("out") / "planos" / id;
     std::error_code ec;
-    bool created = fs::create_directories(dir, ec);
+    bool created = std::filesystem::create_directories(dir, ec);
     if (ec) {
         wr::p("PERSIST", dir.string() + " create fail: " + ec.message(), "Red");
     } else if (created) {
@@ -65,7 +66,7 @@ std::string outPlanosDirFor(const std::string& projeto, const std::string& id) {
 }
 
 bool savePlanoJSON(const std::string& dir, const PlanoCorteDTO& plano) {
-    const fs::path p = fs::path(dir) / "plano.json";
+    const std::filesystem::path p = std::filesystem::path(dir) / "plano.json";
     try {
         json j = plano;
         return atomicWrite(p, j.dump(2));
@@ -79,7 +80,7 @@ bool savePlanoJSON(const std::string& dir, const PlanoCorteDTO& plano) {
 }
 
 bool savePlanoCSV(const std::string& dir, const PlanoCorteDTO& plano) {
-    const fs::path p = fs::path(dir) / "plano.csv";
+    const std::filesystem::path p = std::filesystem::path(dir) / "plano.csv";
     try {
         std::ostringstream oss;
         oss << "nome;largura_m;comprimento_m;porm2;area_m2;valor;rot90\n";
@@ -106,7 +107,7 @@ bool savePlanoCSV(const std::string& dir, const PlanoCorteDTO& plano) {
 
 // Lê o JSON indicado e preenche `out` com os dados do plano
 bool loadPlanoJSON(const std::string& file, PlanoCorteDTO& out) {
-    const fs::path p = file;
+    const std::filesystem::path p = file;
     try {
         std::ifstream f(p);
         if (!f) {
@@ -126,11 +127,11 @@ bool loadPlanoJSON(const std::string& file, PlanoCorteDTO& out) {
 }
 
 bool updateIndex(const PlanoCorteDTO& plano) {
-    const fs::path indexPath = fs::path("out") / "planos" / "index.json";
+    const std::filesystem::path indexPath = std::filesystem::path("out") / "planos" / "index.json";
     try {
         if (!indexPath.parent_path().empty()) {
             std::error_code ec;
-            bool created = fs::create_directories(indexPath.parent_path(), ec);
+            bool created = std::filesystem::create_directories(indexPath.parent_path(), ec);
             if (ec) {
                 wr::p("PERSIST", indexPath.parent_path().string() + " create fail: " + ec.message(), "Red");
             } else if (created) {
@@ -139,7 +140,7 @@ bool updateIndex(const PlanoCorteDTO& plano) {
         }
 
         json j;
-        if (fs::exists(indexPath)) {
+        if (std::filesystem::exists(indexPath)) {
             std::ifstream f(indexPath);
             if (f) {
                 try {
@@ -182,7 +183,7 @@ bool updateIndex(const PlanoCorteDTO& plano) {
 }
 
 bool loadIndex(std::vector<PlanoIndexEntry>& out) {
-    const fs::path indexPath = fs::path("out") / "planos" / "index.json";
+    const std::filesystem::path indexPath = std::filesystem::path("out") / "planos" / "index.json";
     try {
         std::ifstream f(indexPath);
         if (!f) return false;

@@ -1,7 +1,31 @@
-#include "core/persist.h"
+#include "core/MaterialDTO.h"
 #include <nlohmann/json.hpp>
 
 using nlohmann::json;
+
+namespace {
+bool upgradeIfNeeded(json& j) {
+    bool upgraded = false;
+    if (!j.contains("schema_version")) {
+        int v = 1;
+        if (j.contains("version")) v = j["version"].get<int>();
+        j["schema_version"] = v;
+        j.erase("version");
+        upgraded = true;
+    }
+    if (!j.contains("materiais") || !j["materiais"].is_array()) {
+        j["materiais"] = json::array();
+        upgraded = true;
+    }
+    for (auto& item : j["materiais"]) {
+        if (!item.contains("tipo") || !item["tipo"].is_string() || item["tipo"].get<std::string>().empty()) {
+            item["tipo"] = "linear";
+            upgraded = true;
+        }
+    }
+    return upgraded;
+}
+} // namespace
 
 namespace Persist {
 
@@ -30,7 +54,7 @@ bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out,
     }
     try {
         json j; f >> j;
-        bool migrated = mater::upgradeIfNeeded(j);
+        bool migrated = upgradeIfNeeded(j);
         int schemaVersion = j.value("schema_version", 1);
         if (out_schema_version) *out_schema_version = schemaVersion;
         if (j.contains("materiais") && j["materiais"].is_array()) {

@@ -1,5 +1,6 @@
 #include "finance/SupplierRepo.h"
-#include "core/persist.h"
+#include "core/paths.h"
+#include "core/atomic_write.h"
 
 #include <fstream>
 #include <nlohmann/json.hpp>

@@ -1,12 +1,12 @@
 #include "persist/projeto.hpp"
-#include "core/persist.h"
+#include "core/paths.h"
+#include "core/atomic_write.h"
 
 #include <filesystem>
 #include <fstream>
 namespace duke {
 
 using nlohmann::json;
-namespace fs = std::filesystem;
 
 // Atualiza JSON de projeto se necessário
 static bool upgradeIfNeeded(json& j) {
@@ -86,12 +86,12 @@ static void jsonToProjeto(const json& j, Projeto& p) {
     }
 }
 
-static fs::path projetoPath(const std::string& id) {
-    return fs::path(::Persist::dataPath("projetos/" + id + "/projeto.json"));
+static std::filesystem::path projetoPath(const std::string& id) {
+    return std::filesystem::path(::Persist::dataPath("projetos/" + id + "/projeto.json"));
 }
 
-static fs::path indexPath() {
-    return fs::path(::Persist::dataPath("projetos/index.json"));
+static std::filesystem::path indexPath() {
+    return std::filesystem::path(::Persist::dataPath("projetos/index.json"));
 }
 
 bool Persist::saveProjetoJSON(const Projeto& projeto) {
@@ -101,7 +101,7 @@ bool Persist::saveProjetoJSON(const Projeto& projeto) {
         if (!::Persist::atomicWrite(projetoPath(projeto.id), j.dump(2))) return false;
 
         json idx;
-        if (fs::exists(indexPath())) {
+        if (std::filesystem::exists(indexPath())) {
             std::ifstream f(indexPath());
             if (f) { try { f >> idx; } catch (...) { idx = json{}; } }
         }
@@ -149,7 +149,7 @@ bool Persist::loadProjetoJSON(const std::string& id, Projeto& out) {
 std::vector<std::string> Persist::listarProjetos() {
     std::vector<std::string> ids;
     try {
-        if (!fs::exists(indexPath())) return ids;
+        if (!std::filesystem::exists(indexPath())) return ids;
         std::ifstream f(indexPath());
         if (!f) return ids;
         json j; f >> j;
@@ -165,9 +165,9 @@ std::vector<std::string> Persist::listarProjetos() {
 bool Persist::deleteProjeto(const std::string& id) {
     bool ok = true;
     try {
-        fs::remove_all(fs::path(::Persist::dataPath("projetos/" + id)));
+        std::filesystem::remove_all(std::filesystem::path(::Persist::dataPath("projetos/" + id)));
         json idx;
-        if (fs::exists(indexPath())) {
+        if (std::filesystem::exists(indexPath())) {
             std::ifstream f(indexPath());
             if (f) { try { f >> idx; } catch (...) { idx = json{}; } }
         }

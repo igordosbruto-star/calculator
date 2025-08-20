@@ -1,6 +1,7 @@
 #include "duke/domain/Tempo.h"
 #include "duke/persist/tempo.hpp"
-#include "core/persist.h"
+#include "core/paths.h"
+#include "core/atomic_write.h"
 #include <cassert>
 #include <filesystem>
 

@@ -1,5 +1,6 @@
 #include <finance/Repo.h>
-#include <core/persist.h>
+#include <core/paths.h>
+#include <core/atomic_write.h>
 #include <cassert>
 #include <fstream>
 #include <filesystem>
