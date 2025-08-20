@@ -1,4 +1,4 @@
-CXX = g++
+	CXX = g++
 CXXFLAGS = -std=c++17 -Wall -DUNIT_TEST
 
 CORE_DIR = ../core
@@ -11,9 +11,11 @@ CALC_SRCS := $(wildcard duke/*.cpp)
 CORE_SRCS := $(wildcard core/*.cpp)
 FIN_SRCS := $(wildcard finance/*.cpp)
 FIN_LIB_SRCS := $(wildcard ../src/finance/*.cpp)
+DES_SRCS := $(wildcard designer/*.cpp)
+PROD_LIB_SRCS := $(wildcard ../src/production/*.cpp)
 
-.PHONY: all duke core finance clean
-all: duke core finance
+.PHONY: all duke core finance designer clean
+all: duke core finance designer
 
 duke: $(LIB_CALC) $(LIB_CORE)
 ifeq ($(strip $(CALC_SRCS)),)
@@ -42,6 +44,15 @@ else
 	./finance/run_tests
 endif
 
+designer:
+ifeq ($(strip $(DES_SRCS)),)
+	@echo "No designer tests"
+else
+	$(CXX) $(CXXFLAGS) $(DES_SRCS) ../apps/designer/DesignerApp.cpp $(PROD_LIB_SRCS) \
+	-I../apps/designer -I../include -I../third_party -o designer/run_tests
+	./designer/run_tests
+endif
+
 $(LIB_CALC):
 	$(MAKE) -C $(CALC_DIR) libduke.a
 
@@ -49,4 +60,4 @@ $(LIB_CORE):
 	$(MAKE) -C $(CORE_DIR) libcore.a
 
 clean:
-	rm -f duke/run_tests core/run_tests finance/run_tests
+	rm -f duke/run_tests core/run_tests finance/run_tests designer/run_tests
