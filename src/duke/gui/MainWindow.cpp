@@ -23,7 +23,8 @@ MainWindow::MainWindow(gui::GuiBridge* bridge,
       m_layout(layout),
       m_selectButton(selectButton),
       m_searchField(nullptr),
-      m_menuBar(nullptr) {
+      m_menuBar(nullptr),
+      m_menu(nullptr) {
     // cria sizer vertical se não informado
     if (!m_layout) {
         m_layout = new wxBoxSizer(wxVERTICAL);
@@ -51,11 +52,13 @@ MainWindow::MainWindow(gui::GuiBridge* bridge,
     if (!m_selectButton) {
         m_selectButton = new wxButton(m_centralPanel, wxID_ANY, "Selecionar");
     }
+    m_selectButton->SetToolTip("Confirmar seleção");
     panelSizer->Add(m_selectButton, 0, wxEXPAND | wxALL, 5);
 
     // menu principal com itens
     m_menuBar = new wxMenuBar();
     SetMenuBar(m_menuBar);
+    m_menu = new wxMenu();
     const std::vector<std::pair<wxString, wxString>> menus{
         {"Clientes", "Gerenciar clientes"},
         {"Vendas", "Registrar vendas"},
@@ -64,10 +67,10 @@ MainWindow::MainWindow(gui::GuiBridge* bridge,
         {"Relatórios", "Visualizar relatórios"},
         {"Configurações", "Preferências do sistema"}};
     for (const auto& m : menus) {
-        wxMenu* menu = new wxMenu();
-        m_menuBar->Append(menu, m.first);
-        m_menus.push_back({menu, m.first});
+        wxMenuItem* item = m_menu->Append(wxID_ANY, m.first, m.second);
+        m_menuItems.push_back(item);
     }
+    m_menuBar->Append(m_menu, "&Menu");
 }
 
 void MainWindow::OnSearchFieldText(wxCommandEvent& evt) {
@@ -78,12 +81,10 @@ void MainWindow::OnSearchFieldText(wxCommandEvent& evt) {
         m_searchField->SetBackgroundColour(wxNullColour);
     }
     m_searchField->Refresh();
-    for (auto& pair : m_menus) {
-        int pos = m_menuBar->FindMenu(pair.second);
-        if (pos != wxNOT_FOUND) {
-            bool vis = pair.second.Lower().Find(txt.Lower()) != wxNOT_FOUND;
-            m_menuBar->EnableTop(pos, vis);
-        }
+    for (auto* item : m_menuItems) {
+        bool vis = item->GetItemLabelText().Lower().Find(txt.Lower()) != wxNOT_FOUND;
+        item->Enable(vis);
+        item->Show(vis);
     }
 }
 

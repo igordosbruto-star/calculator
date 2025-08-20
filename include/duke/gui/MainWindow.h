@@ -11,6 +11,7 @@ class wxButton;
 class wxTextCtrl;
 class wxMenuBar;
 class wxMenu;
+class wxMenuItem;
 class wxCommandEvent;
 
 #include "gui/GuiBridge.h"
@@ -48,7 +49,8 @@ private:
     wxButton* m_selectButton;
     wxTextCtrl* m_searchField;
     wxMenuBar* m_menuBar;
-    std::vector<std::pair<wxMenu*, wxString>> m_menus;
+    wxMenu* m_menu;
+    std::vector<wxMenuItem*> m_menuItems;
 };
 
 } // namespace gui
