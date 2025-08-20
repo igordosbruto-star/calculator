@@ -8,15 +8,14 @@
 
 // Testa criação de pedido
 void test_criar_pedido() {
-    using namespace duke;
     std::filesystem::remove_all("tmp_sales");
     Persist::Config cfg; cfg.baseDir = "tmp_sales"; Persist::setConfig(cfg);
     std::vector<MaterialDTO> mats{{"Prod", 10.0, 1.0, 1.0, "linear"}};
     Persist::save("materiais.json", mats);
-    std::vector<Customer> clientes{Customer{"Ana"}};
+    std::vector<duke::Customer> clientes{duke::Customer{"Ana"}};
     Persist::saveJSONVec("clientes.json", clientes, "clientes");
 
-    ApplicationCore core;
+    duke::ApplicationCore core;
     core.carregar();
     assert(core.criarPedido("Ana", "Prod", 1));
     auto pedidos = core.listarPedidos();
@@ -27,14 +26,13 @@ void test_criar_pedido() {
 
 // Testa listagem de clientes
 void test_listar_clientes() {
-    using namespace duke;
     std::filesystem::remove_all("tmp_sales_cli");
     Persist::Config cfg; cfg.baseDir = "tmp_sales_cli"; Persist::setConfig(cfg);
-    std::vector<Customer> clientes{Customer{"Bia"}, Customer{"Carlos"}};
+    std::vector<duke::Customer> clientes{duke::Customer{"Bia"}, duke::Customer{"Carlos"}};
     Persist::saveJSONVec("clientes.json", clientes, "clientes");
     Persist::save("materiais.json", std::vector<MaterialDTO>{{"X",1,1,1,"linear"}});
 
-    ApplicationCore core; core.carregar();
+    duke::ApplicationCore core; core.carregar();
     auto lista = core.listarClientes();
     assert(lista.size() == 2);
     assert(lista[0].nome == "Bia");
@@ -43,13 +41,12 @@ void test_listar_clientes() {
 
 // Testa consulta de estoque
 void test_consulta_estoque() {
-    using namespace duke;
     std::filesystem::remove_all("tmp_sales_inv");
     Persist::Config cfg; cfg.baseDir = "tmp_sales_inv"; Persist::setConfig(cfg);
     std::vector<MaterialDTO> mats{{"Estoque", 5.0, 1.0, 1.0, "linear"}};
     Persist::save("materiais.json", mats);
 
-    ApplicationCore core; core.carregar();
+    duke::ApplicationCore core; core.carregar();
     static_assert(std::is_same_v<decltype(core.listarEstoque()), const std::vector<MaterialDTO>&>);
     const auto& estoque = core.listarEstoque();
     auto copia = estoque;
@@ -62,13 +59,12 @@ void test_consulta_estoque() {
 
 // Testa rejeição de entradas inválidas ao criar pedido
 void test_pedido_invalido() {
-    using namespace duke;
     std::filesystem::remove_all("tmp_sales_bad");
     Persist::Config cfg; cfg.baseDir = "tmp_sales_bad"; Persist::setConfig(cfg);
     Persist::save("materiais.json", std::vector<MaterialDTO>{{"Prod", 1,1,1,"linear"}});
-    Persist::saveJSONVec("clientes.json", std::vector<Customer>{Customer{"Ana"}}, "clientes");
+    Persist::saveJSONVec("clientes.json", std::vector<duke::Customer>{duke::Customer{"Ana"}}, "clientes");
 
-    ApplicationCore core; core.carregar();
+    duke::ApplicationCore core; core.carregar();
     assert(!core.criarPedido("", "Prod", 1));
     assert(!core.criarPedido("Ana", "", 1));
     assert(!core.criarPedido("Ana", "Prod", 0));
