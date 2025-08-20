@@ -45,7 +45,7 @@ Compara materiais pelos IDs informados.
 
 ## Configuração do VS Code
 
-Execute `start.bat` para gerar os arquivos de configuração do VS Code.
+Execute `scripts/start.bat` para gerar os arquivos de configuração do VS Code.
 Antes da criação desses arquivos, o script verifica se `g++`, `make` e `gdb`
 estão instalados. Caso alguma dependência não seja encontrada, a execução é
 interrompida com uma mensagem de erro.

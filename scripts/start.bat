@@ -1,6 +1,6 @@
 @echo off
 setlocal
-call check_dependencies.bat || exit /b 1
+call "%~dp0check_dependencies.bat" || exit /b 1
 
 set "VSCODE_DIR=.vscode"
 
