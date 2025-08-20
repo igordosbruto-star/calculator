@@ -2,6 +2,8 @@
 
 #include <string>
 #include <vector>
+#include <chrono>
+#include "core/notifications.h"
 
 // Forward declarations to avoid heavy includes.  The implementation will
 // include the necessary headers from the existing DUKE codebase (such as
@@ -21,6 +23,9 @@ public:
     // appropriate subcommands.
     int run(int argc, char** argv);
 
+    void addDeliveryDate(const std::string& id,
+                         std::chrono::system_clock::time_point due);
+
 private:
     // Implementation helpers
     void showHelp() const;
@@ -32,5 +37,6 @@ private:
     // Pointer to core application logic.  This object will be used to
     // load materials, customers and persist changes.
     duke::ApplicationCore* core_;
+    core::NotificationService notifications_;
 };
 

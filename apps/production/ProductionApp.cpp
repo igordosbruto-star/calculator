@@ -4,6 +4,7 @@
 #include "ApplicationCore.h"
 #include "finance/Repo.h"
 #include "core/reports.h"
+#include <chrono>
 
 ProductionApp::ProductionApp() : core_(new duke::ApplicationCore()) {
     // Carrega dados básicos (stubbed na versão de testes)
@@ -60,6 +61,10 @@ int ProductionApp::run(int argc, char** argv) {
     } else {
         std::cerr << "Unknown command: " << command << "\n";
         showHelp();
+    }
+    auto alerts = notifications_.dueAlerts(std::chrono::system_clock::now());
+    for (const auto& a : alerts) {
+        std::cout << "Alerta: entrega vencida para " << a << "\n";
     }
     return 0;
 }
@@ -158,5 +163,10 @@ void ProductionApp::handleReport(const std::vector<std::string>& args) const {
     repo.load();
     auto paths = core::reports::generateMonthlyReport(repo, year, month);
     std::cout << "CSV: " << paths.first << "\nPDF: " << paths.second << "\n";
+}
+
+void ProductionApp::addDeliveryDate(const std::string& id,
+                                    std::chrono::system_clock::time_point due) {
+    notifications_.addDelivery(id, due);
 }
 
