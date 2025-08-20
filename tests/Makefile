@@ -11,17 +11,16 @@ CALC_SRCS := $(wildcard duke/*.cpp)
 CORE_SRCS := $(wildcard core/*.cpp)
 FIN_SRCS := $(wildcard finance/*.cpp)
 FIN_LIB_SRCS := $(wildcard ../src/finance/*.cpp)
+SALES_SRCS := $(wildcard sales/*.cpp)
 
-.PHONY: all duke core finance clean
-all: duke core finance
+.PHONY: all duke core finance sales clean
+all: duke core finance sales
 
 duke: $(LIB_CALC) $(LIB_CORE)
 ifeq ($(strip $(CALC_SRCS)),)
 	@echo "No DUKE tests"
 else
-	$(CXX) $(CXXFLAGS) -include duke/namespace.h \
-		$(CALC_SRCS) -I$(CALC_DIR)/include -I../include -I../third_party -I$(CORE_DIR)/include \
-		$(LIB_CALC) $(LIB_CORE) -o duke/run_tests
+	$(CXX) $(CXXFLAGS) -include duke/namespace.h $(CALC_SRCS) -I$(CALC_DIR)/include -I../include -I../third_party -I$(CORE_DIR)/include $(LIB_CALC) $(LIB_CORE) -o duke/run_tests
 	./duke/run_tests
 endif
 
@@ -29,8 +28,7 @@ core: $(LIB_CORE)
 ifeq ($(strip $(CORE_SRCS)),)
 	@echo "No core tests"
 else
-	$(CXX) $(CXXFLAGS) $(CORE_SRCS) -I$(CORE_DIR)/include \
-		$(LIB_CORE) -o core/run_tests
+	$(CXX) $(CXXFLAGS) $(CORE_SRCS) -I$(CORE_DIR)/include $(LIB_CORE) -o core/run_tests
 	./core/run_tests
 endif
 
@@ -42,6 +40,14 @@ else
 	./finance/run_tests
 endif
 
+sales: $(LIB_CALC) $(LIB_CORE)
+ifeq ($(strip $(SALES_SRCS)),)
+	@echo "No sales tests"
+else
+	$(CXX) $(CXXFLAGS) $(SALES_SRCS) -I$(CALC_DIR)/include -I../include -I../third_party -I$(CORE_DIR)/include $(LIB_CALC) $(LIB_CORE) -o sales/run_tests
+	./sales/run_tests
+endif
+
 $(LIB_CALC):
 	$(MAKE) -C $(CALC_DIR) libduke.a
 
@@ -49,4 +55,4 @@ $(LIB_CORE):
 	$(MAKE) -C $(CORE_DIR) libcore.a
 
 clean:
-	rm -f duke/run_tests core/run_tests finance/run_tests
+	rm -f duke/run_tests core/run_tests finance/run_tests sales/run_tests

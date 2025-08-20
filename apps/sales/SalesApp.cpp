@@ -41,17 +41,30 @@ void SalesApp::showHelp() const {
 }
 
 void SalesApp::handleNewOrder(const std::vector<std::string>& args) {
-    // TODO: Implement order creation by interacting with ApplicationCore
-    std::cout << "Creating a new order...\n";
+    // Espera: new-order <cliente> <item> <quantidade>
+    if (args.size() < 3) {
+        std::cerr << "Uso: new-order <cliente> <item> <quantidade>\n";
+        return;
+    }
+    int qtd = std::stoi(args[2]);
+    if (core_->criarPedido(args[0], args[1], qtd)) {
+        std::cout << "Pedido criado com sucesso.\n";
+    } else {
+        std::cerr << "Falha ao criar pedido.\n";
+    }
 }
 
 void SalesApp::handleListCustomers() const {
-    // TODO: Retrieve and display customers from ApplicationCore
-    std::cout << "Listing customers...\n";
+    auto clientes = core_->listarClientes();
+    for (const auto& c : clientes) {
+        std::cout << "- " << c.nome << "\n";
+    }
 }
 
 void SalesApp::handleInventory() const {
-    // TODO: Show stock of finished products
-    std::cout << "Showing inventory...\n";
+    auto estoque = core_->listarEstoque();
+    for (const auto& m : estoque) {
+        std::cout << "- " << m.nome << " (R$" << m.valor << ")\n";
+    }
 }
 
