@@ -25,6 +25,7 @@ O DUKE evoluirá em etapas para oferecer mais flexibilidade e confiabilidade.
 
 - [ ] [P2] Implementar sistema de alertas de prazos e reposição de materiais.
 - [ ] [P3] Garantir comunicação de notificações entre módulos.
+- [ ] [P3] Importar listas de preços externas e comparar automaticamente.
 
 ## Concluído
 
