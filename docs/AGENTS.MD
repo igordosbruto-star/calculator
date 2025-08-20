@@ -20,7 +20,7 @@
 - Verificar `CHECKLIST.md` e marcar entradas
 - Compilar com:
   ```sh
-  g++ -std=c++17 -Wall src/*.cpp -Iinclude -I../third_party -o app
+  g++ -std=c++17 -Wall src/*.cpp -Iinclude -Ithird_party -o app
   ```
 - Executar testes com: ./tests/run_tests
 - Commits no padrão Conventional Commits (`feat:`, `fix:`, `chore:`)
