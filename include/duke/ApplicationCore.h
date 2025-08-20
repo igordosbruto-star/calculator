@@ -74,6 +74,7 @@ public:
     double somarLancamentos(const finance::Filtro& f) const;
 
 private:
+    std::vector<MaterialDTO> criarMateriaisPadrao() const;
     std::vector<MaterialDTO> base_;
     std::vector<Material> mats_;
     std::vector<Customer> clientes_;
