@@ -12,6 +12,16 @@ as encontre antes de compilar.
 
 O projeto é dividido em módulos compilados separadamente.
 
+### Script de compilação
+
+Para compilar todos os módulos de uma só vez, utilize o script `build.sh`:
+
+```sh
+./build.sh
+```
+
+Ele executa `make` no núcleo `core`, compila a interface gráfica e a CLI do módulo `src/duke` e roda os testes.
+
 ### Núcleo `core`
 
 ```sh
