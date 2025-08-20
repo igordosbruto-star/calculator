@@ -6,7 +6,7 @@ add_executable(duke_admin main.cpp AdminApp.cpp)
 
 target_include_directories(duke_admin PRIVATE
     ${CMAKE_SOURCE_DIR}/core/include
-    ${CMAKE_SOURCE_DIR}/DUKE/include
+    ${CMAKE_SOURCE_DIR}/third_party/DUKE/include
     ${CMAKE_SOURCE_DIR}/finance/include
 )
 

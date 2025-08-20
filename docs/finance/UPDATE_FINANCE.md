@@ -66,8 +66,8 @@ Registrar e consultar **lançamentos financeiros** (saídas/entradas), filtrando
     ```cpp
     class FinanceRepo {
     public:
-      bool load(const std::string& path="data/financeiro/lancamentos.json");
-      bool save(const std::string& path="data/financeiro/lancamentos.json") const;
+      bool load(const std::string& path="docs/financeiro/lancamentos.json");
+      bool save(const std::string& path="docs/financeiro/lancamentos.json") const;
       std::string nextId() const;
       void add(const Lancamento&);
       bool remove(const std::string& id);
@@ -79,7 +79,7 @@ Registrar e consultar **lançamentos financeiros** (saídas/entradas), filtrando
     };
     ```
 - [ ] Estrutura de arquivo
-  - `data/financeiro/lancamentos.json` com `schema_version` e array `items`
+  - `docs/financeiro/lancamentos.json` com `schema_version` e array `items`
 
 ### C) CLI (MVP)
 - [ ] Comandos
@@ -104,7 +104,7 @@ Registrar e consultar **lançamentos financeiros** (saídas/entradas), filtrando
 
 ## 2) Schema de Dados (JSON)
 
-### 2.1 `data/financeiro/lancamentos.json`
+### 2.1 `docs/financeiro/lancamentos.json`
 ```json
 {
   "schema_version": 1,
