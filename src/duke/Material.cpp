@@ -1,6 +1,7 @@
 #include "Material.h"
 #include "core/format.h"
 #include <iostream>
+#include <stdexcept>
 namespace duke {
 
 void Material::iniciar() noexcept {
@@ -25,9 +26,23 @@ double Material::getLarg()  const noexcept { return largura; }
 double Material::getComp()  const noexcept { return comprimento; }
 double Material::getPorm2() const noexcept { return porm2; }
 
-void Material::setLarg(double l) { largura = l; iniciar(); }
-void Material::setComp(double c) { comprimento = c; iniciar(); }
-void Material::setValor(double v) { valor = v; iniciar(); }
+void Material::setLarg(double l) {
+    if (l < 0) throw std::invalid_argument("largura negativa");
+    largura = l;
+    iniciar();
+}
+
+void Material::setComp(double c) {
+    if (c < 0) throw std::invalid_argument("comprimento negativo");
+    comprimento = c;
+    iniciar();
+}
+
+void Material::setValor(double novoValor) {
+    if (novoValor < 0) throw std::invalid_argument("valor negativo");
+    valor = novoValor;
+    iniciar();
+}
 
 void Material::mostrar() const {
     std::cout << "Material      : " << getNome() << "\n"

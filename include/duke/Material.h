@@ -28,7 +28,7 @@ public:
 
     void setLarg(double l);
     void setComp(double c);
-    void setValor(double v);
+    void setValor(double novoValor);
 
     void mostrar() const;
 };
