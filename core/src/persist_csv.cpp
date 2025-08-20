@@ -6,8 +6,9 @@ namespace Persist {
 bool saveCSV(const std::string& path, const std::vector<MaterialDTO>& items,
              const std::string& baseDir) {
     for (const auto& m : items) {
-        if (!validar(m)) {
-            wr::p("PERSIST", "Material invalido: " + m.nome, "Red");
+        auto err = validar(m);
+        if (err.code != duke::ErrorCode::Ok) {
+            wr::p("PERSIST", duke::errorMessage(err.code, err.field) + ": " + m.nome, "Red");
             return false;
         }
     }
@@ -81,8 +82,9 @@ bool loadCSV(const std::string& path, std::vector<MaterialDTO>& out,
         bool ok = parseNum(cols[2], m.valor) &&
                   parseNum(cols[3], m.largura) &&
                   parseNum(cols[4], m.comprimento);
-        if (!ok || !validar(m)) {
-            wr::p("PERSIST", p + ":" + std::to_string(lineNo) + " dados invalidos", "Yellow");
+        auto err = validar(m);
+        if (!ok || err.code != duke::ErrorCode::Ok) {
+            wr::p("PERSIST", p + ":" + std::to_string(lineNo) + " " + duke::errorMessage(err.code, err.field), "Yellow");
             ++invalidLines;
             continue;
         }

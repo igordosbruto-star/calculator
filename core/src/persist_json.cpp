@@ -8,8 +8,9 @@ namespace Persist {
 bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v,
               int schemaVersion, const std::string& baseDir) {
     for (const auto& m : v) {
-        if (!validar(m)) {
-            wr::p("PERSIST", "Material invalido: " + m.nome, "Red");
+        auto err = validar(m);
+        if (err.code != duke::ErrorCode::Ok) {
+            wr::p("PERSIST", duke::errorMessage(err.code, err.field) + ": " + m.nome, "Red");
             return false;
         }
     }

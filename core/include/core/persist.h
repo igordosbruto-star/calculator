@@ -13,6 +13,7 @@
 #include <system_error>
 #include <cstdlib>
 #include "core/Debug.h"
+#include "duke/error.h"
 
 namespace fs = std::filesystem;
 
@@ -92,15 +93,16 @@ inline void setConfig(const Config& cfg) { config() = cfg; }
 // Valida MaterialDTO: nome nao vazio e valores >=0
 // Exemplo:
 //   MaterialDTO m{"Madeira", 10, 2, 3};
-//   bool ok = Persist::validar(m); // true
+//   auto err = Persist::validar(m); // err.code == ErrorCode::Ok
 // ------------------------------------------------
-inline bool validar(const MaterialDTO& m) {
-    if (m.nome.empty()) return false;
-    if (m.valor < 0) return false;
-    if (m.largura < 0) return false;
-    if (m.comprimento < 0) return false;
-    if (m.tipo != "unitario" && m.tipo != "linear" && m.tipo != "cubico") return false;
-    return true;
+inline duke::ErrorDetail validar(const MaterialDTO& m) {
+    if (m.nome.empty()) return {duke::ErrorCode::EmptyField, "nome"};
+    if (m.valor < 0) return {duke::ErrorCode::NegativeValue, "valor"};
+    if (m.largura < 0) return {duke::ErrorCode::NegativeValue, "largura"};
+    if (m.comprimento < 0) return {duke::ErrorCode::NegativeValue, "comprimento"};
+    if (m.tipo != "unitario" && m.tipo != "linear" && m.tipo != "cubico")
+        return {duke::ErrorCode::InvalidType, "tipo"};
+    return {duke::ErrorCode::Ok, ""};
 }
 
 // ----------------------------------------------

@@ -8,8 +8,9 @@ namespace Persist {
 bool saveXML(const std::string& path, const std::vector<MaterialDTO>& items,
              const std::string& baseDir) {
     for (const auto& m : items) {
-        if (!validar(m)) {
-            wr::p("PERSIST", "Material invalido: " + m.nome, "Red");
+        auto err = validar(m);
+        if (err.code != duke::ErrorCode::Ok) {
+            wr::p("PERSIST", duke::errorMessage(err.code, err.field) + ": " + m.nome, "Red");
             return false;
         }
     }
@@ -61,7 +62,8 @@ bool loadXML(const std::string& path, std::vector<MaterialDTO>& out,
         el->QueryDoubleAttribute("valor", &m.valor);
         el->QueryDoubleAttribute("largura", &m.largura);
         el->QueryDoubleAttribute("comprimento", &m.comprimento);
-        if (!validar(m)) { ++invalid; continue; }
+        auto err = validar(m);
+        if (err.code != duke::ErrorCode::Ok) { ++invalid; continue; }
         out.push_back(std::move(m));
     }
     if (out.empty() && invalid > 0) return false;

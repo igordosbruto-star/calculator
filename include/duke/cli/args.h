@@ -7,6 +7,7 @@
 #include <vector>
 #include <optional>
 #include "finance/Tipos.h"
+#include "duke/error.h"
 namespace duke {
 
 // Comandos reconhecidos pela aplicação (ainda não implementados)
@@ -42,14 +43,13 @@ struct CliOptions {
     std::optional<bool> finEntrada; // entrada ou saída
     std::string finDtIni;        // filtro data inicial
     std::string finDtFim;        // filtro data final
-    std::vector<std::string> naoMapeados; // argumentos não reconhecidos
-    bool ok = true;             // falso se houve tokens não mapeados
+    std::vector<duke::ErrorDetail> errors; // lista de erros encontrados
 };
 
 // Processa argc/argv e devolve opções reconhecidas
 // Exemplo de uso:
 //   CliOptions opt = parseArgs(argc, argv);
-//   if (!opt.ok) return 1; // argumentos inválidos
+//   if (!opt.errors.empty()) return 1; // argumentos inválidos
 CliOptions parseArgs(int argc, char* argv[]);
 
 } // namespace duke

@@ -124,8 +124,9 @@ void App::criarMaterial() {
             m.comprimento = ui::readDouble("Comprimento padrao (m): ");
             break;
     }
-    if (!::Persist::validar(m)) {
-        wr::p("APP", "Material invalido, nada salvo.", "Red");
+    auto err = ::Persist::validar(m);
+    if (err.code != ErrorCode::Ok) {
+        wr::p("APP", errorMessage(err.code, err.field), "Red");
         return;
     }
     base.push_back(m);
