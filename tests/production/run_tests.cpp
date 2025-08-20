@@ -1,6 +1,9 @@
-#include <cassert>
+#include "../test_runner.h"
+
 void test_order_flow();
-int main(){
-    test_order_flow();
-    return 0;
+
+int main() {
+    return run_tests({
+        test_order_flow
+    });
 }
