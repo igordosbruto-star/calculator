@@ -19,6 +19,7 @@ void test_data_path();
 void test_domain_material();
 void test_material_factory();
 void testValidarMaterialPorTipo();
+void test_material_mostrar();
 void test_estimador_custo();
 void test_projeto();
 void test_projeto_custo();
@@ -47,6 +48,7 @@ int main() {
         test_domain_material,
         test_material_factory,
         testValidarMaterialPorTipo,
+        test_material_mostrar,
         test_estimador_custo,
         test_projeto,
         test_projeto_custo,
