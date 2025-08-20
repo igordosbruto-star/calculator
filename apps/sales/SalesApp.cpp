@@ -2,6 +2,8 @@
 #include <iostream>
 
 #include "ApplicationCore.h" // Provided by the existing DUKE project
+#include "finance/Repo.h"
+#include "core/reports.h"
 #include <chrono>
 
 SalesApp::SalesApp() : core_(new duke::ApplicationCore()) {
@@ -27,6 +29,8 @@ int SalesApp::run(int argc, char** argv) {
         handleListCustomers();
     } else if (command == "inventory") {
         handleInventory();
+    } else if (command == "report") {
+        handleReport(args);
     } else {
         std::cerr << "Unknown command: " << command << "\n";
         showHelp();
@@ -43,6 +47,7 @@ void SalesApp::showHelp() const {
     std::cout << "  new-order <args>     Create a new sales order\n";
     std::cout << "  list-customers       List all registered customers\n";
     std::cout << "  inventory            Show stock of finished products\n";
+    std::cout << "  report <ano> <mes>   Generate consolidated report\n";
 }
 
 void SalesApp::handleNewOrder(const std::vector<std::string>& args) {
@@ -71,6 +76,20 @@ void SalesApp::handleInventory() const {
     for (const auto& m : estoque) {
         std::cout << "- " << m.nome << " (R$" << m.valor << ")\n";
     }
+}
+
+
+void SalesApp::handleReport(const std::vector<std::string>& args) const {
+    if (args.size() < 2) {
+        std::cerr << "Usage: report <year> <month>\n";
+        return;
+    }
+    int year = std::stoi(args[0]);
+    int month = std::stoi(args[1]);
+    finance::FinanceRepo repo;
+    repo.load();
+    auto paths = core::reports::generateMonthlyReport(repo, year, month);
+    std::cout << "CSV: " << paths.first << "\nPDF: " << paths.second << "\n";
 }
 
 void SalesApp::addDeliveryDate(const std::string& id,

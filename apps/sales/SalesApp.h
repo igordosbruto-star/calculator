@@ -32,6 +32,7 @@ private:
     void handleNewOrder(const std::vector<std::string>& args);
     void handleListCustomers() const;
     void handleInventory() const;
+    void handleReport(const std::vector<std::string>& args) const;
 
     // Pointer to core application logic.  This object will be used to
     // load materials, customers and persist changes.

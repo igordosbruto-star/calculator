@@ -26,6 +26,7 @@ private:
     void handleListTransactions() const;
     void handleSumTransactions(const std::vector<std::string>& args) const;
     void handleSuppliers() const;
+    void handleReport(const std::vector<std::string>& args) const;
 
     finance::FinanceRepo* repo_;
     core::NotificationService notifications_;

@@ -23,6 +23,7 @@ private:
     void handleNewProject(const std::vector<std::string>& args);
     void handleLoadProject(const std::vector<std::string>& args);
     void handleExportBOM(const std::vector<std::string>& args) const;
+    void handleReport(const std::vector<std::string>& args) const;
 
     std::optional<production::ModeloProducao> projeto_;
     std::string projetoPath_;

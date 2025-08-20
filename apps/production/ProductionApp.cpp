@@ -2,6 +2,8 @@
 #include <iostream>
 #include <algorithm>
 #include "ApplicationCore.h"
+#include "finance/Repo.h"
+#include "core/reports.h"
 #include <chrono>
 
 ProductionApp::ProductionApp() : core_(new duke::ApplicationCore()) {
@@ -54,6 +56,8 @@ int ProductionApp::run(int argc, char** argv) {
         handleStartOrder(args);
     } else if (command == "finish-order") {
         handleFinishOrder(args);
+    } else if (command == "report") {
+        handleReport(args);
     } else {
         std::cerr << "Unknown command: " << command << "\n";
         showHelp();
@@ -70,6 +74,7 @@ void ProductionApp::showHelp() const {
     std::cout << "  list-orders          List active production orders\n";
     std::cout << "  start-order <id>     Start work on an order\n";
     std::cout << "  finish-order <id>    Mark an order as complete\n";
+    std::cout << "  report <ano> <mes>   Generate consolidated report\n";
 }
 
 void ProductionApp::handleListOrders() const {
@@ -145,6 +150,19 @@ void ProductionApp::handleFinishOrder(const std::vector<std::string>& args) {
     }
     ord.finished = true;
     std::cout << "Order " << ord.id << " finished\n";
+}
+
+void ProductionApp::handleReport(const std::vector<std::string>& args) const {
+    if (args.size() < 2) {
+        std::cerr << "Usage: report <year> <month>\n";
+        return;
+    }
+    int year = std::stoi(args[0]);
+    int month = std::stoi(args[1]);
+    finance::FinanceRepo repo;
+    repo.load();
+    auto paths = core::reports::generateMonthlyReport(repo, year, month);
+    std::cout << "CSV: " << paths.first << "\nPDF: " << paths.second << "\n";
 }
 
 void ProductionApp::addDeliveryDate(const std::string& id,
