@@ -10,8 +10,8 @@ CORE_LIB = $(CORE_DIR)/libcore.a
 
 CLI_SRC := cli/app.cpp cli/args.cpp cli/parser.cpp cli/utils.cpp cli/commands.cpp cli/processor.cpp
 FIN_SRC := $(wildcard ../finance/*.cpp)
-GUI_MAIN := gui/main_qt.cpp
-GUI_SRC := $(filter-out $(GUI_MAIN),$(wildcard gui/*.cpp))
+GUI_MAIN := gui/main_wx.cpp
+GUI_SRC := gui/Navigation.cpp
 SRC := $(wildcard *.cpp) $(CLI_SRC) \
 $(wildcard domain/*.cpp) $(wildcard custo/*.cpp) \
 $(wildcard ui/*.cpp) $(FIN_SRC)
