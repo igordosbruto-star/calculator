@@ -11,15 +11,18 @@ CALC_SRCS := $(wildcard duke/*.cpp)
 CORE_SRCS := $(wildcard core/*.cpp)
 FIN_SRCS := $(wildcard finance/*.cpp)
 FIN_LIB_SRCS := $(wildcard ../src/finance/*.cpp)
+
+DES_SRCS := $(wildcard designer/*.cpp)
+PROD_LIB_SRCS := $(wildcard ../src/production/*.cpp)
+
 ADMIN_SRCS := $(wildcard admin/*.cpp)
 ADMIN_APP_SRCS := ../apps/admin/AdminApp.cpp
 PROD_SRCS := $(wildcard production/*.cpp)
 PROD_APP_SRCS := ../apps/production/ProductionApp.cpp ../src/production/ModeloProducao.cpp
 SALES_SRCS := $(wildcard sales/*.cpp)
 
-.PHONY: all duke core finance admin production sales clean
-all: duke core finance admin production sales
-
+.PHONY: all duke core finance designer admin production sales clean
+all: duke core finance admin designer production sales
 
 duke: $(LIB_CALC) $(LIB_CORE)
 ifeq ($(strip $(CALC_SRCS)),)
@@ -78,6 +81,15 @@ else
 	./admin/run_tests
 endif
 
+designer:
+ifeq ($(strip $(DES_SRCS)),)
+	@echo "No designer tests"
+else
+	$(CXX) $(CXXFLAGS) $(DES_SRCS) ../apps/designer/DesignerApp.cpp $(PROD_LIB_SRCS) \
+	-I../apps/designer -I../include -I../third_party -o designer/run_tests
+	./designer/run_tests
+endif
+
 $(LIB_CALC):
 	$(MAKE) -C $(CALC_DIR) libduke.a
 
@@ -85,6 +97,4 @@ $(LIB_CORE):
 	$(MAKE) -C $(CORE_DIR) libcore.a
 
 clean:
-	rm -f duke/run_tests core/run_tests finance/run_tests admin/run_tests
-	rm -f duke/run_tests core/run_tests finance/run_tests production/run_tests
-  rm -f duke/run_tests core/run_tests finance/run_tests sales/run_tests
+	rm -f duke/run_tests core/run_tests finance/run_tests designer/run_tests admin/run_tests production/run_tests sales/run_tests
