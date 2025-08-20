@@ -1,5 +1,5 @@
-#include "core.h"
-#include "Material.h"
+#include "duke/core.h"
+#include "duke/Material.h"
 #include <vector>
 #include <cassert>
 #include <stdexcept>

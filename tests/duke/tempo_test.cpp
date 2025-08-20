@@ -1,5 +1,5 @@
-#include "domain/Tempo.h"
-#include "persist/tempo.hpp"
+#include "duke/domain/Tempo.h"
+#include "duke/persist/tempo.hpp"
 #include "core/persist.h"
 #include <cassert>
 #include <filesystem>

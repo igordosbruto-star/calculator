@@ -1,4 +1,4 @@
-#include "Corte.h"
+#include "duke/Corte.h"
 #include <cassert>
 
 // Testa cálculo de área e valor do corte

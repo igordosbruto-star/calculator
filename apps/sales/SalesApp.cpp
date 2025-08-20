@@ -1,7 +1,7 @@
 #include "SalesApp.h"
 #include <iostream>
 
-#include "ApplicationCore.h" // Provided by the existing DUKE project
+#include "duke/ApplicationCore.h" // Provided by the existing DUKE project
 #include "finance/Repo.h"
 #include "core/reports.h"
 #include <chrono>

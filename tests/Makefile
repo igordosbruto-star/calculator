@@ -1,4 +1,4 @@
-	CXX = g++
+CXX = g++
 CXXFLAGS = -std=c++17 -Wall -DUNIT_TEST
 
 CORE_DIR = ../core
@@ -26,9 +26,9 @@ all: duke core finance admin designer production sales
 
 duke: $(LIB_CALC) $(LIB_CORE)
 ifeq ($(strip $(CALC_SRCS)),)
-	@echo "No DUKE tests"
+        @echo "No DUKE tests"
 else
-	$(CXX) $(CXXFLAGS) -include duke/namespace.h $(CALC_SRCS) -I$(CALC_DIR)/include -I../include -I../third_party -I$(CORE_DIR)/include $(LIB_CALC) $(LIB_CORE) -o duke/run_tests
+	$(CXX) $(CXXFLAGS) -include duke/namespace.h $(CALC_SRCS) -I../include -I../third_party -I$(CORE_DIR)/include $(LIB_CALC) $(LIB_CORE) -o duke/run_tests
 	./duke/run_tests
 endif
 
@@ -67,9 +67,9 @@ ifeq ($(strip $(SALES_SRCS)),)
 else
 	@mkdir -p sales
 	$(CXX) $(CXXFLAGS) $(SALES_SRCS) \
-		-I$(CALC_DIR)/include -I../include -I../third_party -I$(CORE_DIR)/include \
-		$(LIB_CALC) $(LIB_CORE) \
-		-o sales/run_tests
+	-I../include -I../third_party -I$(CORE_DIR)/include \
+	$(LIB_CALC) $(LIB_CORE) \
+	-o sales/run_tests
 	./sales/run_tests
 endif
 

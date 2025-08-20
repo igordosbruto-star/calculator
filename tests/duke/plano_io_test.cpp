@@ -1,6 +1,6 @@
-#include "persist.hpp"
-#include "plano_corte.h"
-#include "Corte.h"
+#include "duke/persist.hpp"
+#include "duke/plano_corte.h"
+#include "duke/Corte.h"
 #include <cassert>
 #include <fstream>
 #include <filesystem>

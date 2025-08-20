@@ -10,7 +10,7 @@ add_executable(duke_designer
 
 target_include_directories(duke_designer PRIVATE
     ${CMAKE_SOURCE_DIR}/core/include
-    ${CMAKE_SOURCE_DIR}/third_party/DUKE/include
+    ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/finance/include
     ${CMAKE_SOURCE_DIR}/include
 )
