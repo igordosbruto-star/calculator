@@ -6,14 +6,18 @@
 
 namespace duke {
 
+std::vector<MaterialDTO> ApplicationCore::criarMateriaisPadrao() const {
+    return {
+        {"Pinus 20cm", 17.00, 0.20, 3.00, "linear"},
+        {"MDF 15mm", 180.00, 1.85, 2.75, "linear"}
+    };
+}
+
 bool ApplicationCore::carregar(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
     int schemaVersion = 0;
     if (!::Persist::load("materiais.json", base, &schemaVersion) || base.empty()) {
         wr::p("DATA", "Base nao encontrada. Criando materiais padrao...", "Yellow");
-        base = {
-            {"Pinus 20cm", 17.00, 0.20, 3.00, "linear"},
-            {"MDF 15mm", 180.00, 1.85, 2.75, "linear"}
-        };
+        base = criarMateriaisPadrao();
         if (::Persist::save("materiais.json", base, 1)) {
             wr::p("DATA", "materiais.json criado.", "Green");
         } else {
@@ -50,10 +54,7 @@ bool ApplicationCore::carregar() {
     int schemaVersion = 0;
     if (!::Persist::load("materiais.json", base_, &schemaVersion) || base_.empty()) {
         wr::p("DATA", "Base nao encontrada. Criando materiais padrao...", "Yellow");
-        base_ = {
-            {"Pinus 20cm", 17.00, 0.20, 3.00, "linear"},
-            {"MDF 15mm", 180.00, 1.85, 2.75, "linear"}
-        };
+        base_ = criarMateriaisPadrao();
         ::Persist::save("materiais.json", base_, 1);
     }
     mats_ = core::reconstruirMateriais(base_);
