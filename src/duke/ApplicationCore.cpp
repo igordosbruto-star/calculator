@@ -2,6 +2,7 @@
 #include <sstream>
 #include <stdexcept>
 #include "core/Debug.h"
+#include "comparison.h"
 
 namespace duke {
 
@@ -36,33 +37,11 @@ std::vector<MaterialDTO> ApplicationCore::listarMateriais(const std::vector<Mate
     return base;
 }
 
-std::vector<ApplicationCore::MaterialComparado>
+std::vector<comparison::MaterialComparado>
 ApplicationCore::compararMateriais(const std::vector<Material>& mats,
                                    const std::vector<int>& ids) const {
-    if (ids.size() < 2) {
-        throw std::invalid_argument("Selecione ao menos dois materiais");
-    }
-    std::vector<Material> sel;
-    sel.reserve(ids.size());
-    for (int i : ids) {
-        if (i < 0 || static_cast<size_t>(i) >= mats.size()) {
-            throw std::out_of_range("Indice invalido");
-        }
-        sel.push_back(mats[static_cast<size_t>(i)]);
-    }
-    auto ext = core::extremosPorM2(sel);
-    std::vector<MaterialComparado> res;
-    res.reserve(ids.size());
-    for (int i : ids) {
-        const auto& m = mats[static_cast<size_t>(i)];
-        MaterialComparado mc;
-        mc.nome = m.getNome();
-        mc.porm2 = m.getPorm2();
-        if (m.getNome() == ext.menor.nome) mc.menor = true;
-        if (m.getNome() == ext.maior.nome) mc.maior = true;
-        res.push_back(mc);
-    }
-    return res;
+    auto sel = comparison::selecionarMateriais(ids, mats);
+    return comparison::compararMateriais(sel);
 }
 
 // ----- APIs do módulo de vendas -----

@@ -25,6 +25,7 @@ void test_projeto_custo();
 void test_tempo();
 void test_menu();
 void test_application_core();
+void test_comparison();
 
 int main() {
     return run_tests({
@@ -51,6 +52,7 @@ int main() {
         test_projeto_custo,
         test_tempo,
         test_menu,
-        test_application_core
+        test_application_core,
+        test_comparison
     });
 }
