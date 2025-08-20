@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 namespace duke {
 
 class Material {
@@ -30,7 +31,7 @@ public:
     void setComp(double c);
     void setValor(double novoValor);
 
-    void mostrar() const;
+    void mostrar(std::ostream& out = std::cout) const;
 };
 
 } // namespace duke

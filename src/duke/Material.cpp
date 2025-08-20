@@ -1,6 +1,5 @@
 #include "Material.h"
 #include "core/format.h"
-#include <iostream>
 #include <stdexcept>
 namespace duke {
 
@@ -44,11 +43,11 @@ void Material::setValor(double novoValor) {
     iniciar();
 }
 
-void Material::mostrar() const {
-    std::cout << "Material      : " << getNome() << "\n"
-              << "Area          : " << getArea() << UN_AREA << "\n"
-              << "Valor Total   : " << UN_MONE << getValor() << "\n"
-              << "Valor por m2  : " << UN_MONE << getPorm2() << "\n\n";
+void Material::mostrar(std::ostream& out) const {
+    out << "Material      : " << getNome() << "\n"
+        << "Area          : " << getArea() << UN_AREA << "\n"
+        << "Valor Total   : " << UN_MONE << getValor() << "\n"
+        << "Valor por m2  : " << UN_MONE << getPorm2() << "\n\n";
 }
 
 } // namespace duke
