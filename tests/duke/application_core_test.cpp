@@ -12,12 +12,12 @@ void test_application_core() {
         {"Madeira", 100.0, 2.0, 3.0, "linear"},
         {"Aco", 200.0, 1.0, 4.0, "linear"}
     };
-    Persist::saveJSON("materiais.json", itens);
+    Persist::save("materiais.json", itens);
 
     ApplicationCore core;
     std::vector<MaterialDTO> base;
     std::vector<Material> mats;
-    assert(core.carregarJSON(base, mats));
+    assert(core.carregar(base, mats));
     auto lista = core.listarMateriais(base);
     assert(lista.size() == 2);
     auto comps = core.compararMateriais(mats, {0, 1});

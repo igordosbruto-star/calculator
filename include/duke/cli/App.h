@@ -17,7 +17,7 @@ private:
     ApplicationCore core; // camada de regras de negócio
 
     void importarCSV();
-    bool carregarJSON();
+    bool carregar();
     void menuMateriais();
     void escolherPreco();
     void solicitarCortes();

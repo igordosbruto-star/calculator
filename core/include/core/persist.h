@@ -262,55 +262,17 @@ inline bool upgradeIfNeeded(json& j) {
 // Salva materiais em JSON com versão de schema
 // Exemplo:
 //   Persist::saveJSON("materiais.json", v);
-inline bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v, int schemaVersion = 1, const std::string& baseDir = config().baseDir) {
-    for (const auto& m : v) {
-        if (!validar(m)) {
-            wr::p("PERSIST", "Material invalido: " + m.nome, "Red");
-            return false;
-        }
-    }
-    json j;
-    j["schema_version"] = schemaVersion;
-    j["materiais"]      = v; // usa to_json automaticamente
-    return atomicWrite(fs::path(dataPath(path, baseDir)), j.dump(2));
-}
+bool saveJSON(const std::string& path, const std::vector<MaterialDTO>& v,
+              int schemaVersion = 1,
+              const std::string& baseDir = config().baseDir);
 
 // Carrega materiais de JSON, migrando campos antigos se necessário
 // Exemplo:
 //   std::vector<MaterialDTO> itens;
 //   Persist::loadJSON("materiais.json", itens);
-inline bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out, int* out_schema_version = nullptr, const std::string& baseDir = config().baseDir) {
-    const std::string p = dataPath(path, baseDir);
-    std::ifstream f(p);
-    if (!f) {
-        wr::p("PERSIST", p + " open fail", "Red");
-        return false;
-    }
-    try {
-        json j; f >> j;
-        bool migrated = mater::upgradeIfNeeded(j);
-        int schemaVersion = j.value("schema_version", 1);
-        if (out_schema_version) *out_schema_version = schemaVersion;
-        if (j.contains("materiais") && j["materiais"].is_array()) {
-            out.clear();
-            for (const auto& item : j["materiais"]) {
-                out.push_back(item.get<MaterialDTO>());
-            }
-            if (migrated) {
-                atomicWrite(fs::path(p), j.dump(2));
-            }
-            return true;
-        }
-        wr::p("PERSIST", p + " missing 'materiais'", "Red");
-        return false;
-    } catch (const std::exception& e) {
-        wr::p("PERSIST", p + " parse error: " + e.what(), "Red");
-        return false;
-    } catch (...) {
-        wr::p("PERSIST", p + " unknown parse error", "Red");
-        return false;
-    }
-}
+bool loadJSON(const std::string& path, std::vector<MaterialDTO>& out,
+              int* out_schema_version = nullptr,
+              const std::string& baseDir = config().baseDir);
 
 // ------------------------------------------------------------
 // Funções genéricas para salvar/carregar vetores em JSON.
@@ -382,102 +344,26 @@ namespace detail {
 } // namespace detail
 
 // ------------ CSV (formato BR: ; + vírgula decimal) ------------
-inline bool saveCSV(const std::string& path, const std::vector<MaterialDTO>& items, const std::string& baseDir = config().baseDir) {
-    for (const auto& m : items) {
-        if (!validar(m)) {
-            wr::p("PERSIST", "Material invalido: " + m.nome, "Red");
-            return false;
-        }
-    }
-
-    std::ostringstream oss;
-
-    // Cabeçalho com tipo
-    oss << "nome;tipo;valor;largura;comprimento\n";
-
-    for (const auto& m : items) {
-        // Sanitize simples para não quebrar CSV com ';'
-        std::string safe = m.nome;
-        for (auto& ch : safe) if (ch == ';') ch = ',';
-
-        // Números com vírgula decimal (compatível com Planilhas em localidade Brasil)
-        oss << safe << ';'
-            << m.tipo << ';'
-            << to_str_br(m.valor) << ';'
-            << to_str_br(m.largura) << ';'
-            << to_str_br(m.comprimento) << "\n";
-    }
-    return atomicWrite(fs::path(dataPath(path, baseDir)), oss.str());
-}
+bool saveCSV(const std::string& path, const std::vector<MaterialDTO>& items,
+             const std::string& baseDir = config().baseDir);
 
 // -------------------- CSV: Leitura --------------------
-inline bool loadCSV(const std::string& path, std::vector<MaterialDTO>& out, const std::string& baseDir = config().baseDir) {
-    const std::string p = dataPath(path, baseDir);
-    std::ifstream f(p);
-    if (!f) {
-        wr::p("PERSIST", p + " open fail", "Red");
-        return false;
-    }
+bool loadCSV(const std::string& path, std::vector<MaterialDTO>& out,
+             const std::string& baseDir = config().baseDir);
 
-    out.clear();
-    std::string line;
+// ------------ XML ------------
+bool saveXML(const std::string& path, const std::vector<MaterialDTO>& items,
+             const std::string& baseDir = config().baseDir);
+bool loadXML(const std::string& path, std::vector<MaterialDTO>& out,
+             const std::string& baseDir = config().baseDir);
 
-    // Lê primeira linha (cabeçalho). Esperado: nome;tipo;valor;largura;comprimento
-    if (!std::getline(f, line)) {
-        wr::p("PERSIST", p + " header read fail", "Red");
-        return false;
-    }
-
-    auto parseNum = [](const std::string& s, double& outVal) -> bool {
-        std::string tmp = detail::trim(s);
-        for (auto& ch : tmp) if (ch == ',') ch = '.';
-        try {
-            size_t idx = 0;
-            outVal = std::stod(tmp, &idx);
-            if (idx != tmp.size()) return false;
-            return true;
-        } catch (...) {
-            return false;
-        }
-    };
-
-    size_t lineNo = 1; // já leu o cabeçalho
-    int invalidLines = 0;
-    while (std::getline(f, line)) {
-        ++lineNo;
-        if (line.empty()) continue;
-
-        // Split por ';'
-        std::vector<std::string> cols;
-        cols.reserve(5);
-        std::stringstream ss(line);
-        std::string item;
-        while (std::getline(ss, item, ';')) {
-            cols.push_back(item);
-        }
-        if (cols.size() != 5) {
-            wr::p("PERSIST", p + ":" + std::to_string(lineNo) + " coluna invalida", "Yellow");
-            ++invalidLines;
-            continue;
-        }
-
-        MaterialDTO m;
-        m.nome = detail::trim(cols[0]);
-        m.tipo = detail::trim(cols[1]);
-        if (m.tipo.empty()) m.tipo = "linear";
-        bool ok = parseNum(cols[2], m.valor) &&
-                  parseNum(cols[3], m.largura) &&
-                  parseNum(cols[4], m.comprimento);
-        if (!ok || !validar(m)) {
-            wr::p("PERSIST", p + ":" + std::to_string(lineNo) + " dados invalidos", "Yellow");
-            ++invalidLines;
-            continue;
-        }
-        out.push_back(std::move(m));
-    }
-    if (out.empty() && invalidLines > 0) return false;
-    return true;
-}
+// ----------- API unificada -----------
+bool save(const std::string& path, const std::vector<MaterialDTO>& v,
+          int schemaVersion = 1,
+          const std::string& baseDir = config().baseDir);
+bool load(const std::string& path, std::vector<MaterialDTO>& out,
+          int* out_schema_version = nullptr,
+          const std::string& baseDir = config().baseDir);
 
 // -------------------- Settings: carregar/salvar --------------------
 namespace sett {

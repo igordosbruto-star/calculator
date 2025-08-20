@@ -8,7 +8,7 @@
 
 ProductionApp::ProductionApp() : core_(new duke::ApplicationCore()) {
     // Carrega dados básicos (stubbed na versão de testes)
-    core_->carregarJSON();
+    core_->carregar();
 
     // Define um modelo de produção com BOM e uma variante
     using namespace production;

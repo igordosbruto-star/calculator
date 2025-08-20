@@ -8,7 +8,7 @@
 
 SalesApp::SalesApp() : core_(new duke::ApplicationCore()) {
     // Load materials and customers on startup
-    core_->carregarJSON();
+    core_->carregar();
 }
 
 SalesApp::~SalesApp() {

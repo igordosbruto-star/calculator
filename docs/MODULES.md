@@ -9,11 +9,12 @@ Responsável pela lógica de comparação e pelos cálculos de cortes e materiai
  - `include/duke/duke.hpp`
 
 ## Persistência de dados
-Centraliza leitura e escrita de informações em JSON ou CSV, além das
-configurações de execução. Antes de salvar, cada `MaterialDTO` é
-validado: o nome não pode ser vazio e nenhum valor numérico pode ser
+Centraliza leitura e escrita de informações em JSON, CSV ou XML,
+além das configurações de execução. Antes de salvar, cada `MaterialDTO`
+é validado: o nome não pode ser vazio e nenhum valor numérico pode ser
 negativo. Caso algum item seja inválido, a operação é abortada e um
-aviso em vermelho é emitido.
+aviso em vermelho é emitido. A API `Persist::save`/`load` seleciona o
+formato de acordo com a extensão do arquivo.
  Principais arquivos:
  - `include/duke/persist.hpp`
 

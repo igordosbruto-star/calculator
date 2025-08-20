@@ -1,6 +1,8 @@
 # Formatos de Dados
 
-Exemplos unificados de estruturas para **Projetos**, **Relatórios** e **Tempos** utilizados no sistema.
+Exemplos unificados de estruturas para **Projetos**, **Relatórios** e **Tempos** utilizados no sistema. Os formatos
+suportados são JSON, CSV e XML. A API `Persist::save`/`load` escolhe o
+formato conforme a extensão do arquivo.
 
 ## Projetos
 Estrutura básica para armazenar projetos de corte.
@@ -20,6 +22,13 @@ Estrutura básica para armazenar projetos de corte.
 ```
 id,nome,material,quantidade
 p1,protótipo,m1,2
+```
+
+### Exemplo XML
+```xml
+<projeto id="p1" nome="protótipo">
+  <material id="m1" quantidade="2"/>
+</projeto>
 ```
 
 ## Relatórios

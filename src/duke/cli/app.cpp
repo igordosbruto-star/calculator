@@ -54,8 +54,8 @@ void App::importarCSV() {
     }
 }
 
-bool App::carregarJSON() {
-    return core.carregarJSON(base, mats);
+bool App::carregar() {
+    return core.carregar(base, mats);
 }
 
 void App::menuMateriais() {
@@ -377,7 +377,7 @@ void App::iniciar(bool autoMode) {
     std::cout << std::fixed << std::setprecision(dec);
 
     importarCSV();
-    if (!carregarJSON()) return;
+    if (!carregar()) return;
     q = core::extremosPorM2(mats);
 
     ui::MenuState state = ui::MenuState::Principal;

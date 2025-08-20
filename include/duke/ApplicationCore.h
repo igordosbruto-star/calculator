@@ -15,13 +15,14 @@ namespace duke {
 // Camada central de operacoes do aplicativo sem interacao direta com o usuario.
 class ApplicationCore {
 public:
-    // Carrega materiais a partir de um arquivo JSON. Retorna false se menos de dois materiais forem carregados.
+    // Carrega materiais a partir de um arquivo de dados (JSON, CSV ou XML).
+    // Retorna false se menos de dois materiais forem carregados.
     // Exemplo:
     //   ApplicationCore core;
     //   std::vector<MaterialDTO> base;
     //   std::vector<Material> mats;
-    //   bool ok = core.carregarJSON(base, mats);
-    bool carregarJSON(std::vector<MaterialDTO>& base, std::vector<Material>& mats);
+    //   bool ok = core.carregar(base, mats);
+    bool carregar(std::vector<MaterialDTO>& base, std::vector<Material>& mats);
 
     // Lista materiais disponíveis. O retorno é uma cópia dos dados para exibição.
     // Exemplo:
@@ -36,11 +37,11 @@ public:
         const std::vector<Material>& mats, const std::vector<int>& ids) const;
 
     // ----- APIs do módulo de vendas -----
-    // Carrega materiais, clientes e pedidos usando os arquivos JSON padrão.
+    // Carrega materiais, clientes e pedidos usando os arquivos padrão.
     // Exemplo:
     //   ApplicationCore core;
-    //   core.carregarJSON();
-    bool carregarJSON();
+    //   core.carregar();
+    bool carregar();
 
     // Cria e persiste um novo pedido.
     // Exemplo:
