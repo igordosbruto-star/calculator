@@ -1,4 +1,4 @@
-CXX = g++
+	CXX = g++
 CXXFLAGS = -std=c++17 -Wall -DUNIT_TEST
 
 CORE_DIR = ../core
@@ -11,14 +11,14 @@ CALC_SRCS := $(wildcard duke/*.cpp)
 CORE_SRCS := $(wildcard core/*.cpp)
 FIN_SRCS := $(wildcard finance/*.cpp)
 FIN_LIB_SRCS := $(wildcard ../src/finance/*.cpp)
-
+ADMIN_SRCS := $(wildcard admin/*.cpp)
+ADMIN_APP_SRCS := ../apps/admin/AdminApp.cpp
 PROD_SRCS := $(wildcard production/*.cpp)
 PROD_APP_SRCS := ../apps/production/ProductionApp.cpp ../src/production/ModeloProducao.cpp
-
 SALES_SRCS := $(wildcard sales/*.cpp)
 
-.PHONY: all duke core finance production sales clean
-all: duke core finance production sales
+.PHONY: all duke core finance admin production sales clean
+all: duke core finance admin production sales
 
 
 duke: $(LIB_CALC) $(LIB_CORE)
@@ -70,6 +70,14 @@ else
 endif
 
 
+admin:
+ifeq ($(strip $(ADMIN_SRCS)),)
+	@echo "No admin tests"
+else
+	$(CXX) $(CXXFLAGS) $(ADMIN_SRCS) $(ADMIN_APP_SRCS) $(FIN_LIB_SRCS) -I.. -I../include -I../third_party -I../core/include -o admin/run_tests
+	./admin/run_tests
+endif
+
 $(LIB_CALC):
 	$(MAKE) -C $(CALC_DIR) libduke.a
 
@@ -77,6 +85,6 @@ $(LIB_CORE):
 	$(MAKE) -C $(CORE_DIR) libcore.a
 
 clean:
+	rm -f duke/run_tests core/run_tests finance/run_tests admin/run_tests
 	rm -f duke/run_tests core/run_tests finance/run_tests production/run_tests
   rm -f duke/run_tests core/run_tests finance/run_tests sales/run_tests
-
