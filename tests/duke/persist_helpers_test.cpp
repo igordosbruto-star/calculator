@@ -1,7 +1,7 @@
 #include <cassert>
 #include <regex>
 #include <filesystem>
-#include "persist.hpp"
+#include "duke/persist.hpp"
 
 void test_persist_helpers() {
     // Testa formato ISO8601

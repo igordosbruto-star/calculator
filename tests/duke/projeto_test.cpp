@@ -1,5 +1,5 @@
-#include "domain/Projeto.h"
-#include "persist/projeto.hpp"
+#include "duke/domain/Projeto.h"
+#include "duke/persist/projeto.hpp"
 #include <cassert>
 #include <filesystem>
 

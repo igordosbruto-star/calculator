@@ -1,4 +1,4 @@
-#include "domain/MaterialFactory.h"
+#include "duke/domain/MaterialFactory.h"
 #include <cassert>
 
 // Testa MaterialFactory::fromDTO

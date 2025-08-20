@@ -1,4 +1,4 @@
-#include "ui/Menu.h"
+#include "duke/ui/Menu.h"
 #include <cassert>
 #include <sstream>
 

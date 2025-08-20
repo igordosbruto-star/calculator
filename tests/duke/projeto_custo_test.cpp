@@ -1,4 +1,4 @@
-#include "domain/Projeto.h"
+#include "duke/domain/Projeto.h"
 #include <cassert>
 
 // Testa cálculo detalhado de custos em Projeto

@@ -10,7 +10,7 @@ add_executable(duke_sales main.cpp SalesApp.cpp)
 
 target_include_directories(duke_sales PRIVATE
     ${CMAKE_SOURCE_DIR}/core/include
-    ${CMAKE_SOURCE_DIR}/third_party/DUKE/include
+    ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/finance/include
 )
 

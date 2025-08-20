@@ -1,6 +1,6 @@
-#include "domain/MaterialUnitario.h"
-#include "domain/MaterialLinear.h"
-#include "domain/MaterialCubico.h"
+#include "duke/domain/MaterialUnitario.h"
+#include "duke/domain/MaterialLinear.h"
+#include "duke/domain/MaterialCubico.h"
 #include <cassert>
 
 // Testa as subclasses de MaterialBase

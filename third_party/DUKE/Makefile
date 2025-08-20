@@ -1,21 +1,22 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -fPIC
 CORE_DIR = ../../core
-INCLUDES = -Iinclude -I../../include -I../../third_party -I$(CORE_DIR)/include
+SRC_DIR = ../../src/duke
+INCLUDES = -I../../include -I../../include/duke -I../../third_party -I$(CORE_DIR)/include
 QT_CFLAGS := $(shell pkg-config --cflags Qt6Widgets)
 QT_LIBS := $(shell pkg-config --libs Qt6Widgets)
 CXXFLAGS += $(QT_CFLAGS)
 
 CORE_LIB = $(CORE_DIR)/libcore.a
 
-CLI_SRC := src/cli/app.cpp src/cli/args.cpp src/cli/parser.cpp src/cli/utils.cpp src/cli/commands.cpp
-GUI_MAIN = src/gui/main_qt.cpp
+CLI_SRC := $(SRC_DIR)/cli/app.cpp $(SRC_DIR)/cli/args.cpp $(SRC_DIR)/cli/parser.cpp $(SRC_DIR)/cli/utils.cpp $(SRC_DIR)/cli/commands.cpp
+GUI_MAIN = $(SRC_DIR)/gui/main_qt.cpp
 FIN_SRC := $(wildcard ../../src/finance/*.cpp)
-SRC := $(wildcard src/*.cpp) $(CLI_SRC) \
-       $(wildcard src/domain/*.cpp) $(wildcard src/custo/*.cpp) \
-       $(wildcard src/ui/*.cpp) $(wildcard src/gui/*.cpp) $(FIN_SRC)
-LIB_SRC := $(filter-out src/main.cpp src/gui/main_qt.cpp,$(SRC))
-OBJ := $(LIB_SRC:.cpp=.o)
+SRC := $(wildcard $(SRC_DIR)/*.cpp) $(CLI_SRC) \
+       $(wildcard $(SRC_DIR)/domain/*.cpp) $(wildcard $(SRC_DIR)/custo/*.cpp) \
+       $(wildcard $(SRC_DIR)/ui/*.cpp) $(wildcard $(SRC_DIR)/gui/*.cpp) $(FIN_SRC)
+LIB_SRC := $(filter-out $(SRC_DIR)/main.cpp $(GUI_MAIN),$(SRC))
+OBJ := $(patsubst $(SRC_DIR)/%, out/%, $(LIB_SRC:.cpp=.o))
 
 all: libduke.a libduke.so
 
@@ -25,11 +26,12 @@ libduke.a: $(OBJ) $(CORE_LIB)
 libduke.so: $(OBJ) $(CORE_LIB)
 	$(CXX) $(CXXFLAGS) -shared $(OBJ) $(QT_LIBS) -L$(CORE_DIR) -lcore -o $@
 
-%.o: %.cpp
+out/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-cli: libduke.a $(CORE_LIB) src/main.cpp
-	$(CXX) $(CXXFLAGS) src/main.cpp $(INCLUDES) -L. -lduke -L$(CORE_DIR) -lcore $(QT_LIBS) -o app
+cli: libduke.a $(CORE_LIB) $(SRC_DIR)/main.cpp
+	$(CXX) $(CXXFLAGS) $(SRC_DIR)/main.cpp $(INCLUDES) -L. -lduke -L$(CORE_DIR) -lcore $(QT_LIBS) -o app
 
 gui: libduke.a $(CORE_LIB) $(GUI_MAIN)
 	$(CXX) $(CXXFLAGS) $(GUI_MAIN) $(INCLUDES) -L. -lduke -L$(CORE_DIR) -lcore $(QT_LIBS) -o app_gui
@@ -42,5 +44,5 @@ $(CORE_LIB):
 
 .PHONY: clean cli gui tests
 clean:
-	        rm -f $(OBJ) libduke.a libduke.so app app_gui
-	        $(MAKE) -C tests clean
+	rm -f $(OBJ) libduke.a libduke.so app app_gui
+	$(MAKE) -C tests clean

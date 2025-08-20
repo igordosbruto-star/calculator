@@ -69,7 +69,7 @@ if not exist "%VSCODE_DIR%\c_cpp_properties.json" (
         echo         {
         echo             "name": "Linux",
         echo             "includePath": [
-        echo                 "${workspaceFolder}/third_party/DUKE/include",
+        echo                 "${workspaceFolder}/include",
         echo                 "${workspaceFolder}/third_party"
         echo             ],
         echo             "defines": [],
