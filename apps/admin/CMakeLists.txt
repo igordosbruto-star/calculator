@@ -10,5 +10,5 @@ target_include_directories(duke_admin PRIVATE
     ${PROJECT_SOURCE_DIR}/../../finance/include
 )
 
-target_link_libraries(duke_admin PRIVATE core duke finance)
+target_link_libraries(duke_admin PRIVATE core_lib duke_lib finance_lib)
 
