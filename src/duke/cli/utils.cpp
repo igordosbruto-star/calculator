@@ -2,8 +2,22 @@
 #include "cli/utils.h"
 #include "core/format.h"
 #include "ApplicationCore.h"
+#include "ui/Menu.h"
 
 namespace duke::cli {
+
+size_t readMaterialIndex(const std::vector<MaterialDTO>& base, const std::string& prompt) {
+    size_t idx = 0;
+    while (true) {
+        int input = ui::readInt(prompt);
+        if (input >= 1 && static_cast<size_t>(input) <= base.size()) {
+            idx = static_cast<size_t>(input - 1);
+            break;
+        }
+        std::cout << "Indice invalido.\n";
+    }
+    return idx;
+}
 
 void listarMateriais(const std::vector<MaterialDTO>& base) {
     ApplicationCore core;
