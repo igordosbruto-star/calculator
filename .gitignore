@@ -1,3 +1,13 @@
-Calculadora/app.exe
-Calculadora/output/Debug/app.exe
-Calculadora/tests/run_tests.exe
+# Ignore compiled object files
+*.o
+
+# Ignore static libraries
+*.a
+
+# Ignore executables
+*.exe
+*.out
+
+# Ignore build directory
+build/
+
