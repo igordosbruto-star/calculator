@@ -32,16 +32,8 @@ void adicionarMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& ma
 void editarMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
     if (base.empty()) return;
     listarMateriais(base);
-    size_t idx = 0;
-    while (true) {
-        int input = ui::readInt("Indice para editar: ");
-        if (input >= 1 && static_cast<size_t>(input) <= base.size()) {
-            idx = static_cast<size_t>(input);
-            break;
-        }
-        std::cout << "Indice invalido.\n";
-    }
-    MaterialDTO& m = base[idx - 1];
+    size_t idx = readMaterialIndex(base, "Indice para editar: ");
+    MaterialDTO& m = base[idx];
     std::string nome;
     std::cout << "Nome (" << m.nome << "): ";
     std::getline(std::cin, nome);
@@ -55,16 +47,8 @@ void editarMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& mats)
 void removerMaterial(std::vector<MaterialDTO>& base, std::vector<Material>& mats) {
     if (base.empty()) return;
     listarMateriais(base);
-    size_t idx = 0;
-    while (true) {
-        int input = ui::readInt("Indice para remover: ");
-        if (input >= 1 && static_cast<size_t>(input) <= base.size()) {
-            idx = static_cast<size_t>(input);
-            break;
-        }
-        std::cout << "Indice invalido.\n";
-    }
-    base.erase(base.begin() + static_cast<long>(idx - 1));
+    size_t idx = readMaterialIndex(base, "Indice para remover: ");
+    base.erase(base.begin() + static_cast<long>(idx));
     salvarReconstruir(base, mats);
 }
 
