@@ -5,15 +5,13 @@ project(duke_designer_app)
 add_executable(duke_designer
     main.cpp
     DesignerApp.cpp
-    ${CMAKE_SOURCE_DIR}/src/production/ModeloProducao.cpp
 )
 
 target_include_directories(duke_designer PRIVATE
-    ${CMAKE_SOURCE_DIR}/core/include
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/finance/include
-    ${CMAKE_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/../../core/include
+    ${PROJECT_SOURCE_DIR}/../../include
+    ${PROJECT_SOURCE_DIR}/../../finance/include
 )
 
-target_link_libraries(duke_designer PRIVATE core duke finance)
+target_link_libraries(duke_designer PRIVATE core_lib duke_lib finance_lib production)
 

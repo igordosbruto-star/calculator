@@ -1,8 +1,12 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -fPIC
 INCLUDES = -Iinclude -I../include -I../third_party/nlohmann -I../third_party/tinyxml2
-WX_CXXFLAGS := $(shell wx-config --cxxflags)
-WX_LIBS := $(shell wx-config --libs)
+WX_CONFIG := $(shell command -v wx-config 2>/dev/null)
+ifeq ($(WX_CONFIG),)
+$(error wx-config not found; install wxWidgets)
+endif
+WX_CXXFLAGS := $(shell $(WX_CONFIG) --cxxflags)
+WX_LIBS := $(shell $(WX_CONFIG) --libs)
 CXXFLAGS += $(WX_CXXFLAGS)
 SRC = $(wildcard src/*.cpp)
 OBJ = $(SRC:src/%.cpp=%.o) tinyxml2.o
