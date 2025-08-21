@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_subdirectory(core)
 add_subdirectory(src/duke)
 add_subdirectory(src/finance)
+add_subdirectory(src/production)
 
 add_subdirectory(apps/admin)
 add_subdirectory(apps/designer)
