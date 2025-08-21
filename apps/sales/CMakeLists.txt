@@ -11,7 +11,6 @@ add_executable(duke_sales main.cpp SalesApp.cpp)
 target_include_directories(duke_sales PRIVATE
     ${PROJECT_SOURCE_DIR}/../../core/include
     ${PROJECT_SOURCE_DIR}/../../include
-    ${PROJECT_SOURCE_DIR}/../../finance/include
 )
 
 target_link_libraries(duke_sales PRIVATE core_lib duke_lib finance_lib)
